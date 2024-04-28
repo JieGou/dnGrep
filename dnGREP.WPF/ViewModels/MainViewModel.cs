@@ -2956,7 +2956,7 @@ namespace dnGREP.WPF
                 }
             }
         }
-
+        //TODO Learn to check Update And download
         private static async void CheckForUpdates(bool fromCommand)
         {
             try

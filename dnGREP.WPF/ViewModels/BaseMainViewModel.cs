@@ -545,7 +545,7 @@ namespace dnGREP.WPF
                 }
                 else
                 {
-                    FileFiltersSummary = string.Join(", ", [.. tempList]);
+                    FileFiltersSummary = string.Join(", ", [.. tempList]);//[.. tempList] 等效于 tempList.ToArray()
                 }
             }
 
