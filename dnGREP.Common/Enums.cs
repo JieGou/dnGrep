@@ -108,12 +108,30 @@ namespace dnGREP.Common
         PageNumber
     }
 
+    /// <summary>
+    /// MRU (Most Recently Used) 类型
+    /// </summary>
     public enum MRUType
     {
+        /// <summary>
+        /// 文件夹
+        /// </summary>
         SearchPath,
+        /// <summary>
+        /// 匹配文件名
+        /// </summary>
         IncludePattern,
+        /// <summary>
+        /// 排除文件名
+        /// </summary>
         ExcludePattern,
+        /// <summary>
+        /// 搜索
+        /// </summary>
         SearchFor,
+        /// <summary>
+        /// 替换为
+        /// </summary>
         ReplaceWith,
     }
 
