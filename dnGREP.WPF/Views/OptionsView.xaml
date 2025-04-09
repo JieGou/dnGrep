@@ -7,25 +7,23 @@
                  xmlns:my="clr-namespace:dnGREP.WPF"
                  mc:Ignorable="d"
                  Title="{l:Loc Key='Options_OptionsTitle'}"
-                 Height="600"
                  MinWidth="500"
-                 d:DesignHeight="3400"
+                 MinHeight="300"
+                 d:DesignHeight="4000"
                  FlowDirection="{Binding CultureFlowDirection}"
                  FontFamily="{Binding ApplicationFontFamily}"
                  FontSize="{Binding DialogFontSize}"
                  my:DiginesisHelpProvider.HelpKeyword="Options"
                  my:DiginesisHelpProvider.HelpNavigator="Topic"
                  my:DiginesisHelpProvider.ShowHelp="True"
-                 ResizeMode="NoResize"
+                 ResizeMode="CanResize"
                  SizeToContent="Width"
+                 my:ChromeButtonExtension.ButtonVisibility="MinimizeHidden"
                  Background="{DynamicResource Dialog.Background}"
                  CaptionBackground="{DynamicResource Caption.Dialog.Background}"
                  Icon="/dnGREP;component/nGREP.ico"
-                 WindowStartupLocation="CenterOwner">
-
-    <Window.InputBindings>
-        <KeyBinding Gesture="Ctrl+F5" Command="{Binding ReloadThemeCommand}" />
-    </Window.InputBindings>
+                 WindowStartupLocation="CenterOwner"
+                 my:InputBindingsBehavior.InputBindings="{Binding InputBindings}" >
 
     <Window.Resources>
         <my:EnumBooleanConverter x:Key="ebc" />
@@ -81,7 +79,7 @@
             <RowDefinition />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <ScrollViewer Grid.Row="0" PanningMode="VerticalOnly">
+        <ScrollViewer Grid.Row="0" PanningMode="Both" HorizontalScrollBarVisibility="Auto">
             <StackPanel HorizontalAlignment="Stretch">
 
                 <GroupBox Header="{l:Loc Key='Options_StartupOptions'}">
@@ -114,10 +112,15 @@
                         </Border>
                         <CheckBox Margin="0,6,0,3" Content="{l:Loc Key='Options_ReuseExistingWindow'}"
                                   IsChecked="{Binding Path=IsSingletonInstance}" />
-                        <CheckBox Margin="24,3,0,3" Content="{l:Loc Key='Options_ForwardSearchFolderToExistingWindow'}"
-                                  ToolTip="{l:Loc Key='Options_IfTheSecondInstanceHasASearchFolderArgument'}"
-                                  IsChecked="{Binding Path=PassSearchFolderToSingleton}"
+                        <CheckBox Margin="24,3,0,3" Content="{l:Loc Key='Options_ForwardCommandLineArgumentsToTheExistingWindow'}"
+                                  IsChecked="{Binding Path=PassCommandLineToSingleton}"
                                   IsEnabled="{Binding IsSingletonInstance}"/>
+                        <CheckBox Margin="0,6,0,3" Content="{l:Loc Key='Options_MinimizeToNotificationArea'}"
+                                  IsChecked="{Binding Path=MinimizeToNotificationArea}" />
+                        <Label Content="{l:Loc Key='Options_KeyboardShortcutToRestoreWindow'}"/>
+                        <TextBox Margin="24,0,0,3" Width="300" HorizontalAlignment="Left"
+                                 Text="{Binding LocalizedRestoreWindowKeyboardShortcut}" 
+                                 PreviewKeyDown="TextBox_PreviewKeyDown"/>
                         <Label Margin="0,3" Content="{l:Loc Key='Options_RestartRequiredWhenChanged'}"
                                Style="{StaticResource ThemedLabel}"/>
                     </StackPanel>
@@ -201,7 +204,7 @@
                             </ComboBox>
                             <Button Margin="6,3" Padding="12,3" Content="{l:Loc Key='Options_Reload'}"
                                     Command="{Binding ReloadThemeCommand}"
-                                    ToolTip="{l:Loc Key='Options_ReloadTheCurrentThemeFile'}" />
+                                    ToolTip="{Binding ReloadThemeCommandTooltip}" />
                         </StackPanel>
                     </StackPanel>
                 </GroupBox>
@@ -225,7 +228,7 @@
                             <Button Margin="6,3" Padding="12,3" 
                                     Content="{l:Loc Key='Options_LoadFromFile'}"
                                     ToolTip="{l:Loc Key='Options_PreviewToolForTranslators'}"
-                                    Command="{Binding LoadResxCommand}" />
+                                    Command="{Binding LoadResxCommand}"/>
                         </StackPanel>
                         <TextBlock>
                             <Run Text="{l:Loc Key='Options_WantADifferentLanguage'}"/>
@@ -245,6 +248,7 @@
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
+                            <RowDefinition />
                             <RowDefinition />
                             <RowDefinition />
                             <RowDefinition />
@@ -406,6 +410,23 @@
                                    FontFamily="{Binding Path=EditResultsFontFamily}"
                                    FontSize="{Binding Path=EditResultsFontSize}"/>
 
+                        <TextBlock Grid.Row="7" Grid.Column="0" Margin="0,3" 
+                                   HorizontalAlignment="Right" Text="{l:Loc Key='Options_ResultsFontWeight'}"
+                                   ToolTip="{l:Loc Key='Options_ForFileNameInSearchResults'}"/>
+                        <ComboBox Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" Margin="6,3"
+                                  HorizontalAlignment="Left"
+                                  ItemsSource="{Binding Path=FontWeightList}"
+                                  SelectedValue="{Binding Path=ResultsFileNameWeight}"
+                                  ToolTip="{l:Loc Key='Options_ForFileNameInSearchResults'}">
+                        <ComboBox.Width>
+                                <MultiBinding Converter="{StaticResource TextBoxWidthConverter}" ConverterParameter="100" FallbackValue="100">
+                                    <Binding RelativeSource="{RelativeSource Mode=Self}"/>
+                                    <Binding Path="ApplicationFontFamily"/>
+                                    <Binding Path="DialogFontSize"/>
+                                </MultiBinding>
+                            </ComboBox.Width>
+                        </ComboBox>
+
                     </Grid>
                 </GroupBox>
 
@@ -504,6 +525,60 @@
 
                 <GroupBox Header="{l:Loc Key='Options_SearchOptions'}">
                     <StackPanel Margin="0,3,0,0">
+                        <CheckBox Content="{l:Loc Key='Options_EnableAutocompleteInTextInputBoxes'}" Margin="3"
+                                  IsChecked="{Binding AutoCompleteEnabled}"/>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Row="0" Grid.Column="0" 
+                                   Content="{l:Loc Key='Options_NumberOfMatchesToAutoStopSearch'}"/>
+                            <TextBox Grid.Row="0" Grid.Column="1" Margin="3,0"
+                                     HorizontalContentAlignment="Right">
+                                <TextBox.Text>
+                                    <Binding Path="SearchAutoStopCount" Mode="TwoWay" 
+                                         UpdateSourceTrigger="PropertyChanged" Delay="1250">
+                                        <Binding.ValidationRules>
+                                            <my:ValueRangeRule Min="1" Max="100000"/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                                <TextBox.Width>
+                                    <MultiBinding Converter="{StaticResource TextBoxWidthConverter}" ConverterParameter="48" FallbackValue="48">
+                                        <Binding RelativeSource="{RelativeSource Mode=Self}"/>
+                                        <Binding Path="ApplicationFontFamily"/>
+                                        <Binding Path="DialogFontSize"/>
+                                    </MultiBinding>
+                                </TextBox.Width>
+                            </TextBox>
+
+                            <Label Grid.Row="1" Grid.Column="0"
+                                   Content="{l:Loc Key='Options_NumberOfMatchesToAutoPauseSearch'}"/>
+                            <TextBox Grid.Row="1" Grid.Column="01" Margin="3,0"
+                                     HorizontalContentAlignment="Right">
+                                <TextBox.Text>
+                                    <Binding Path="SearchAutoPauseCount" Mode="TwoWay" 
+                                         UpdateSourceTrigger="PropertyChanged" Delay="1250">
+                                        <Binding.ValidationRules>
+                                            <my:ValueRangeRule Min="1" Max="100000"/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                                <TextBox.Width>
+                                    <MultiBinding Converter="{StaticResource TextBoxWidthConverter}" ConverterParameter="48" FallbackValue="48">
+                                        <Binding RelativeSource="{RelativeSource Mode=Self}"/>
+                                        <Binding Path="ApplicationFontFamily"/>
+                                        <Binding Path="DialogFontSize"/>
+                                    </MultiBinding>
+                                </TextBox.Width>
+                            </TextBox>
+                        </Grid>
+                        
                         <Label Content="{l:Loc Key='Options_MaximumNumberOfParallelSearches'}"/>
                         <StackPanel Orientation="Horizontal">
                             <Slider Width="250" HorizontalAlignment="Left"
@@ -513,6 +588,16 @@
                                     Value="{Binding ParallelismCount}"/>
                             <CheckBox Margin="12,0" Content="{l:Loc Key='Options_NoFixedLimit'}"
                                       IsChecked="{Binding ParallelismUnlimited}"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Vertical">
+                            <Label Content="{l:Loc Key='Options_SetKeyboardFocusTo'}"/>
+                            <RadioButton Content="{l:Loc Key='Options_FocusResultsTree'}" 
+                                         Margin="18,3" GroupName="FocusElement"
+                                         IsChecked="{Binding FocusElement, Converter={StaticResource ebc}, ConverterParameter=ResultsTree}" />
+                            <RadioButton Content="{l:Loc Key='Options_FocusSearchFor'}" 
+                                         Margin="18,3" GroupName="FocusElement"
+                                         IsChecked="{Binding FocusElement, Converter={StaticResource ebc}, ConverterParameter=SearchFor}" />
                         </StackPanel>
                     </StackPanel>
                 </GroupBox>
@@ -534,8 +619,7 @@
                                       IsChecked="{Binding Path=ShowLinesInContext}" 
                                       Content="{l:Loc Key='Options_ShowResultLinesInContext'}"/>
                             <TextBox Margin="3,0,0,0"
-                                     Text="{Binding Path=ContextLinesBefore, UpdateSourceTrigger=PropertyChanged}"
-                                     IsEnabled="{Binding ElementName=cbShowContext, Path=IsChecked}">
+                                     Text="{Binding Path=ContextLinesBefore, UpdateSourceTrigger=PropertyChanged}">
                                 <TextBox.Width>
                                     <MultiBinding Converter="{StaticResource TextBoxWidthConverter}" ConverterParameter="32" FallbackValue="32">
                                         <Binding RelativeSource="{RelativeSource Mode=Self}"/>
@@ -545,8 +629,7 @@
                                 </TextBox.Width>
                             </TextBox>
                             <Label Content="{l:Loc Key='Options_ContextBeforeAnd'}" />
-                            <TextBox Text="{Binding Path=ContextLinesAfter, UpdateSourceTrigger=PropertyChanged}"
-                                     IsEnabled="{Binding ElementName=cbShowContext, Path=IsChecked}">
+                            <TextBox Text="{Binding Path=ContextLinesAfter, UpdateSourceTrigger=PropertyChanged}">
                                 <TextBox.Width>
                                     <MultiBinding Converter="{StaticResource TextBoxWidthConverter}" ConverterParameter="32" FallbackValue="32">
                                         <Binding RelativeSource="{RelativeSource Mode=Self}"/>
@@ -611,6 +694,66 @@
                             </StackPanel>
                         </StackPanel>
                     </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="Directories">
+                    <Grid Margin="0,6,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="500"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <CheckBox Grid.Row="0" Grid.Column="0" Margin="0,3"
+                                  Content="Use default directories"
+                                  IsChecked="{Binding PathsAreDefault}"/>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" Margin="12,3,3,3" 
+                                   Text="Application configuration and data:" />
+
+                        <TextBox Grid.Row="2" Grid.Column="0" Margin="20,3,3,3"
+                                 Text="{Binding Path=DataDirectoryPath, UpdateSourceTrigger=PropertyChanged}"
+                                 IsReadOnly="{Binding PathsAreDefault}"/>
+
+                        <Button Grid.Row="2" Grid.Column="1" Margin="3"
+                                Content="{l:Loc Key='Options_BrowseFileLocation'}"
+                                Command="{Binding Path=BrowseDataDirectory}"
+                                IsEnabled="{Binding PathsAreDefault, Converter={StaticResource not}}">
+                            <Button.Width>
+                                <MultiBinding Converter="{StaticResource TextBoxWidthConverter}" ConverterParameter="32" FallbackValue="32">
+                                    <Binding RelativeSource="{RelativeSource Mode=Self}"/>
+                                    <Binding Path="ApplicationFontFamily"/>
+                                    <Binding Path="DialogFontSize"/>
+                                </MultiBinding>
+                            </Button.Width>
+                        </Button>
+
+                        <TextBlock Grid.Row="3" Grid.Column="0" Margin="12,3,3,3" 
+                                   Text="Application log files:" />
+
+                        <TextBox Grid.Row="4" Grid.Column="0" Margin="20,3,3,3"
+                                 Text="{Binding Path=LogDirectoryPath, UpdateSourceTrigger=PropertyChanged}"
+                                 IsReadOnly="{Binding PathsAreDefault}"/>
+
+                        <Button Grid.Row="4" Grid.Column="1" Margin="3"
+                                Content="{l:Loc Key='Options_BrowseFileLocation'}"
+                                Command="{Binding Path=BrowseLogDirectory}"
+                                IsEnabled="{Binding PathsAreDefault, Converter={StaticResource not}}">
+                            <Button.Width>
+                                <MultiBinding Converter="{StaticResource TextBoxWidthConverter}" ConverterParameter="32" FallbackValue="32">
+                                    <Binding RelativeSource="{RelativeSource Mode=Self}"/>
+                                    <Binding Path="ApplicationFontFamily"/>
+                                    <Binding Path="DialogFontSize"/>
+                                </MultiBinding>
+                            </Button.Width>
+                        </Button>
+                    </Grid>
                 </GroupBox>
 
                 <GroupBox Header="{l:Loc Key='Options_Layout'}">
@@ -746,6 +889,13 @@
                             <RadioButton Margin="6,3" Content="{l:Loc Key='Options_Ask'}" GroupName="copyOverwrite"
                                          IsChecked="{Binding CopyOverwriteFileOption, Converter={StaticResource ebc}, ConverterParameter=Prompt}"/>
                         </StackPanel>
+                        <Label Content="{l:Loc Key='Options_WithFilesInArchives'}"/>
+                        <StackPanel Orientation="Horizontal" Margin="12,0">
+                            <RadioButton Margin="6,3" Content="{l:Loc Key='Options_CopyTheWholeArchive'}" GroupName="copyArchive"
+                                         IsChecked="{Binding ArchiveCopyOption, Converter={StaticResource ebc}, ConverterParameter=WholeArchive}"/>
+                            <RadioButton Margin="6,3" Content="{l:Loc Key='Options_ExtractAndCopyFiles'}" GroupName="copyArchive"
+                                         IsChecked="{Binding ArchiveCopyOption, Converter={StaticResource ebc}, ConverterParameter=CopyFile}"/>
+                        </StackPanel>
                     </StackPanel>
                 </GroupBox>
 
@@ -762,6 +912,13 @@
                             <RadioButton Margin="6,3" Content="{l:Loc Key='Options_Ask'}" GroupName="moveOverwrite"
                                          IsChecked="{Binding MoveOverwriteFileOption, Converter={StaticResource ebc}, ConverterParameter=Prompt}"/>
                         </StackPanel>
+                        <Label Content="{l:Loc Key='Options_WithFilesInArchives'}"/>
+                        <StackPanel Orientation="Horizontal" Margin="12,0">
+                            <RadioButton Margin="6,3" Content="{l:Loc Key='Options_MoveTheWholeArchive'}" GroupName="moveArchive"
+                                         IsChecked="{Binding ArchiveMoveOption, Converter={StaticResource ebc}, ConverterParameter=WholeArchive}"/>
+                            <RadioButton Margin="6,3" Content="{l:Loc Key='Options_ExtractAndMoveFiles'}" GroupName="moveArchive"
+                                         IsChecked="{Binding ArchiveMoveOption, Converter={StaticResource ebc}, ConverterParameter=CopyFile}"/>
+                        </StackPanel>
                     </StackPanel>
                 </GroupBox>
 
@@ -773,6 +930,13 @@
                                          IsChecked="{Binding DeleteOption, Converter={StaticResource ebc}, ConverterParameter=Recycle}" />
                             <RadioButton Margin="18,3" Content="{l:Loc Key='Options_DeletePermanently'}" GroupName="deleteFiles"
                                          IsChecked="{Binding DeleteOption, Converter={StaticResource ebc}, ConverterParameter=Permanent}" />
+                        </StackPanel>
+                        <Label Content="{l:Loc Key='Options_WithFilesInArchives'}"/>
+                        <StackPanel Orientation="Horizontal" Margin="12,0">
+                            <RadioButton Margin="6,3" Content="{l:Loc Key='Options_DeleteTheWholeArchive'}" GroupName="deleteArchive"
+                                         IsChecked="{Binding ArchiveDeleteOption, Converter={StaticResource ebc}, ConverterParameter=WholeArchive}"/>
+                            <RadioButton Margin="6,3" Content="{l:Loc Key='Options_DoNothing'}" GroupName="deleteArchive"
+                                         IsChecked="{Binding ArchiveDeleteOption, Converter={StaticResource ebc}, ConverterParameter=DoNothing}"/>
                         </StackPanel>
                     </StackPanel>
                 </GroupBox>
@@ -998,7 +1162,8 @@
                                  Width="350" Margin="0,3"
                                  HorizontalAlignment="Left" />
                         <Button Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" 
-                                Content="{l:Loc Key='Options_PdfToTextReset'}" Command="{Binding ResetPdfToTextOptionCommand}"
+                                Content="{l:Loc Key='Options_PdfToTextReset'}" 
+                                Command="{Binding ResetPdfToTextOptionCommand}"
                                 Padding="12,3" Margin="20,3" 
                                 HorizontalAlignment="Left" VerticalAlignment="Center"/>
                         <CheckBox Grid.Row="2" Grid.Column="0" 
@@ -1012,6 +1177,63 @@
                                          IsChecked="{Binding PdfNumberStyle, Converter={StaticResource ebc}, ConverterParameter=LineNumber}" />
                         </StackPanel>
                     </Grid>
+                </GroupBox>
+
+                <GroupBox Header="{l:Loc Key='Options_PlugInCache'}">
+                    <StackPanel Orientation="Vertical" Margin="0,6,0,0">
+                        <CheckBox Content="{l:Loc Key='Options_CacheExtractedFiles'}"
+                                  Margin="0,3"
+                                  IsChecked="{Binding CacheExtractedFiles}"/>
+                        <RadioButton Content="{l:Loc Key='Options_CacheFilesInTempFolder'}"
+                                     Margin="0,3"
+                                     IsChecked="{Binding CacheFilesInTempFolder}"/>
+                        <StackPanel Orientation="Horizontal">
+                            <RadioButton Content="{l:Loc Key='Options_CacheFilesIn'}"
+                                         Margin="0,3,3,3"
+                                         IsChecked="{Binding CacheFilesInTempFolder, Converter={StaticResource not}}"/>
+                            <TextBox Margin="3"  
+                                     Text="{Binding CacheFilePath, UpdateSourceTrigger=PropertyChanged}" 
+                                     IsEnabled="{Binding CacheFilesInTempFolder, Converter={StaticResource not}}"
+                                     Width="350"
+                                     HorizontalAlignment="Left" />
+                            <Button Grid.Column="2" Content="{l:Loc Key='Options_BrowseFileLocation'}" Margin="3"
+                                    Command="{Binding Path=BrowseCacheCommand}">
+                                <Button.Width>
+                                    <MultiBinding Converter="{StaticResource TextBoxWidthConverter}" ConverterParameter="32" FallbackValue="32">
+                                        <Binding RelativeSource="{RelativeSource Mode=Self}"/>
+                                        <Binding Path="ApplicationFontFamily"/>
+                                        <Binding Path="DialogFontSize"/>
+                                    </MultiBinding>
+                                </Button.Width>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <CheckBox Content="{l:Loc Key='Options_DeleteFilesFromCacheIfNotUsedIn'}"
+                                      Margin="0,3,3,3"
+                                      IsChecked="{Binding CacheFilesClean}"/>
+                            <TextBox Margin="3,0"
+                                     Text="{Binding CacheFilesCleanDays, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                     TextAlignment="Right" PreviewTextInput="TextBox_PreviewTextInput"
+                                     DataObject.Pasting="TextBox_Pasting"
+                                     IsEnabled="{Binding CacheFilesClean}">
+                                <TextBox.Width>
+                                    <MultiBinding Converter="{StaticResource TextBoxWidthConverter}" ConverterParameter="48" FallbackValue="48">
+                                        <Binding RelativeSource="{RelativeSource Mode=Self}"/>
+                                        <Binding Path="ApplicationFontFamily"/>
+                                        <Binding Path="DialogFontSize"/>
+                                    </MultiBinding>
+                                </TextBox.Width>
+                            </TextBox>
+                            <Label Content="{l:Loc Key='Options_CheckDays'}"/>
+                        </StackPanel>
+                        <TextBlock Text="{l:Loc Key='Options_CreateCacheFileKeyUsing'}"/>
+                        <RadioButton Margin="18,3" Content="{l:Loc Key='Options_HashOfFullFile'}"
+                                     GroupName="CacheHashType"
+                                     IsChecked="{Binding CacheFileHashType, Converter={StaticResource ebc}, ConverterParameter=FullFile}"/>
+                        <RadioButton Margin="18,3" Content="{l:Loc Key='Options_HashOfFileSizeAndModifiedTime'}"
+                                     GroupName="CacheHashType"
+                                     IsChecked="{Binding CacheFileHashType, Converter={StaticResource ebc}, ConverterParameter=SizeTimestamp}"/>
+                    </StackPanel>
                 </GroupBox>
 
                 <GroupBox Header="{l:Loc Key='Options_PluginOptions'}">

@@ -7,6 +7,7 @@
                  FlowDirection="{Binding CultureFlowDirection}"
                  FontFamily="{Binding ApplicationFontFamily}"
                  FontSize="{Binding DialogFontSize}"
+                 my:ChromeButtonExtension.ButtonVisibility="MinimizeHidden"
                  SizeToContent="Height"
                  Width="600" MinHeight="460"
                  WindowStyle="SingleBorderWindow"
@@ -123,7 +124,11 @@
                             </TextBox.ToolTip>
                         </TextBox>
                     </Grid>
-                    <UniformGrid Grid.Row="3" Grid.Column="0" Margin="8,0,0,0" Rows="2">
+                    <UniformGrid Grid.Row="3" Grid.Column="0" Margin="8,0,0,0" Rows="3">
+                        <CheckBox Content="Global" Margin="3,4,3,3" 
+                                    IsChecked="{Binding Path=Global}"
+                                    IsEnabled="{Binding Path=IsGlobalEnabled}"
+                                    ToolTip="{Binding GlobalFlagTooltip}"/>
                         <CheckBox Content="{l:Loc Key='Test_CaseSensitive'}" Margin="3,4,3,3" 
                                     IsChecked="{Binding Path=CaseSensitive}"
                                     IsEnabled="{Binding Path=IsCaseSensitiveEnabled}"/>

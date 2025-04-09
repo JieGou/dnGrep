@@ -278,14 +278,6 @@
     <value>_Pridať</value>
     <comment>Bookmarks dialog, button label (accel)</comment>
   </data>
-  <data name="Bookmarks_AltDownArrow" xml:space="preserve">
-    <value>Alt+šípka nadol</value>
-    <comment>Bookmarks dialog, bookmark list 'Move down' context menu shortcut text</comment>
-  </data>
-  <data name="Bookmarks_AltUpArrow" xml:space="preserve">
-    <value>Alt+šípka hore</value>
-    <comment>Bookmarks dialog, bookmark list 'Move up' context menu shortcut text</comment>
-  </data>
   <data name="Bookmarks_Close" xml:space="preserve">
     <value>_Zavrieť</value>
     <comment>Bookmarks dialog, button text (accel)</comment>
@@ -385,14 +377,6 @@
   <data name="Bookmarks_SectionsHeader" xml:space="preserve">
     <value>Sekcie</value>
     <comment>Bookmarks dialog, grid header</comment>
-  </data>
-  <data name="Bookmarks_ShiftAltDownArrow" xml:space="preserve">
-    <value>Shift+Alt+šipka nadol</value>
-    <comment>Bookmarks dialog, bookmark list 'Move to bottom' context menu shortcut text</comment>
-  </data>
-  <data name="Bookmarks_ShiftAltUpArrow" xml:space="preserve">
-    <value>Shift+Alt+šipka nahor</value>
-    <comment>Bookmarks dialog, bookmark list 'Move to top' context menu shortcut text</comment>
   </data>
   <data name="Bookmarks_Summary_MaxFolderDepth" xml:space="preserve">
     <value>Maximálna hĺbka priečinka 1{0}</value>
@@ -966,5 +950,72 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
   <data name="Test_WholeWord" xml:space="preserve">
     <value>_Celé slovo</value>
     <comment>Test window, search options checkbox label (accel)</comment>
+  </data>
+  <data name="ShellMenu_SearchWithDnGrep" xml:space="preserve">
+    <value>Vyhľadávanie pomocou dnGrep</value>
+    <comment>Text shown on Windows shell context menu, and Options dialog, startup options checkbox label</comment>
+  </data>
+  <data name="BookmarkDetails_CaseSensitive" xml:space="preserve">
+    <value>Záleží na veľkosti písmen</value>
+  </data>
+  <data name="Main_Created" xml:space="preserve">
+    <value>Vytvorené</value>
+  </data>
+  <data name="Main_CaseSensitive" xml:space="preserve">
+    <value>Záleží na veľkosti písmen</value>
+  </data>
+  <data name="Test_CaseSensitive" xml:space="preserve">
+    <value>Záleží na veľkosti písmen</value>
+  </data>
+  <data name="Keyboard_Save" xml:space="preserve">
+    <value>Uložiť</value>
+  </data>
+  <data name="Keyboard_Close" xml:space="preserve">
+    <value>Zavrieť</value>
+  </data>
+  <data name="Keyboard_PressF1ForHelpOnKeyboardShortcuts" xml:space="preserve">
+    <value>Stlačením F1 získate pomoc s klávesovými skratkami</value>
+  </data>
+  <data name="Main_Menu_Keyboard" xml:space="preserve">
+    <value>_Klávesnica…</value>
+  </data>
+  <data name="Window_Main" xml:space="preserve">
+    <value>Hlavné</value>
+  </data>
+  <data name="Keyboard_UpArrowKey" xml:space="preserve">
+    <value>Hore</value>
+  </data>
+  <data name="Keyboard_DownArrowKey" xml:space="preserve">
+    <value>Dole</value>
+  </data>
+  <data name="Keyborard_LeftArrowKey" xml:space="preserve">
+    <value>Vľavo</value>
+  </data>
+  <data name="Keyboard_WindowHeader" xml:space="preserve">
+    <value>Okno</value>
+  </data>
+  <data name="Keyboard_CommandHeader" xml:space="preserve">
+    <value>Príkaz</value>
+  </data>
+  <data name="Keyboard_ShortcutForSelectedCommand" xml:space="preserve">
+    <value>Kombinácia klávesov pre vybraný príkaz</value>
+  </data>
+  <data name="Keyboard_PressShortcutKeys" xml:space="preserve">
+    <value>Stlačte klávesové skratky:</value>
+  </data>
+  <data name="Keyboard_Remove" xml:space="preserve">
+    <value>Odstrániť</value>
+  </data>
+  <data name="Keyboard_Assign" xml:space="preserve">
+    <value>Priradiť</value>
+  </data>
+  <data name="Keyboard_RightArrowKey" xml:space="preserve">
+    <value>Vpravo</value>
+  </data>
+  <data name="Keyboard_DeleteKey" xml:space="preserve">
+    <value>Vymazať</value>
+  </data>
+  <data name="Keyboard_BackspaceKey" xml:space="preserve">
+    <value>Späť</value>
   </data>
 </root>

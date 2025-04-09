@@ -19,19 +19,22 @@ namespace dnGREP.Engines
             GrepSearchOption searchOptions, Encoding encoding, PauseCancelToken pauseCancelToken = default)
         {
             using FileStream fileStream = new(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 4096, FileOptions.SequentialScan);
-            return Search(fileStream, file, searchPattern, searchType, searchOptions, encoding, pauseCancelToken);
+            return Search(fileStream, new(file), searchPattern, searchType, searchOptions, encoding, pauseCancelToken);
         }
 
-        public List<GrepSearchResult> Search(Stream input, string fileName, string searchPattern,
+        public List<GrepSearchResult> Search(Stream input, FileData fileData, string searchPattern,
             SearchType searchType, GrepSearchOption searchOptions, Encoding encoding, PauseCancelToken pauseCancelToken = default)
         {
+            bool checkGlobalFlag = false;
             SearchDelegates.DoSearch searchMethod = DoTextSearch;
             switch (searchType)
             {
                 case SearchType.PlainText:
+                    checkGlobalFlag = true;
                     searchMethod = DoTextSearch;
                     break;
                 case SearchType.Regex:
+                    checkGlobalFlag = true;
                     searchMethod = DoRegexSearch;
                     break;
                 case SearchType.XPath:
@@ -43,9 +46,9 @@ namespace dnGREP.Engines
             }
 
             if (searchOptions.HasFlag(GrepSearchOption.Multiline) || searchType == SearchType.XPath)
-                return SearchMultiline(input, fileName, searchPattern, searchOptions, searchMethod, encoding, pauseCancelToken);
+                return SearchMultiline(input, fileData.FullName, searchPattern, searchOptions, searchMethod, encoding, pauseCancelToken);
             else
-                return Search(input, fileName, searchPattern, searchOptions, searchMethod, encoding, pauseCancelToken);
+                return Search(input, fileData.FullName, searchPattern, searchOptions, checkGlobalFlag, searchMethod, encoding, pauseCancelToken);
         }
 
         public bool Replace(string sourceFile, string destinationFile, string searchPattern, string replacePattern, SearchType searchType,
@@ -92,9 +95,8 @@ namespace dnGREP.Engines
         #region Actual Implementation
 
         private static List<GrepSearchResult> Search(Stream input, string fileName, string searchPattern,
-
-            GrepSearchOption searchOptions, SearchDelegates.DoSearch searchMethod, Encoding encoding,
-            PauseCancelToken pauseCancelToken)
+            GrepSearchOption searchOptions, bool checkGlobalFlag, SearchDelegates.DoSearch searchMethod,
+            Encoding encoding, PauseCancelToken pauseCancelToken)
         {
             List<GrepSearchResult> searchResults = [];
 
@@ -126,6 +128,13 @@ namespace dnGREP.Engines
                             matches.Add(m);
                         }
                     }
+
+                    if (checkGlobalFlag && matches.Count > 0 &&
+                        !searchOptions.HasFlag(GrepSearchOption.Global))
+                    {
+                        break;
+                    }
+
                     filePosition += line.Length;
                     lineNumber++;
                 }

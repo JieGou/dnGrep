@@ -29,12 +29,14 @@ namespace dnGREP.Common
     public enum GrepSearchOption
     {
         None = 0,
-        CaseSensitive = 1,
-        Multiline = 2,
-        SingleLine = 4,
-        WholeWord = 8,
-        StopAfterFirstMatch = 16,
-        BooleanOperators = 32
+        Global = 1,
+        CaseSensitive = 2,
+        Multiline = 4,
+        SingleLine = 8,
+        WholeWord = 16,
+        BooleanOperators = 32,
+        StopAfterNumMatches = 64,
+        PauseAfterNumMatches = 128,
     }
 
     public enum GrepOperation
@@ -87,6 +89,12 @@ namespace dnGREP.Common
         Date,
         MatchCount,
         ReadOnly,
+    }
+
+    public enum ReplaceType
+    { 
+        ReplaceDialog,
+        SelectedFiles,
     }
 
     public enum ReportMode
@@ -178,6 +186,25 @@ namespace dnGREP.Common
         Small = 0,
         Medium = 1,
         Large = 2,
+    }
+
+    public enum FocusElement
+    {
+        ResultsTree,
+        SearchFor,
+    }
+
+    public enum ArchiveCopyMoveDelete
+    {
+        WholeArchive,
+        CopyFile,
+        DoNothing,
+    }
+
+    public enum HashOption
+    {
+        FullFile = 0,
+        SizeTimestamp,
     }
 
 }

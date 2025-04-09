@@ -1713,7 +1713,7 @@ Establece el indicador de búsqueda de palabras completas: True o False.</value>
     <comment>Options dialog, theme reload button label (accel)</comment>
   </data>
   <data name="Options_ReloadTheCurrentThemeFile" xml:space="preserve">
-    <value>Vuelva a cargar el archivo de tema actual [Ctrl + F5]</value>
+    <value>Vuelva a cargar el archivo de tema actual</value>
     <comment>Options dialog, theme reload button tooltip</comment>
   </data>
   <data name="Options_ReplaceDialogLayout" xml:space="preserve">
@@ -1885,11 +1885,11 @@ Establece el indicador de búsqueda de palabras completas: True o False.</value>
     <comment>Replace window, Files group header label</comment>
   </data>
   <data name="Replace_MarkAllMatchesInThisFileForReplacement" xml:space="preserve">
-    <value>Marque todas las coincidencias en este archivo para su reemplazo [Ctrl + A]</value>
+    <value>Marque todas las coincidencias en este archivo para su reemplazo</value>
     <comment>Replace window, Replace in file button tooltip</comment>
   </data>
   <data name="Replace_MarkMatchForReplacement" xml:space="preserve">
-    <value>Marca la coincidencia para el reemplazo [Ctrl + R]</value>
+    <value>Marca la coincidencia para el reemplazo</value>
     <comment>Replace window, Replace button tooltip</comment>
   </data>
   <data name="Replace_Matches" xml:space="preserve">
@@ -1897,11 +1897,11 @@ Establece el indicador de búsqueda de palabras completas: True o False.</value>
     <comment>Replace window, Matches group header label</comment>
   </data>
   <data name="Replace_MoveToTheNextMatchInThisFile" xml:space="preserve">
-    <value>Mover a la siguiente coincidencia en este archivo [Ctrl + Izquierda]</value>
+    <value>Mover a la siguiente coincidencia en este archivo</value>
     <comment>Replace window, Next button tooltip</comment>
   </data>
   <data name="Replace_MoveToThePreviousMatchInThisFile" xml:space="preserve">
-    <value>Mover a la coincidencia anterior en este archivo [Ctrl + Derecha]</value>
+    <value>Mover a la coincidencia anterior en este archivo</value>
     <comment>Replace window, Previous button tooltip</comment>
   </data>
   <data name="Replace_NextFile" xml:space="preserve">
@@ -1925,7 +1925,7 @@ Establece el indicador de búsqueda de palabras completas: True o False.</value>
     <comment>Replace window, conditional file name suffix</comment>
   </data>
   <data name="Replace_ReplaceAllMatchesInAllFilesAndApply" xml:space="preserve">
-    <value>Reemplace todas las coincidencias en todos los archivos y aplique [F10]</value>
+    <value>Reemplace todas las coincidencias en todos los archivos y aplique</value>
     <comment>Replace window, Replace in all files button tooltip</comment>
   </data>
   <data name="Replace_ReplaceInAllFiles" xml:space="preserve">
@@ -1961,7 +1961,7 @@ Establece el indicador de búsqueda de palabras completas: True o False.</value>
     <comment>Replace window, replace text input box label</comment>
   </data>
   <data name="Replace_ResetAndSkipAllMatchesInThisFile" xml:space="preserve">
-    <value>Restablecer y omitir todas las coincidencias en este archivo [Ctrl + T]</value>
+    <value>Restablecer y omitir todas las coincidencias en este archivo</value>
     <comment>Replace window, Undo file button tooltip</comment>
   </data>
   <data name="Replace_SearchFor" xml:space="preserve">
@@ -1969,11 +1969,11 @@ Establece el indicador de búsqueda de palabras completas: True o False.</value>
     <comment>Replace window, search pattern label</comment>
   </data>
   <data name="Replace_ShowTheNextFile" xml:space="preserve">
-    <value>Mostrar el siguiente archivo [Ctrl + PgDn]</value>
+    <value>Mostrar el siguiente archivo</value>
     <comment>Replace window, Next file button tooltip</comment>
   </data>
   <data name="Replace_ShowThePreviousFile" xml:space="preserve">
-    <value>Mostrar el archivo anterior [Ctrl + PgUp]</value>
+    <value>Mostrar el archivo anterior</value>
     <comment>Replace window, Previous file button tooltip</comment>
   </data>
   <data name="Replace_SyntaxNone" xml:space="preserve">
@@ -1993,7 +1993,7 @@ Establece el indicador de búsqueda de palabras completas: True o False.</value>
     <comment>Replace window, Undo file button label (accel)</comment>
   </data>
   <data name="Replace_UndoMarkReplaceOnThisMatch" xml:space="preserve">
-    <value>Deshacer la sustitución de marcas en esta coincidencia [Ctrl + U]</value>
+    <value>Deshacer la sustitución de marcas en esta coincidencia</value>
     <comment>Replace window, Undo button tooltip</comment>
   </data>
   <data name="Replace_WrapText" xml:space="preserve">
@@ -2440,16 +2440,8 @@ Establece el indicador de búsqueda de palabras completas: True o False.</value>
     <value>/sc [scriptKey]
 -sc [scriptKey]
 -script [scriptKey]
-    Ejecuta un script identificado por una clave (scriptKey).</value>
+    Ejecuta el script identificado por la clave de script.</value>
     <comment>Help dialog text when running dnGrep from the command-line</comment>
-  </data>
-  <data name="Bookmarks_AltDownArrow" xml:space="preserve">
-    <value>Alt + ↓</value>
-    <comment>Bookmarks dialog, bookmark list 'Move down' context menu shortcut text</comment>
-  </data>
-  <data name="Bookmarks_AltUpArrow" xml:space="preserve">
-    <value>Alt + ↑</value>
-    <comment>Bookmarks dialog, bookmark list 'Move up' context menu shortcut text</comment>
   </data>
   <data name="Bookmarks_MoveToBottom" xml:space="preserve">
     <value>Ir hasta abajo</value>
@@ -2471,19 +2463,11 @@ Establece el indicador de búsqueda de palabras completas: True o False.</value>
     <value>Mover hacia arriba</value>
     <comment>Bookmarks dialog, bookmark list context menu text</comment>
   </data>
-  <data name="Bookmarks_ShiftAltDownArrow" xml:space="preserve">
-    <value>Shift + Alt + ↓</value>
-    <comment>Bookmarks dialog, bookmark list 'Move to bottom' context menu shortcut text</comment>
-  </data>
-  <data name="Bookmarks_ShiftAltUpArrow" xml:space="preserve">
-    <value>Shift + Alt + ↑</value>
-    <comment>Bookmarks dialog, bookmark list 'Move to top' context menu shortcut text</comment>
-  </data>
   <data name="Help_CmdLineListItemSeparator" xml:space="preserve">
-    <value>/sep [separator character or text]
--sep [separator character or text]
--listItemSeparator [separator character or text]
-    Establece el caracter o cadena de texto que separará los elementos de la lista en el output.</value>
+    <value>/sep [carácter separador o texto]
+-sep [carácter separador o texto]
+-listItemSeparator [carácter o texto separador]
+    Establece el carácter o cadena para separar los elementos de la lista en una línea de la salida del informe.</value>
     <comment>Help dialog text when running dnGrep from the command-line</comment>
   </data>
   <data name="Help_CmdLineFileInformation" xml:space="preserve">
@@ -2559,5 +2543,30 @@ Establece el indicador de búsqueda de palabras completas: True o False.</value>
   <data name="ReportOptionsWindow_Cancel" xml:space="preserve">
     <value>Cancelar</value>
     <comment>Report options dialog, close button</comment>
+  </data>
+  <data name="ShellMenu_SearchWithDnGrep" xml:space="preserve">
+    <value>Buscar con dnGrep</value>
+    <comment>Text shown on Windows shell context menu, and Options dialog, startup options checkbox label</comment>
+  </data>
+  <data name="Help_CmdLineSeparateLines" xml:space="preserve">
+    <value>/sl [True/False]
+-sl [True/False]
+-separateLines [True/False]
+    Establece el indicador para mostrar cada coincidencia o grupo en una línea separada en la salida del informe de expresión regular: True o False.</value>
+  </data>
+  <data name="Keyboard_LabelHeader" xml:space="preserve">
+    <value>Etiqueta</value>
+  </data>
+  <data name="Keyboard_Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="Keyboard_RightArrowKey" xml:space="preserve">
+    <value>Derecha</value>
+  </data>
+  <data name="Keyborard_LeftArrowKey" xml:space="preserve">
+    <value>Izquierda</value>
+  </data>
+  <data name="Keyboard_DeleteKey" xml:space="preserve">
+    <value>Borrar</value>
   </data>
 </root>

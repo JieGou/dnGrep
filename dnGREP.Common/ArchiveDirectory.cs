@@ -30,7 +30,7 @@ namespace dnGREP.Common
 
         public static List<string> Extensions { get; private set; } = [];
 
-        public static List<string> Patterns { get; private set; } = [];
+        public static HashSet<string> ExtensionsSet { get; private set; } = [];
 
         private static readonly char[] separator = ['/'];
         private static readonly char[] csvSeparators = [',', ';', ' '];
@@ -44,8 +44,9 @@ namespace dnGREP.Common
             Extensions.Clear();
             Extensions.AddRange(list);
 
-            Patterns.Clear();
-            Patterns.AddRange(Extensions.Select(s => "*." + s));
+            ExtensionsSet.Clear();
+            foreach (var ext in list)
+                ExtensionsSet.Add('.' + ext);
         }
 
         public static IEnumerable<FileData> EnumerateFiles(string file, FileFilter filter,
@@ -129,10 +130,18 @@ namespace dnGREP.Common
                 string innerFileName = fileInfo.FileName;
 
                 int index = fileInfo.Index;
+                bool isAnonymousArchive = false;
                 if (innerFileName == "[no name]" && extractor.ArchiveFileData.Count == 1)
                 {
+                    // this may be a file or an archive
+
                     index = 0;
                     innerFileName = Path.GetFileNameWithoutExtension(fileName);
+
+                    string innerExtension = Path.GetExtension(innerFileName);
+                    if (string.IsNullOrEmpty(innerExtension)) // no file extension, assume it is an archive
+                        isAnonymousArchive = true;
+
                     ArchiveFileInfo temp = Copy(fileInfo);
                     temp.FileName = innerFileName;
                     fileData = new(fileName, temp);
@@ -172,7 +181,7 @@ namespace dnGREP.Common
                     }
                 }
 
-                if (Utils.IsArchive(innerFileName))
+                if (isAnonymousArchive || Utils.IsArchive(innerFileName))
                 {
                     using Stream stream = new MemoryStream();
                     extractor.ExtractFile(index, stream);
@@ -392,7 +401,7 @@ namespace dnGREP.Common
                     return false;
                 }
 
-                if (checkEncoding && !fileData.IsBinary)
+                if (!isPluginMatch && checkEncoding && !fileData.IsBinary)
                 {
                     fileData.Encoding = Utils.GetFileEncoding(stream);
                 }
@@ -450,7 +459,7 @@ namespace dnGREP.Common
             Utils.OpenFile(newArgs);
         }
 
-        public static List<GrepLine> GetLinesWithContext(GrepSearchResult searchResult, int linesBefore, int linesAfter)
+        public static List<GrepLine> GetLinesWithContext(GrepSearchResult searchResult, int linesBefore, int linesAfter, bool inHexFormat)
         {
             string[] parts = searchResult.FileNameDisplayed.Split(separator, StringSplitOptions.RemoveEmptyEntries);
             if (!searchResult.FileNameDisplayed.Contains(ArchiveSeparator, StringComparison.Ordinal) || parts.Length < 2)
@@ -468,10 +477,11 @@ namespace dnGREP.Common
             }
 
             using FileStream input = File.Open(zipFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-            return GetLinesWithContext(input, searchResult, linesBefore, linesAfter, innerFileName, intermediateFiles);
+            return GetLinesWithContext(input, searchResult, linesBefore, linesAfter, innerFileName, intermediateFiles, inHexFormat);
         }
 
-        private static List<GrepLine> GetLinesWithContext(Stream input, GrepSearchResult searchResult, int linesBefore, int linesAfter, string innerFileName, string[] intermediateFiles)
+        private static List<GrepLine> GetLinesWithContext(Stream input, GrepSearchResult searchResult, int linesBefore, int linesAfter,
+            string innerFileName, string[] intermediateFiles, bool inHexFormat)
         {
             List<GrepLine> results = [];
 
@@ -500,7 +510,7 @@ namespace dnGREP.Common
                         extractor.ExtractFile(index, stream);
                         string[] newIntermediateFiles = intermediateFiles.Skip(1).ToArray();
 
-                        results = GetLinesWithContext(stream, searchResult, linesBefore, linesAfter, innerFileName, newIntermediateFiles);
+                        results = GetLinesWithContext(stream, searchResult, linesBefore, linesAfter, innerFileName, newIntermediateFiles, inHexFormat);
                     }
                 }
                 else
@@ -526,8 +536,16 @@ namespace dnGREP.Common
                         {
                             extractor.ExtractFile(index, stream);
                             stream.Seek(0, SeekOrigin.Begin);
-                            using StreamReader reader = new(stream);
-                            results = Utils.GetLinesEx(reader, searchResult.Matches, linesBefore, linesAfter);
+                            if (inHexFormat)
+                            {
+                                using BinaryReader readStream = new(stream);
+                                results = Utils.GetLinesHexFormat(readStream, searchResult.Matches, linesBefore, linesAfter);
+                            }
+                            else
+                            {
+                                using StreamReader reader = new(stream);
+                                results = Utils.GetLinesEx(reader, searchResult.Matches, linesBefore, linesAfter);
+                            }
                         }
                         catch (Exception ex)
                         {
@@ -537,6 +555,28 @@ namespace dnGREP.Common
                 }
             }
             return results;
+        }
+
+        public static List<GrepLine> GetLinesHexFormat(GrepSearchResult searchResult, int linesBefore, int linesAfter)
+        {
+            string[] parts = searchResult.FileNameDisplayed.Split(separator, StringSplitOptions.RemoveEmptyEntries);
+            if (!searchResult.FileNameDisplayed.Contains(ArchiveSeparator, StringComparison.Ordinal) || parts.Length < 2)
+            {
+                return [];
+            }
+
+            string innerFileName = parts.Last();
+            string[] intermediateFiles = parts.Skip(1).Take(parts.Length - 2).ToArray();
+
+            string zipFile = searchResult.FileNameReal;
+            if (zipFile.Length > 260 && !zipFile.StartsWith(@"\\?\", StringComparison.Ordinal))
+            {
+                zipFile = @"\\?\" + zipFile;
+            }
+
+            using FileStream input = File.Open(zipFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            using BinaryReader readStream = new(input);
+            return Utils.GetLinesHexFormat(readStream, searchResult.Matches, linesBefore, linesAfter);
         }
 
         public static string ExtractToTempFile(GrepSearchResult searchResult)

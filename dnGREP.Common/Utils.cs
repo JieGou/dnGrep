@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -21,7 +23,12 @@ namespace dnGREP.Common
 {
     public static partial class Utils
     {
+        public const string defaultCacheFolderName = "dnGrep-files";
+
         private const string metacharacters = "+()^$.{}|\\";
+
+        private const int ErrorRequiresElevation = 740;
+
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         private static readonly char[] chars =
@@ -79,7 +86,7 @@ namespace dnGREP.Common
         /// <returns>number of files copied</returns>
         public static int CopyFiles(List<GrepSearchResult> source, string sourceDirectory, string destinationDirectory, OverwriteFile action)
         {
-            return CopyMoveFilesImpl(source, sourceDirectory, destinationDirectory, action, false);
+            return CopyMoveFilesImpl(source, sourceDirectory, destinationDirectory, action, false).count;
         }
 
         /// <summary>
@@ -89,13 +96,30 @@ namespace dnGREP.Common
         /// <param name="sourceDirectory"></param>
         /// <param name="destinationDirectory"></param>
         /// <param name="action"></param>
-        /// <returns>number of files copied</returns>
-        public static int MoveFiles(List<GrepSearchResult> source, string sourceDirectory, string destinationDirectory, OverwriteFile action)
+        /// <returns>count of copied/moved files and List of real files moved</returns>
+        /// <remarks>
+        /// The list contains only real files that were moved, and the count also includes files copied from archives
+        /// </remarks>
+        public static (int count, List<string> realFilesMoved) MoveFiles(List<GrepSearchResult> source, string sourceDirectory, string destinationDirectory, OverwriteFile action)
         {
             return CopyMoveFilesImpl(source, sourceDirectory, destinationDirectory, action, true);
         }
 
-        private static int CopyMoveFilesImpl(List<GrepSearchResult> source, string sourceDirectory, string destinationDirectory, OverwriteFile action, bool deleteAfterCopy)
+        /// <summary>
+        /// Moves files with directory structure based on search results. If destination folder does not exist, creates it.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="sourceDirectory"></param>
+        /// <param name="destinationDirectory"></param>
+        /// <param name="action"></param>
+        /// <param name="deleteAfterCopy">true to move files, false to copy</param>
+        /// <returns>count of copied/moved files and List of real files moved</returns>
+        /// <remarks>
+        /// The list contains only real files that were moved, and the count also includes files copied from archives
+        /// </remarks>
+        private static (int count, List<string> realFilesMoved) CopyMoveFilesImpl(
+            List<GrepSearchResult> source, string sourceDirectory, string destinationDirectory,
+            OverwriteFile action, bool deleteAfterCopy)
         {
             sourceDirectory = FixFolderName(sourceDirectory);
             destinationDirectory = FixFolderName(destinationDirectory);
@@ -104,10 +128,55 @@ namespace dnGREP.Common
 
             int count = 0;
             HashSet<string> files = [];
+            List<string> realFilesMoved = [];
+
+            bool copyFilesFromArchive = deleteAfterCopy ?
+               GrepSettings.Instance.Get<ArchiveCopyMoveDelete>(GrepSettings.Key.ArchiveMove) == ArchiveCopyMoveDelete.CopyFile :
+               GrepSettings.Instance.Get<ArchiveCopyMoveDelete>(GrepSettings.Key.ArchiveCopy) == ArchiveCopyMoveDelete.CopyFile;
 
             foreach (GrepSearchResult result in source)
             {
-                if (!files.Contains(result.FileNameReal) && result.FileNameReal.Contains(sourceDirectory, StringComparison.OrdinalIgnoreCase))
+                if (copyFilesFromArchive && IsArchive(result.FileNameReal) && !files.Contains(result.FileNameDisplayed) &&
+                    result.FileNameReal.Contains(sourceDirectory, StringComparison.OrdinalIgnoreCase))
+                {
+                    files.Add(result.FileNameDisplayed);
+                    string tempFile = ArchiveDirectory.ExtractToTempFile(result);
+
+                    FileInfo sourceFileInfo = new(tempFile);
+                    string destinationPath = string.Concat(destinationDirectory, result.FileNameReal.AsSpan(sourceDirectory.Length));
+                    destinationPath = Path.ChangeExtension(destinationPath, null);
+
+                    int pos = result.FileNameDisplayed.IndexOf(ArchiveDirectory.ArchiveSeparator, StringComparison.Ordinal);
+                    if (pos == -1) continue; // should never happen
+                    pos += ArchiveDirectory.ArchiveSeparator.Length;
+                    string subPath = result.FileNameDisplayed[pos..];
+                    destinationPath = Path.Combine(destinationPath, subPath);
+                    FileInfo destinationFileInfo = new(destinationPath);
+                    if (sourceFileInfo.FullName != destinationFileInfo.FullName)
+                    {
+                        bool overwrite = action == OverwriteFile.Yes;
+                        if (destinationFileInfo.Exists && !string.IsNullOrEmpty(destinationFileInfo.DirectoryName))
+                        {
+                            if (action == OverwriteFile.Prompt &&
+                                !AskUserOverwrite(destinationFileInfo.Name, destinationFileInfo.DirectoryName,
+                                false, ref overwrite, ref action))
+                            {
+                                return (count, realFilesMoved);
+                            }
+
+                            if (!overwrite)
+                            {
+                                continue;
+                            }
+                        }
+
+                        // Move is the same as Copy from an archive; the archive does not get modified
+                        CopyFile(sourceFileInfo.FullName, destinationFileInfo.FullName, overwrite);
+                        DeleteFile(tempFile);
+                        count++;
+                    }
+                }
+                else if (!files.Contains(result.FileNameReal) && result.FileNameReal.Contains(sourceDirectory, StringComparison.OrdinalIgnoreCase))
                 {
                     files.Add(result.FileNameReal);
                     FileInfo sourceFileInfo = new(result.FileNameReal);
@@ -121,7 +190,7 @@ namespace dnGREP.Common
                                 !AskUserOverwrite(destinationFileInfo.Name, destinationFileInfo.DirectoryName,
                                 deleteAfterCopy, ref overwrite, ref action))
                             {
-                                return count;
+                                return (count, realFilesMoved);
                             }
 
                             if (!overwrite)
@@ -133,13 +202,14 @@ namespace dnGREP.Common
                         CopyFile(sourceFileInfo.FullName, destinationFileInfo.FullName, overwrite);
                         if (deleteAfterCopy)
                         {
+                            realFilesMoved.Add(sourceFileInfo.FullName);
                             DeleteFile(sourceFileInfo.FullName);
                         }
                         count++;
                     }
                 }
             }
-            return count;
+            return (count, realFilesMoved);
         }
 
         /// <summary>
@@ -152,7 +222,7 @@ namespace dnGREP.Common
         /// <returns>number of files copied</returns>
         public static int CopyFiles(List<GrepSearchResult> source, string destinationDirectory, OverwriteFile action)
         {
-            return CopyMoveImpl(source, destinationDirectory, action, false);
+            return CopyMoveImpl(source, destinationDirectory, action, false).count;
         }
 
         /// <summary>
@@ -163,21 +233,57 @@ namespace dnGREP.Common
         /// <param name="destinationDirectory"></param>
         /// <param name="action"></param>
         /// <returns>number of files moved</returns>
-        public static int MoveFiles(List<GrepSearchResult> source, string destinationDirectory, OverwriteFile action)
+        public static (int count, List<string> realFilesMoved) MoveFiles(List<GrepSearchResult> source, string destinationDirectory, OverwriteFile action)
         {
             return CopyMoveImpl(source, destinationDirectory, action, true);
         }
 
-        private static int CopyMoveImpl(List<GrepSearchResult> source, string destinationDirectory, OverwriteFile action, bool deleteAfterCopy)
+        private static (int count, List<string> realFilesMoved) CopyMoveImpl(List<GrepSearchResult> source, string destinationDirectory, OverwriteFile action, bool deleteAfterCopy)
         {
             if (!Directory.Exists(destinationDirectory)) Directory.CreateDirectory(destinationDirectory);
 
             int count = 0;
             HashSet<string> files = [];
+            List<string> realFilesMoved = [];
+
+            bool copyFilesFromArchive = deleteAfterCopy ?
+                GrepSettings.Instance.Get<ArchiveCopyMoveDelete>(GrepSettings.Key.ArchiveMove) == ArchiveCopyMoveDelete.CopyFile :
+                GrepSettings.Instance.Get<ArchiveCopyMoveDelete>(GrepSettings.Key.ArchiveCopy) == ArchiveCopyMoveDelete.CopyFile;
 
             foreach (GrepSearchResult result in source)
             {
-                if (!files.Contains(result.FileNameReal))
+                if (copyFilesFromArchive && IsArchive(result.FileNameReal) && !files.Contains(result.FileNameDisplayed))
+                {
+                    files.Add(result.FileNameDisplayed);
+                    string tempFile = ArchiveDirectory.ExtractToTempFile(result);
+                    FileInfo sourceFileInfo = new(tempFile);
+                    FileInfo destinationFileInfo = new(Path.Combine(destinationDirectory, Path.GetFileName(tempFile)));
+                    if (sourceFileInfo.FullName != destinationFileInfo.FullName)
+                    {
+                        bool overwrite = action == OverwriteFile.Yes;
+                        if (destinationFileInfo.Exists)
+                        {
+                            if (action == OverwriteFile.Prompt && !string.IsNullOrEmpty(destinationFileInfo.DirectoryName) &&
+                                !AskUserOverwrite(destinationFileInfo.Name, destinationFileInfo.DirectoryName,
+                                    deleteAfterCopy, ref overwrite, ref action))
+                            {
+                                return (count, realFilesMoved);
+                            }
+
+                            if (!overwrite)
+                            {
+                                continue;
+                            }
+                        }
+
+                        // Move is the same as Copy from an archive; the archive does not get modified
+                        CopyFile(sourceFileInfo.FullName, destinationFileInfo.FullName, overwrite);
+                        DeleteFile(tempFile);
+                        count++;
+                    }
+
+                }
+                else if (!files.Contains(result.FileNameReal))
                 {
                     files.Add(result.FileNameReal);
                     FileInfo sourceFileInfo = new(result.FileNameReal);
@@ -191,7 +297,7 @@ namespace dnGREP.Common
                                 !AskUserOverwrite(destinationFileInfo.Name, destinationFileInfo.DirectoryName,
                                     deleteAfterCopy, ref overwrite, ref action))
                             {
-                                return count;
+                                return (count, realFilesMoved);
                             }
 
                             if (!overwrite)
@@ -203,13 +309,14 @@ namespace dnGREP.Common
                         CopyFile(sourceFileInfo.FullName, destinationFileInfo.FullName, overwrite);
                         if (deleteAfterCopy)
                         {
+                            realFilesMoved.Add(sourceFileInfo.FullName);
                             DeleteFile(sourceFileInfo.FullName);
                         }
                         count++;
                     }
                 }
             }
-            return count;
+            return (count, realFilesMoved);
         }
 
         /// <summary>
@@ -317,32 +424,44 @@ namespace dnGREP.Common
         /// Deletes file based on search results. 
         /// </summary>
         /// <param name="source"></param>
-        public static int DeleteFiles(List<GrepSearchResult> source)
+        public static List<string> DeleteFiles(List<GrepSearchResult> source)
         {
+            bool deleteArchive = GrepSettings.Instance.Get<ArchiveCopyMoveDelete>(GrepSettings.Key.ArchiveDelete)
+                == ArchiveCopyMoveDelete.WholeArchive;
+
             HashSet<string> files = [];
-            int count = 0;
             foreach (GrepSearchResult result in source)
             {
+                // based on option, do not delete archives
+                if (IsArchive(result.FileNameReal) && !deleteArchive)
+                    continue;
+
                 if (!files.Contains(result.FileNameReal))
                 {
                     files.Add(result.FileNameReal);
+
                     DeleteFile(result.FileNameReal);
-                    count++;
                 }
             }
-            return count;
+            return [.. files];
         }
 
         /// <summary>
         /// Deletes files to the recycle bin based on search results. 
         /// </summary>
         /// <param name="source"></param>
-        public static int SendToRecycleBin(List<GrepSearchResult> source)
+        public static List<string> SendToRecycleBin(List<GrepSearchResult> source)
         {
+            bool deleteArchive = GrepSettings.Instance.Get<ArchiveCopyMoveDelete>(GrepSettings.Key.ArchiveDelete)
+                == ArchiveCopyMoveDelete.WholeArchive;
+
             HashSet<string> files = [];
-            int count = 0;
             foreach (GrepSearchResult result in source)
             {
+                // based on option, do not delete archives
+                if (IsArchive(result.FileNameReal) && !deleteArchive)
+                    continue;
+
                 if (!files.Contains(result.FileNameReal))
                 {
                     files.Add(result.FileNameReal);
@@ -350,10 +469,9 @@ namespace dnGREP.Common
                     Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(result.FileNameReal,
                         Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs,
                         Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
-                    count++;
                 }
             }
-            return count;
+            return [.. files];
         }
 
         /// <summary>
@@ -683,11 +801,6 @@ namespace dnGREP.Common
         public static List<string> ArchiveExtensions => ArchiveDirectory.Extensions;
 
         /// <summary>
-        /// returns a list of archiveExtensions used to search for files (with leading '*.')
-        /// </summary>
-        public static List<string> ArchivePatterns => ArchiveDirectory.Patterns;
-
-        /// <summary>
         /// Add DirectorySeparatorChar to the end of the folder path if does not exist
         /// </summary>
         /// <param name="name">Folder path</param>
@@ -730,7 +843,7 @@ namespace dnGREP.Common
             bool handled = false;
             if (!filter.IsRegex && !filter.NamePatternToInclude.Contains("#!", StringComparison.Ordinal))
             {
-                var includePatterns = UiUtils.SplitPattern(filter.NamePatternToInclude);
+                var includePatterns = UiUtils.SplitPattern(filter.NamePatternToInclude, false);
                 foreach (var pattern in includePatterns)
                 {
                     if (pattern == "*.doc" || pattern == "*.xls" || pattern == "*.ppt")
@@ -750,7 +863,7 @@ namespace dnGREP.Common
             if (includeRegexPatterns == null || excludeRegexPatterns == null || includeShebangPatterns == null)
                 return;
 
-            var includePatterns = UiUtils.SplitPattern(filter.NamePatternToInclude);
+            var includePatterns = UiUtils.SplitPattern(filter.NamePatternToInclude, filter.IsRegex);
             if (HasShebangPattern(includePatterns))
             {
                 foreach (var pattern in includePatterns.Where(p => HasShebangPattern(p)))
@@ -768,7 +881,7 @@ namespace dnGREP.Common
                 }
             }
 
-            var excludePatterns = UiUtils.SplitPattern(filter.NamePatternToExclude);
+            var excludePatterns = UiUtils.SplitPattern(filter.NamePatternToExclude, filter.IsRegex);
             foreach (var pattern in excludePatterns)
             {
                 excludeRegexPatterns.Add(GetRegex(pattern, filter.IsRegex));
@@ -854,7 +967,7 @@ namespace dnGREP.Common
                 List<string> patterns = [];
                 if (!string.IsNullOrWhiteSpace(filePatternIgnore))
                 {
-                    var excludePatterns = UiUtils.SplitPattern(filePatternIgnore);
+                    var excludePatterns = UiUtils.SplitPattern(filePatternIgnore, isRegex);
                     foreach (var pattern in excludePatterns)
                     {
                         Regex regex = GetRegex(pattern, isRegex);
@@ -887,6 +1000,12 @@ namespace dnGREP.Common
                 {
                     if (!isRegex)
                         pattern = WildcardToRegex(pattern);
+
+                    if (pattern.Equals(NoExtensionPattern, StringComparison.Ordinal))
+                        return NoExtensionRegex();
+
+                    if (pattern.Equals(DotFilesPattern, StringComparison.Ordinal))
+                        return DotFilesRegex();
 
                     if (!regexCache.TryGetValue(pattern, out Regex? regex))
                     {
@@ -1359,13 +1478,21 @@ namespace dnGREP.Common
         }
 
         /// <summary>
-        /// Converts unix asterisk based file pattern to regex
+        /// Converts windows asterisk based file pattern to regex
         /// </summary>
         /// <param name="wildcard">Asterisk based pattern</param>
         /// <returns>Regular expression of null is empty</returns>
         public static string WildcardToRegex(string wildcard)
         {
             if (string.IsNullOrWhiteSpace(wildcard)) return wildcard;
+
+            // special meaning files with no extension
+            if (wildcard.Equals("*.", StringComparison.OrdinalIgnoreCase))
+                return NoExtensionPattern;
+
+            // special meaning files that start with dot
+            if (wildcard.Equals(".*", StringComparison.OrdinalIgnoreCase))
+                return DotFilesPattern;
 
             StringBuilder sb = new();
 
@@ -1412,7 +1539,24 @@ namespace dnGREP.Common
                             FileName = UiUtils.Quote(filePath),
                             UseShellExecute = true,
                         };
-                        using var proc = Process.Start(startInfo);
+                        try
+                        {
+                            using var proc = Process.Start(startInfo);
+                        }
+                        catch (Win32Exception ex)
+                        {
+                            if (ex.NativeErrorCode == ErrorRequiresElevation)
+                            {
+                                startInfo.Verb = "runas";
+                                startInfo.UseShellExecute = true;
+
+                                using var proc = Process.Start(startInfo);
+                            }
+                            else
+                            {
+                                throw;
+                            }
+                        }
                     }
                     catch
                     {
@@ -1422,7 +1566,24 @@ namespace dnGREP.Common
                             CreateNoWindow = true,
                             Arguments = filePath
                         };
-                        using var proc = Process.Start(startInfo);
+                        try
+                        {
+                            using var proc = Process.Start(startInfo);
+                        }
+                        catch (Win32Exception ex)
+                        {
+                            if (ex.NativeErrorCode == ErrorRequiresElevation)
+                            {
+                                startInfo.Verb = "runas";
+                                startInfo.UseShellExecute = true;
+
+                                using var proc = Process.Start(startInfo);
+                            }
+                            else
+                            {
+                                throw;
+                            }
+                        }
                     }
                 }
                 else
@@ -1465,7 +1626,24 @@ namespace dnGREP.Common
                                 .Replace("%match", matchValue, StringComparison.Ordinal)
                                 .Replace("%column", args.ColumnNumber.ToString(), StringComparison.Ordinal),
                         };
-                        using var proc = Process.Start(startInfo);
+                        try
+                        {
+                            using var proc = Process.Start(startInfo);
+                        }
+                        catch (Win32Exception ex)
+                        {
+                            if (ex.NativeErrorCode == ErrorRequiresElevation)
+                            {
+                                startInfo.Verb = "runas";
+                                startInfo.UseShellExecute = true;
+
+                                using var proc = Process.Start(startInfo);
+                            }
+                            else
+                            {
+                                throw;
+                            }
+                        }
                     }
                 }
             }
@@ -1492,6 +1670,33 @@ namespace dnGREP.Common
         }
 
         /// <summary>
+        /// Returns a path to a folder used by plugins to extract files to text. The location of this
+        /// folder depends on user settings, and may be the temp folder <see cref="GetTempFolder"/>
+        /// </summary>
+        /// <returns></returns>
+        public static string GetCacheFolder()
+        {
+            if (GrepSettings.Instance.Get<bool>(GrepSettings.Key.CacheExtractedFiles))
+            {
+                string userCachePath = GrepSettings.Instance.Get<string>(GrepSettings.Key.CacheFilePath);
+                string cachePath = !IsValidPath(userCachePath) ||
+                    GrepSettings.Instance.Get<bool>(GrepSettings.Key.CacheFilesInTempFolder) ?
+                    Path.Combine(Path.GetTempPath(), defaultCacheFolderName) :
+                    userCachePath;
+
+                if (!Directory.Exists(cachePath))
+                {
+                    Directory.CreateDirectory(cachePath);
+                }
+                return cachePath + Path.DirectorySeparatorChar;
+            }
+            else
+            {
+                return GetTempFolder();
+            }
+        }
+
+        /// <summary>
         /// Deletes temp folder
         /// </summary>
         public static void DeleteTempFolder()
@@ -1505,6 +1710,45 @@ namespace dnGREP.Common
             catch (Exception ex)
             {
                 logger.Error(ex, "Failed to delete temp folder");
+            }
+        }
+
+        public static void CleanCacheFiles()
+        {
+            Stopwatch sw = Stopwatch.StartNew();
+            int days = GrepSettings.Instance.Get<int>(GrepSettings.Key.CacheFilesCleanDays);
+            if (days > 0 &&
+                GrepSettings.Instance.Get<bool>(GrepSettings.Key.CacheExtractedFiles))
+            {
+                string userCachePath = GrepSettings.Instance.Get<string>(GrepSettings.Key.CacheFilePath);
+                string cachePath = !IsValidPath(userCachePath) ||
+                    GrepSettings.Instance.Get<bool>(GrepSettings.Key.CacheFilesInTempFolder) ?
+                    Path.Combine(Path.GetTempPath(), defaultCacheFolderName) :
+                    userCachePath;
+
+                int count = 0;
+                if (Directory.Exists(cachePath))
+                {
+                    DateTime expiredDate = DateTime.Now.AddDays(-1 * days);
+
+                    foreach (string file in Directory.GetFiles(cachePath, "*.*", SearchOption.AllDirectories))
+                    {
+                        FileInfo fileInfo = new(file);
+                        if (fileInfo.LastAccessTime < expiredDate)
+                        {
+                            try
+                            {
+                                DeleteFile(file);
+                                count++;
+                            }
+                            catch (Exception ex)
+                            {
+                                logger.Error(ex, $"Failed to delete file from cache folder '{file}'");
+                            }
+                        }
+                    }
+                }
+                logger.Info($"Deleted {count} files from cache in {sw.ElapsedMilliseconds} ms");
             }
         }
 
@@ -1563,31 +1807,37 @@ namespace dnGREP.Common
                 fileName = PathEx.GetShort83Path(fileName);
 
             ProcessStartInfo startInfo = new("explorer.exe", "/select,\"" + fileName + "\"");
-            using var proc = Process.Start(startInfo);
+            try
+            {
+                using var proc = Process.Start(startInfo);
+            }
+            catch (Win32Exception ex)
+            {
+                if (ex.NativeErrorCode == ErrorRequiresElevation)
+                {
+                    startInfo.Verb = "runas";
+                    startInfo.UseShellExecute = true;
+
+                    using var proc = Process.Start(startInfo);
+                }
+                else
+                {
+                    throw;
+                }
+            }
         }
 
-        public static void CompareFiles(IList<GrepSearchResult> files)
+        public static void CompareFiles(IList<string> paths)
         {
+            if (paths.Count < 2 || paths.Count > 3)
+                throw new ArgumentException("CompareFiles takes 2 or 3 files");
+
             var settings = GrepSettings.Instance;
             string? application = settings.Get<string>(GrepSettings.Key.CompareApplication);
             string? args = settings.Get<string>(GrepSettings.Key.CompareApplicationArgs);
 
             if (!string.IsNullOrWhiteSpace(application))
             {
-                List<string> paths = [];
-                foreach (var item in files)
-                {
-                    string filePath = item.FileNameReal;
-                    if (IsArchive(filePath))
-                        filePath = ArchiveDirectory.ExtractToTempFile(item);
-
-                    if (!paths.Contains(filePath))
-                        paths.Add(filePath);
-
-                    if (paths.Count == 3)
-                        break;
-                }
-
                 string appArgs = string.IsNullOrWhiteSpace(args) ? string.Empty : args + " ";
                 string fileArgs = string.Join(" ", paths.Select(p => UiUtils.Quote(p)));
 
@@ -1597,8 +1847,43 @@ namespace dnGREP.Common
                     CreateNoWindow = true,
                     Arguments = appArgs + fileArgs
                 };
-                using var proc = Process.Start(startInfo);
+                try
+                {
+                    using var proc = Process.Start(startInfo);
+                }
+                catch (Win32Exception ex)
+                {
+                    if (ex.NativeErrorCode == ErrorRequiresElevation)
+                    {
+                        startInfo.Verb = "runas";
+                        startInfo.UseShellExecute = true;
+
+                        using var proc = Process.Start(startInfo);
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
             }
+        }
+
+        public static void CompareFiles(IList<GrepSearchResult> files)
+        {
+            List<string> paths = [];
+            foreach (var item in files)
+            {
+                string filePath = item.FileNameReal;
+                if (IsArchive(filePath))
+                    filePath = ArchiveDirectory.ExtractToTempFile(item);
+
+                if (!paths.Contains(filePath))
+                    paths.Add(filePath);
+
+                if (paths.Count == 3)
+                    break;
+            }
+            CompareFiles(paths);
         }
 
         /// <summary>
@@ -1608,55 +1893,6 @@ namespace dnGREP.Common
         public static string GetCurrentPath()
         {
             return GetCurrentPath(typeof(Utils));
-        }
-
-        private static bool? canUseCurrentFolder = null;
-        /// <summary>
-        /// Returns path to folder where user has write access to. Either current folder or user APP_DATA.
-        /// </summary>
-        /// <returns></returns>
-        public static string GetDataFolderPath()
-        {
-            string currentFolder = GetCurrentPath(typeof(Utils));
-            if (!canUseCurrentFolder.HasValue)
-            {
-                // if started in Admin mode, the user can write to these directories
-                // so filter them out first...
-                if (currentFolder.IsSubDirectoryOf(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)) ||
-                    currentFolder.IsSubDirectoryOf(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86)) ||
-                    currentFolder.IsSubDirectoryOf(Environment.GetFolderPath(Environment.SpecialFolder.Windows)))
-                {
-                    canUseCurrentFolder = false;
-                }
-                else
-                {
-                    canUseCurrentFolder = HasWriteAccessToFolder(currentFolder);
-                }
-            }
-
-            if (canUseCurrentFolder == true)
-            {
-                return currentFolder;
-            }
-            else
-            {
-                string dataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "dnGREP");
-                if (!Directory.Exists(dataFolder))
-                    Directory.CreateDirectory(dataFolder);
-                return dataFolder;
-            }
-        }
-
-        public static bool IsPortableMode
-        {
-            get
-            {
-                if (!canUseCurrentFolder.HasValue)
-                {
-                    GetDataFolderPath();
-                }
-                return canUseCurrentFolder ?? false;
-            }
         }
 
         public static bool IsSubDirectoryOf(this string candidate, string other)
@@ -1683,37 +1919,6 @@ namespace dnGREP.Common
             }
 
             return isChild;
-        }
-
-        private static bool HasWriteAccessToFolder(string folderPath)
-        {
-            string filename = Path.Combine(folderPath, "~temp.dat");
-            bool canAccess = true;
-
-            //2. Attempt the action but handle permission changes.
-            try
-            {
-                using FileStream fstream = File.Open(filename, FileMode.Create);
-                using TextWriter writer = new StreamWriter(fstream);
-                writer.WriteLine("sometext");
-            }
-            catch
-            {
-                //No permission. 
-                canAccess = false;
-            }
-
-            // Cleanup
-            try
-            {
-                DeleteFile(filename);
-            }
-            catch
-            {
-                // Ignore
-            }
-
-            return canAccess;
         }
 
 
@@ -1943,7 +2148,7 @@ namespace dnGREP.Common
                                     if (multilineMatch)
                                     {
                                         lineGroups = bodyMatchesClone[0].Groups.Where(g => g.StartLocation >= startOfLineIndex &&
-                                                g.StartLocation < startOfLineIndex + tempLine.Length && 
+                                                g.StartLocation < startOfLineIndex + tempLine.Length &&
                                                 g.StartLocation + g.Length <= startOfLineIndex + tempLine.Length)
                                             .Select(g => new GrepCaptureGroup(g.Name, g.StartLocation - startOfLineIndex, g.Length, g.Value, g.FullValue))
                                             .ToList();
@@ -1973,7 +2178,7 @@ namespace dnGREP.Common
                                     else
                                         matches.Add(new GrepMatch(fileMatchId, bodyMatchesClone[0].SearchPattern, i, 0, bodyMatchesClone[0].Length - tempLinesTotalLength + line.Length + startIndex, lineGroups, bodyMatchesClone[0].RegexMatchValue));
 
-                                    startOfLineIndex += tempLine.TrimEndOfLine().Length + 1; //add 1 for the \n character that was used when the regex was run
+                                    startOfLineIndex += tempLine.Length;
                                     startRecordingAfterLines = true;
                                 }
                                 bodyMatchesClone.RemoveAt(0);
@@ -2049,7 +2254,7 @@ namespace dnGREP.Common
                             grepMatch.Groups.Insert(idx, new(name, start, first.Length, first, group.FullValue));
                             if (second.Length > 0 && !second.Equals(eol, StringComparison.Ordinal))
                             {
-                                grepMatch.Groups.Add(new(name, start + first.Length + 1, second.Length, second, group.FullValue));
+                                grepMatch.Groups.Add(new(name, start + first.Length + eol.Length, second.Length, second, group.FullValue));
                             }
                             break;
                         }
@@ -2278,21 +2483,13 @@ namespace dnGREP.Common
         /// <returns></returns>
         public static string GetHash(string input)
         {
-            // step 1, calculate MD5 hash from input
             byte[] inputBytes = Encoding.ASCII.GetBytes(input);
             byte[] hash = MD5.HashData(inputBytes);
-
-            // step 2, convert byte array to hex string
-            StringBuilder sb = new();
-            for (int i = 0; i < hash.Length; i++)
-            {
-                sb.Append(hash[i].ToString("X2", CultureInfo.InvariantCulture));
-            }
-            return sb.ToString();
+            return Convert.ToHexString(hash);
         }
 
         /// <summary>
-        /// Returns true if beginText end with a non-alphanumeric character. Copied from AtroGrep.
+        /// Returns true if beginText end with a non-alphanumeric character. Copied from AstroGrep.
         /// </summary>
         /// <param name="beginText">Text to test</param>
         /// <returns></returns>
@@ -2437,6 +2634,116 @@ namespace dnGREP.Common
             return 0xEF == b1 && 0xBB == b2 && 0xBF == b3;
         }
 
+        public static string GetTempTextFileName(string filePath)
+        {
+            if (!string.IsNullOrEmpty(filePath))
+            {
+                return string.Concat(Path.GetFileName(filePath), "_", HashSHA256(filePath), ".txt");
+            }
+            return string.Empty;
+        }
+
+        public static string GetTempTextFileName(Stream stream, string fileName)
+        {
+            if (stream != null && !string.IsNullOrEmpty(fileName))
+            {
+                return string.Concat(Path.GetFileName(fileName), "_", HashSHA256(stream), ".txt");
+            }
+            return string.Empty;
+        }
+
+        public static string HashSHA256(string file)
+        {
+            try
+            {
+                using var stream = File.OpenRead(file);
+                return Convert.ToHexString(SHA256.HashData(stream));
+            }
+            catch (Exception) // cannot open file for reading
+            {
+                return string.Empty;
+            }
+        }
+
+        public static string HashSHA256(Stream stream)
+        {
+            var hash = Convert.ToHexString(SHA256.HashData(stream));
+            stream.Seek(0, SeekOrigin.Begin);
+            return hash;
+        }
+
+        public static string GetTempTextFileName(FileData fileData)
+        {
+            if (fileData != null)
+            {
+                return string.Concat(Path.GetFileName(fileData.Name), "_", HashFileSizeModifiedTime(fileData), ".txt");
+            }
+            return string.Empty;
+        }
+
+        public static string HashFileSizeModifiedTime(FileData fileData)
+        {
+            long size = fileData.Length;
+            long ticks = fileData.LastWriteTimeUtc.Ticks;
+
+            byte[] input = [.. BitConverter.GetBytes(size), .. BitConverter.GetBytes(ticks)];
+            return Convert.ToHexString(SHA256.HashData(input));
+        }
+
+        /// <summary>
+        /// Gets a value that indicates whether <paramref name="path"/>
+        /// is a valid path.
+        /// </summary>
+        /// <returns>Returns <c>true</c> if <paramref name="path"/> is a
+        /// valid path; <c>false</c> otherwise. Also returns <c>false</c> if
+        /// the caller does not have the required permissions to access
+        /// <paramref name="path"/>.
+        /// </returns>
+        /// <seealso cref="Path.GetFullPath"/>
+        /// <seealso cref="TryGetFullPath"/>
+        public static bool IsValidPath(string path)
+        {
+            return TryGetFullPath(path, out _);
+        }
+
+        /// <summary>
+        /// Returns the absolute path for the specified path string. A return
+        /// value indicates whether the conversion succeeded.
+        /// </summary>
+        /// <param name="path">The file or directory for which to obtain absolute
+        /// path information.
+        /// </param>
+        /// <param name="result">When this method returns, contains the absolute
+        /// path representation of <paramref name="path"/>, if the conversion
+        /// succeeded, or <see cref="string.Empty"/> if the conversion failed.
+        /// The conversion fails if <paramref name="path"/> is null or
+        /// <see cref="string.Empty"/>, or is not of the correct format. This
+        /// parameter is passed uninitialized; any value originally supplied
+        /// in <paramref name="result"/> will be overwritten.
+        /// </param>
+        /// <returns><c>true</c> if <paramref name="path"/> was converted
+        /// to an absolute path successfully; otherwise, false.
+        /// </returns>
+        /// <seealso cref="Path.GetFullPath"/>
+        /// <seealso cref="IsValidPath"/>
+        public static bool TryGetFullPath(string path, out string result)
+        {
+            result = string.Empty;
+            if (string.IsNullOrWhiteSpace(path)) { return false; }
+            bool status = false;
+
+            try
+            {
+                result = Path.GetFullPath(path);
+                status = true;
+            }
+            catch (ArgumentException) { }
+            catch (SecurityException) { }
+            catch (NotSupportedException) { }
+            catch (PathTooLongException) { }
+
+            return status;
+        }
         public static bool IsGitInstalled => GitUtil.IsGitInstalled;
 
         public static bool ValidateRegex(string pattern)
@@ -2466,6 +2773,14 @@ namespace dnGREP.Common
 
         [GeneratedRegex(@"\[(\w+)\]")]
         private static partial Regex PatternTypeRegex();
+
+        internal const string NoExtensionPattern = @"(?<!\.\w+)$";
+        [GeneratedRegex(NoExtensionPattern)]
+        private static partial Regex NoExtensionRegex();
+
+        internal const string DotFilesPattern = @"\\\.[^\\]+$";
+        [GeneratedRegex(DotFilesPattern)]
+        private static partial Regex DotFilesRegex();
     }
 
     public class KeyValueComparer : IComparer<KeyValuePair<string, int>>

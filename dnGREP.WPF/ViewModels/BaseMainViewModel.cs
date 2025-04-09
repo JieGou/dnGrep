@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -30,6 +29,7 @@ namespace dnGREP.WPF
             PropertyChanged += MainViewModel_PropertyChanged;
 
             CurrentGrepOperation = GrepOperation.None;
+            IsGlobalEnabled = TypeOfSearch == SearchType.PlainText || TypeOfSearch == SearchType.Regex;
             IsCaseSensitiveEnabled = true;
             IsMultilineEnabled = true;
             IsWholeWordEnabled = true;
@@ -56,6 +56,7 @@ namespace dnGREP.WPF
             nameof(FilePatternIgnore),
             nameof(TimeRangeFrom),
             nameof(TimeRangeTo),
+            nameof(Global),
             nameof(IncludeArchive),
             nameof(IncludeBinary),
             nameof(IncludeHidden),
@@ -279,13 +280,26 @@ namespace dnGREP.WPF
         }
 
         [ObservableProperty]
+        private bool global;
+        partial void OnGlobalChanged(bool value)
+        {
+            GlobalFlagTooltip = value ? Resources.Main_GlobalTooltip_True : Resources.Main_GlobalTooltip_False;
+        }
+
+        [ObservableProperty]
+        private bool isGlobalEnabled;
+
+        [ObservableProperty]
+        private string globalFlagTooltip = Resources.Main_GlobalTooltip_True;
+
+        [ObservableProperty]
         private bool caseSensitive;
 
         [ObservableProperty]
-        private bool previewFileContent;
+        private bool isCaseSensitiveEnabled;
 
         [ObservableProperty]
-        private bool isCaseSensitiveEnabled;
+        private bool previewFileContent;
 
         [ObservableProperty]
         private bool multiline;
@@ -313,7 +327,16 @@ namespace dnGREP.WPF
         private bool isHighlightGroupsEnabled;
 
         [ObservableProperty]
-        private bool stopAfterFirstMatch;
+        private bool stopAfterNumMatches;
+
+        [ObservableProperty]
+        private bool pauseAfterNumMatches;
+
+        [ObservableProperty]
+        public int searchAutoStopCount = 1;
+
+        [ObservableProperty]
+        public int searchAutoPauseCount = 5;
 
         [ObservableProperty]
         private bool wholeWord;
@@ -430,27 +453,6 @@ namespace dnGREP.WPF
             }
             else
             {
-                if (TypeOfFileSearch == FileSearchType.Everything)
-                {
-                    // Is this a list of paths?  A path may contain a comma or semi-colon
-                    // so check that it isn't a valid directory or file first
-                    string trimmedPath = path.Trim('\"', ' ');
-                    if (!(Directory.Exists(trimmedPath) || File.Exists(trimmedPath)) &&
-                        (path.Contains(',', StringComparison.Ordinal) || path.Contains(';', StringComparison.Ordinal)))
-                    {
-                        try
-                        {
-                            var parts = UiUtils.SplitPath(path, true).Select(p => UiUtils.QuoteIfIncludesSpaces(p));
-                            path = string.Join(" | ", parts);
-                        }
-                        catch { }
-                    }
-                    else
-                    {
-                        path = UiUtils.QuoteIfIncludesSpaces(path);
-                    }
-                }
-
                 FileOrFolderPath = path;
             }
         }
@@ -463,10 +465,6 @@ namespace dnGREP.WPF
             switch (name)
             {
                 case nameof(Multiline):
-                case nameof(Singleline):
-                case nameof(WholeWord):
-                case nameof(CaseSensitive):
-                case nameof(StopAfterFirstMatch):
                     if (Multiline)
                         TextBoxStyle = "{StaticResource ExpandedTextbox}";
                     else
@@ -495,7 +493,7 @@ namespace dnGREP.WPF
                 case nameof(TypeOfFileSearch):
                     if (TypeOfFileSearch == FileSearchType.Everything)
                     {
-                        SetFileOrFolderPath(FileOrFolderPath);
+                        SetFileOrFolderPath(ConvertToEverythingPath(FileOrFolderPath));
                         FilePattern = string.Empty;
                         FilePatternIgnore = string.Empty;
                         UseGitignore = false;
@@ -701,12 +699,14 @@ namespace dnGREP.WPF
             {
                 if (TypeOfSearch == SearchType.XPath)
                 {
+                    IsGlobalEnabled = false;
                     IsCaseSensitiveEnabled = false;
                     IsMultilineEnabled = false;
                     IsSinglelineEnabled = false;
                     IsWholeWordEnabled = false;
                     IsBooleanOperatorsEnabled = false;
                     IsHighlightGroupsEnabled = false;
+                    Global = true;
                     CaseSensitive = false;
                     Multiline = false;
                     Singleline = false;
@@ -715,43 +715,51 @@ namespace dnGREP.WPF
                 }
                 else if (TypeOfSearch == SearchType.PlainText)
                 {
+                    IsGlobalEnabled = true;
                     IsCaseSensitiveEnabled = true;
                     IsMultilineEnabled = true;
                     IsSinglelineEnabled = false;
                     IsWholeWordEnabled = true;
                     IsBooleanOperatorsEnabled = true;
                     IsHighlightGroupsEnabled = false;
+                    Global = true;
                     Singleline = false;
                 }
                 else if (TypeOfSearch == SearchType.Soundex)
                 {
+                    IsGlobalEnabled = false;
                     IsMultilineEnabled = true;
                     IsCaseSensitiveEnabled = false;
                     IsSinglelineEnabled = false;
                     IsWholeWordEnabled = true;
                     IsBooleanOperatorsEnabled = false;
                     IsHighlightGroupsEnabled = false;
+                    Global = true;
                     CaseSensitive = false;
                     Singleline = false;
                     BooleanOperators = false;
                 }
                 else if (TypeOfSearch == SearchType.Regex)
                 {
+                    IsGlobalEnabled = true;
                     IsCaseSensitiveEnabled = true;
                     IsMultilineEnabled = true;
                     IsSinglelineEnabled = true;
                     IsWholeWordEnabled = true;
                     IsBooleanOperatorsEnabled = true;
                     IsHighlightGroupsEnabled = true;
+                    Global = true;
                 }
                 else if (TypeOfSearch == SearchType.Hex)
                 {
+                    IsGlobalEnabled = false;
                     IsCaseSensitiveEnabled = false;
                     IsMultilineEnabled = false;
                     IsSinglelineEnabled = false;
                     IsWholeWordEnabled = false;
                     IsBooleanOperatorsEnabled = false;
                     IsHighlightGroupsEnabled = false;
+                    Global = true;
                     CaseSensitive = false;
                     Multiline = false;
                     Singleline = false;
@@ -760,6 +768,28 @@ namespace dnGREP.WPF
                     HighlightCaptureGroups = false;
                 }
             }
+        }
+
+        private string ConvertToEverythingPath(string path)
+        {
+            if (TypeOfFileSearch == FileSearchType.Everything)
+            {
+                // Is this a list of paths?  A path may contain a comma or semi-colon
+                // so check that it isn't a valid directory or file first
+                string trimmedPath = path.Trim('\"', ' ');
+                if (!(Directory.Exists(trimmedPath) || File.Exists(trimmedPath)) &&
+                    (path.Contains(',', StringComparison.Ordinal) || path.Contains(';', StringComparison.Ordinal)))
+                {
+                    try
+                    {
+                        var parts = UiUtils.SplitPath(path, true).Select(p => UiUtils.QuoteIfIncludesSpaces(p));
+                        path = string.Join(" | ", parts);
+                    }
+                    catch { }
+                }
+                // do not check Everything search strings for spaces - if they are there, they should be there
+            }
+            return path;
         }
 
         protected bool ValidateBooleanExpression()
@@ -873,10 +903,10 @@ namespace dnGREP.WPF
             FilePatternIgnore = Settings.Get<string>(GrepSettings.Key.FilePatternIgnore);
             UseGitignore = Settings.Get<bool>(GrepSettings.Key.UseGitignore) && Utils.IsGitInstalled;
             UseFileSizeFilter = Settings.Get<FileSizeFilter>(GrepSettings.Key.UseFileSizeFilter);
+            Global = Settings.Get<bool>(GrepSettings.Key.Global);
             CaseSensitive = Settings.Get<bool>(GrepSettings.Key.CaseSensitive);
             Multiline = Settings.Get<bool>(GrepSettings.Key.Multiline);
             Singleline = Settings.Get<bool>(GrepSettings.Key.Singleline);
-            StopAfterFirstMatch = Settings.Get<bool>(GrepSettings.Key.StopAfterFirstMatch);
             WholeWord = Settings.Get<bool>(GrepSettings.Key.WholeWord);
             BooleanOperators = Settings.Get<bool>(GrepSettings.Key.BooleanOperators);
             CaptureGroupSearch = GrepSettings.Instance.Get<bool>(GrepSettings.Key.CaptureGroupSearch);
@@ -893,6 +923,8 @@ namespace dnGREP.WPF
             EndDate = Settings.GetNullable<DateTime?>(GrepSettings.Key.EndDate);
             TimeRangeFrom = Settings.Get<int>(GrepSettings.Key.TimeRangeFrom);
             TimeRangeTo = Settings.Get<int>(GrepSettings.Key.TimeRangeTo);
+            SearchAutoStopCount = Settings.Get<int>(GrepSettings.Key.SearchAutoStopCount);
+            SearchAutoPauseCount = Settings.Get<int>(GrepSettings.Key.SearchAutoPauseCount);
         }
 
         protected void LoadMRULists()
@@ -961,10 +993,10 @@ namespace dnGREP.WPF
             Settings.Set(GrepSettings.Key.FilePatternIgnore, FilePatternIgnore);
             Settings.Set(GrepSettings.Key.UseGitignore, UseGitignore);
             Settings.Set(GrepSettings.Key.UseFileSizeFilter, UseFileSizeFilter);
+            Settings.Set(GrepSettings.Key.Global, Global);
             Settings.Set(GrepSettings.Key.CaseSensitive, CaseSensitive);
             Settings.Set(GrepSettings.Key.Multiline, Multiline);
             Settings.Set(GrepSettings.Key.Singleline, Singleline);
-            Settings.Set(GrepSettings.Key.StopAfterFirstMatch, StopAfterFirstMatch);
             Settings.Set(GrepSettings.Key.WholeWord, WholeWord);
             Settings.Set(GrepSettings.Key.BooleanOperators, BooleanOperators);
             Settings.Set(GrepSettings.Key.CaptureGroupSearch, CaptureGroupSearch);
@@ -1000,7 +1032,7 @@ namespace dnGREP.WPF
 
                 case SearchType.Regex:
                     SearchToolTip = string.Join(Environment.NewLine,
-                    [
+                    new List<string?> {
                         Resources.TTA1_MatchesAllCharacters,
                         Resources.TTA2_MatchesAlphaNumerics,
                         Resources.TTA3_MatchesDigits,
@@ -1008,15 +1040,15 @@ namespace dnGREP.WPF
                         Resources.TTA5_MatchesAnyNumberOfCharacters,
                         Resources.TTA6_Matches1To3Characters,
                         Resources.TTA7_ForMoreRegexPatternsHitF1,
-                    ]);
+                    });
 
                     ReplaceToolTip = string.Join(Environment.NewLine,
-                    [
+                    new List<string?> {
                         Resources.TTB0_InsertsTabNewline,
                         Resources.TTB1_ReplacesEntireRegex,
                         Resources.TTB2_InsertsTheTextMatchedIntoTheReplacementText,
                         Resources.TTB3_InsertsASingleDollarSignIntoTheReplacementText,
-                    ]);
+                    });
                     break;
                 default:
                     SearchToolTip = string.Empty;

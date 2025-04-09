@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Management;
 using System.Reflection;
 using System.Security.Cryptography;
-using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Markup;
@@ -76,7 +73,7 @@ namespace dnGREP.WPF
                 }
                 else
                 {
-                    string dataFolder = Utils.GetDataFolderPath();
+                    string dataFolder = DirectoryConfiguration.Instance.DataDirectory;
                     string fileName = CurrentThemeName + ".xaml";
                     string? path = Directory.GetFiles(dataFolder, "*.xaml", SearchOption.AllDirectories)
                         .Where(p => Path.GetFileName(p).Equals(fileName, StringComparison.Ordinal))
@@ -106,7 +103,7 @@ namespace dnGREP.WPF
 
         public void Initialize()
         {
-            if (!Utils.IsPortableMode)
+            if (!DirectoryConfiguration.Instance.IsPortableMode)
             {
                 List<string> files =
                 [
@@ -118,17 +115,17 @@ namespace dnGREP.WPF
 
                 foreach (string file in files)
                 {
-                    // Copy xaml files from Program Files\Themes to AppData\dnGrep
+                    // Copy xaml files from Program Files\Themes to the app data directory
                     // If the file exists and is different, back up the old file first, then copy
                     string dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? ".";
                     string src = Path.Combine(dir, "Themes", file);
-                    string dest = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "dnGrep", file);
+                    string dest = Path.Combine(DirectoryConfiguration.Instance.DataDirectory, file);
                     if (File.Exists(dest) && FileChanged(src, dest))
                     {
                         for (int idx = 1; idx < 40; idx++)
                         {
                             string baseName = Path.GetFileNameWithoutExtension(file);
-                            string temp = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "dnGrep", $"{baseName}_{idx}.xaml.bak");
+                            string temp = Path.Combine(DirectoryConfiguration.Instance.DataDirectory, $"{baseName}_{idx}.xaml.bak");
                             if (!File.Exists(temp))
                             {
                                 try
@@ -203,7 +200,7 @@ namespace dnGREP.WPF
         {
             using var stream = File.OpenRead(filename);
             using var sha = SHA256.Create();
-            return BitConverter.ToString(sha.ComputeHash(stream)).Replace("-", "", StringComparison.Ordinal).ToLowerInvariant();
+            return Convert.ToHexString(sha.ComputeHash(stream));
         }
 
         public void WatchTheme()
@@ -211,30 +208,18 @@ namespace dnGREP.WPF
             if (!HasWindowsThemes)
                 return;
 
-            var currentUser = WindowsIdentity.GetCurrent();
-            if (currentUser != null && currentUser.User != null)
+            SystemEvents.UserPreferenceChanged += SystemEvents_UserPreferenceChanged;
+        }
+
+        private void SystemEvents_UserPreferenceChanged(object sender, UserPreferenceChangedEventArgs e)
+        {
+            if (e.Category == UserPreferenceCategory.General ||
+                e.Category == UserPreferenceCategory.Color)
             {
-                string query = string.Format(
-                    CultureInfo.InvariantCulture,
-                    @"SELECT * FROM RegistryValueChangeEvent WHERE Hive = 'HKEY_USERS' AND KeyPath = '{0}\\{1}' AND ValueName = '{2}'",
-                    currentUser.User.Value,
-                    RegistryKeyPath.Replace(@"\", @"\\", StringComparison.Ordinal),
-                    RegistryValueName);
-
-                try
+                WindowsTheme newTheme = GetWindowsTheme();
+                if (newTheme != WindowsTheme)
                 {
-                    var watcher = new ManagementEventWatcher(query);
-                    watcher.EventArrived += (sender, args) =>
-                    {
-                        AppThemeChanged();
-                    };
-
-                    // Start listening for events
-                    watcher.Start();
-                }
-                catch (Exception)
-                {
-                    // This can fail on Windows 7
+                    AppThemeChanged();
                 }
             }
         }
@@ -271,7 +256,7 @@ namespace dnGREP.WPF
 
         private void LoadExternalThemes()
         {
-            string dataFolder = Utils.GetDataFolderPath();
+            string dataFolder = DirectoryConfiguration.Instance.DataDirectory;
             foreach (string fileName in Directory.GetFiles(dataFolder, "*.xaml", SearchOption.AllDirectories))
             {
                 try

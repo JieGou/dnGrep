@@ -397,14 +397,6 @@
     <value>_Add</value>
     <comment>Bookmarks dialog, button label (accel)</comment>
   </data>
-  <data name="Bookmarks_AltDownArrow" xml:space="preserve">
-    <value>Alt+Down Arrow</value>
-    <comment>Bookmarks dialog, bookmark list 'Move down' context menu shortcut text</comment>
-  </data>
-  <data name="Bookmarks_AltUpArrow" xml:space="preserve">
-    <value>Alt+Up Arrow</value>
-    <comment>Bookmarks dialog, bookmark list 'Move up' context menu shortcut text</comment>
-  </data>
   <data name="Bookmarks_Close" xml:space="preserve">
     <value>_Close</value>
     <comment>Bookmarks dialog, button text (accel)</comment>
@@ -468,14 +460,6 @@
   <data name="Bookmarks_SectionsHeader" xml:space="preserve">
     <value>Sections</value>
     <comment>Bookmarks dialog, grid header</comment>
-  </data>
-  <data name="Bookmarks_ShiftAltDownArrow" xml:space="preserve">
-    <value>Shift+Alt+Down Arrow</value>
-    <comment>Bookmarks dialog, bookmark list 'Move to bottom' context menu shortcut text</comment>
-  </data>
-  <data name="Bookmarks_ShiftAltUpArrow" xml:space="preserve">
-    <value>Shift+Alt+Up Arrow</value>
-    <comment>Bookmarks dialog, bookmark list 'Move to top' context menu shortcut text</comment>
   </data>
   <data name="Bookmarks_Summary_CaseSensitive" xml:space="preserve">
     <value>Case sensitive</value>
@@ -988,7 +972,7 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Main window, main menu subitem label (accel)</comment>
   </data>
   <data name="Main_Menu_About_AppData" xml:space="preserve">
-    <value>Application data and _logs</value>
+    <value>Application _data</value>
     <comment>Main window, main menu subitem label (accel)</comment>
   </data>
   <data name="Main_Menu_About_CheckForUpdates" xml:space="preserve">
@@ -1497,7 +1481,7 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
   </data>
   <data name="Main_StopAfterFirstMatch" xml:space="preserve">
     <value>Stop after first match</value>
-    <comment>Main window, search options checkbox label (accel)</comment>
+    <comment>Main window, search option label</comment>
   </data>
   <data name="Main_TestExpression" xml:space="preserve">
     <value>Test expression</value>
@@ -2200,7 +2184,7 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Options dialog, theme reload button label (accel)</comment>
   </data>
   <data name="Options_ReloadTheCurrentThemeFile" xml:space="preserve">
-    <value>Reload the current theme file [Ctrl+F5]</value>
+    <value>Reload the current theme file</value>
     <comment>Options dialog, theme reload button tooltip</comment>
   </data>
   <data name="Options_ReplaceDialogLayout" xml:space="preserve">
@@ -2416,11 +2400,11 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Replace window, Keep modified date checkbox label</comment>
   </data>
   <data name="Replace_MarkAllMatchesInThisFileForReplacement" xml:space="preserve">
-    <value>Mark all matches in this file for replacement [Ctrl+A]</value>
+    <value>Mark all matches in this file for replacement</value>
     <comment>Replace window, Replace in file button tooltip</comment>
   </data>
   <data name="Replace_MarkMatchForReplacement" xml:space="preserve">
-    <value>Mark match for replacement [Ctrl+R]</value>
+    <value>Mark match for replacement</value>
     <comment>Replace window, Replace button tooltip</comment>
   </data>
   <data name="Replace_Matches" xml:space="preserve">
@@ -2428,11 +2412,11 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Replace window, Matches group header label</comment>
   </data>
   <data name="Replace_MoveToTheNextMatchInThisFile" xml:space="preserve">
-    <value>Move to the next match in this file [Ctrl+Left]</value>
+    <value>Move to the next match in this file</value>
     <comment>Replace window, Next button tooltip</comment>
   </data>
   <data name="Replace_MoveToThePreviousMatchInThisFile" xml:space="preserve">
-    <value>Move to the previous match in this file [Ctrl+Right]</value>
+    <value>Move to the previous match in this file</value>
     <comment>Replace window, Previous button tooltip</comment>
   </data>
   <data name="Replace_Next" xml:space="preserve">
@@ -2464,7 +2448,7 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Replace window, conditional file name suffix</comment>
   </data>
   <data name="Replace_ReplaceAllMatchesInAllFilesAndApply" xml:space="preserve">
-    <value>Replace all matches in all files, and apply [F10]</value>
+    <value>Replace all matches in all files, and apply</value>
     <comment>Replace window, Replace in all files button tooltip</comment>
   </data>
   <data name="Replace_ReplaceButton" xml:space="preserve">
@@ -2504,7 +2488,7 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Replace window, replace text input box label</comment>
   </data>
   <data name="Replace_ResetAndSkipAllMatchesInThisFile" xml:space="preserve">
-    <value>Reset and skip all matches in this file [Ctrl+T]</value>
+    <value>Reset and skip all matches in this file</value>
     <comment>Replace window, Undo file button tooltip</comment>
   </data>
   <data name="Replace_SearchFor" xml:space="preserve">
@@ -2512,11 +2496,11 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Replace window, search pattern label</comment>
   </data>
   <data name="Replace_ShowTheNextFile" xml:space="preserve">
-    <value>Show the next file [Ctrl+PgDn]</value>
+    <value>Show the next file</value>
     <comment>Replace window, Next file button tooltip</comment>
   </data>
   <data name="Replace_ShowThePreviousFile" xml:space="preserve">
-    <value>Show the previous file [Ctrl+PgUp]</value>
+    <value>Show the previous file</value>
     <comment>Replace window, Previous file button tooltip</comment>
   </data>
   <data name="Replace_SyntaxNone" xml:space="preserve">
@@ -2540,7 +2524,7 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Replace window, Undo file button label (accel)</comment>
   </data>
   <data name="Replace_UndoMarkReplaceOnThisMatch" xml:space="preserve">
-    <value>Undo mark replace on this match [Ctrl+U]</value>
+    <value>Undo mark replace on this match</value>
     <comment>Replace window, Undo button tooltip</comment>
   </data>
   <data name="Replace_WhenCheckedTheDateModifiedWillNotBeChangedOnReplace" xml:space="preserve">
@@ -3639,14 +3623,6 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <value>Reuse existing window (single instance) *</value>
     <comment>Options dialog, singleton instance label (star refers to Options_RestartRequiredWhenChanged footnote</comment>
   </data>
-  <data name="Options_ForwardSearchFolderToExistingWindow" xml:space="preserve">
-    <value>Forward search folder to existing window</value>
-    <comment>Options dialog, change folder option label</comment>
-  </data>
-  <data name="Options_IfTheSecondInstanceHasASearchFolderArgument" xml:space="preserve">
-    <value>If the second instance has a search folder argument, change the folder in the existing window.</value>
-    <comment>Options dialog, change folder option tooltip</comment>
-  </data>
   <data name="Options_RestartRequiredWhenChanged" xml:space="preserve">
     <value>* Restart required when changed</value>
     <comment>Options dialog, footnote text</comment>
@@ -4057,5 +4033,353 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
 -everything [search commands]
     Sets the Everything search text. Must be the last option on the command line and will copy the remainder of the command line verbatim.</value>
     <comment>Help dialog text when running dnGrep from the command-line</comment>
+  </data>
+  <data name="Main_StopAfter0Matches" xml:space="preserve">
+    <value>Stop after {0} matches</value>
+    <comment>Main window, search option label</comment>
+  </data>
+  <data name="Main_PauseAfterFirstMatch" xml:space="preserve">
+    <value>Pause after first match</value>
+    <comment>Main window, search option label</comment>
+  </data>
+  <data name="Main_PauseAfter0Matches" xml:space="preserve">
+    <value>Pause after {0} matches</value>
+    <comment>Main window, search option label</comment>
+  </data>
+  <data name="Options_NumberOfMatchesToAutoStopSearch" xml:space="preserve">
+    <value>Number of matches to auto stop search</value>
+    <comment>Options dialog, search options label</comment>
+  </data>
+  <data name="Options_NumberOfMatchesToAutoPauseSearch" xml:space="preserve">
+    <value>Number of matches to auto pause search</value>
+    <comment>Options dialog, search options label</comment>
+  </data>
+  <data name="Options_EnableAutocompleteInTextInputBoxes" xml:space="preserve">
+    <value>Enable autocomplete in text input boxes</value>
+    <comment>Options dialog, search option checkbox label</comment>
+  </data>
+  <data name="ReportSummary_NotGlobal" xml:space="preserve">
+    <value>Not global</value>
+    <comment>Report search options summary</comment>
+  </data>
+  <data name="Bookmarks_Summary_NotGlobal" xml:space="preserve">
+    <value>Not global</value>
+    <comment>Bookmarks dialog, Other Properties summary</comment>
+  </data>
+  <data name="BookmarkDetails_Global" xml:space="preserve">
+    <value>Global</value>
+    <comment>Bookmark details dialog, search option checkbox label (accel)</comment>
+  </data>
+  <data name="Main_Global" xml:space="preserve">
+    <value>Global</value>
+    <comment>Main window, search option checkbox label (accel)</comment>
+  </data>
+  <data name="Main_GlobalTooltip_True" xml:space="preserve">
+    <value>All matches in each file</value>
+    <comment>Main window, tooltip for the Global checkbox, when checked</comment>
+  </data>
+  <data name="Main_GlobalTooltip_False" xml:space="preserve">
+    <value>First match in each file</value>
+    <comment>Main window, tooltip for the Global checkbox, when not checked</comment>
+  </data>
+  <data name="ScriptHint_set_global" xml:space="preserve">
+    <value>Global</value>
+    <comment>Script editor command/target tooltip</comment>
+  </data>
+  <data name="Options_SetKeyboardFocusTo" xml:space="preserve">
+    <value>After searching, set keyboard focus to</value>
+    <comment>Options dialog, radio button group label</comment>
+  </data>
+  <data name="Options_FocusResultsTree" xml:space="preserve">
+    <value>Results tree</value>
+    <comment>Options dialog, radio button label</comment>
+  </data>
+  <data name="Options_FocusSearchFor" xml:space="preserve">
+    <value>Search for input</value>
+    <comment>Options dialog, radio button label</comment>
+  </data>
+  <data name="Options_WithFilesInArchives" xml:space="preserve">
+    <value>With files in archives</value>
+    <comment>Options dialog, radio group label</comment>
+  </data>
+  <data name="Options_CopyTheWholeArchive" xml:space="preserve">
+    <value>Copy the whole archive</value>
+    <comment>Options dialog, radio button label</comment>
+  </data>
+  <data name="Options_ExtractAndCopyFiles" xml:space="preserve">
+    <value>Extract and copy files</value>
+    <comment>Options dialog, radio button label</comment>
+  </data>
+  <data name="Options_MoveTheWholeArchive" xml:space="preserve">
+    <value>Move the whole archive</value>
+    <comment>Options dialog, radio button label</comment>
+  </data>
+  <data name="Options_ExtractAndMoveFiles" xml:space="preserve">
+    <value>Extract and move files</value>
+    <comment>Options dialog, radio button label</comment>
+  </data>
+  <data name="Options_DeleteTheWholeArchive" xml:space="preserve">
+    <value>Delete the whole archive</value>
+    <comment>Options dialog, radio button label</comment>
+  </data>
+  <data name="Options_DoNothing" xml:space="preserve">
+    <value>Do nothing</value>
+    <comment>Options dialog, radio button label</comment>
+  </data>
+  <data name="Options_PlugInCache" xml:space="preserve">
+    <value>Plug-in cache</value>
+    <comment>Options dialog, group label</comment>
+  </data>
+  <data name="Options_CacheExtractedFiles" xml:space="preserve">
+    <value>Cache extracted files</value>
+    <comment>Options dialog, checkbox label</comment>
+  </data>
+  <data name="Options_CacheFilesInTempFolder" xml:space="preserve">
+    <value>Cache files in Temp folder</value>
+    <comment>Options dialog, radiobutton label</comment>
+  </data>
+  <data name="Options_CacheFilesIn" xml:space="preserve">
+    <value>Cache files in</value>
+    <comment>Options dialog, radiobutton label</comment>
+  </data>
+  <data name="Options_DeleteFilesFromCacheIfNotUsedIn" xml:space="preserve">
+    <value>Delete files from cache if not used in</value>
+    <comment>Options dialog, checkbox label</comment>
+  </data>
+  <data name="MessageBox_ThePlugInCacheSettingsHaveChanged" xml:space="preserve">
+    <value>The plug-in cache settings have changed. Delete the old cache folder?</value>
+    <comment>Message box text for: delete cache files</comment>
+  </data>
+  <data name="Preview_ViewWhitespace" xml:space="preserve">
+    <value>View Whitespace</value>
+    <comment>Preview control, checkbox label</comment>
+  </data>
+  <data name="Options_CreateCacheFileKeyUsing" xml:space="preserve">
+    <value>Create cache file key using:</value>
+    <comment>Radio button group label</comment>
+  </data>
+  <data name="Options_HashOfFullFile" xml:space="preserve">
+    <value>Hash of full file</value>
+    <comment>Options dialog, radio button label</comment>
+  </data>
+  <data name="Options_HashOfFileSizeAndModifiedTime" xml:space="preserve">
+    <value>Hash of file size and modified time</value>
+    <comment>Options dialog, radio button label</comment>
+  </data>
+  <data name="Main_ReplaceMenu_UseReplaceDialog" xml:space="preserve">
+    <value>Use Replace dialog</value>
+    <comment>Main window replace options menu label (accel)</comment>
+  </data>
+  <data name="Main_ReplaceMenu_ReplaceInSelectedFiles" xml:space="preserve">
+    <value>Replace in selected files</value>
+    <comment>Main window replace options menu label (accel)</comment>
+  </data>
+  <data name="MessageBox_ThereAreNoFilesSelectedForReplace" xml:space="preserve">
+    <value>There are no files selected for replace.</value>
+    <comment>Message box text for: replace selected files with no selection</comment>
+  </data>
+  <data name="MessageBox_CouldNotRegisterTheNewKeyboardShortcut" xml:space="preserve">
+    <value>Could not register the new keyboard shortcut - is it in use?</value>
+    <comment>Message box text for: Could not registre the new keyboard shortcut</comment>
+  </data>
+  <data name="Options_MinimizeToNotificationArea" xml:space="preserve">
+    <value>Minimize to notification area *</value>
+    <comment>Options dialog, checkbox label</comment>
+  </data>
+  <data name="Options_KeyboardShortcutToRestoreWindow" xml:space="preserve">
+    <value>Keyboard shortcut to restore dnGrep window</value>
+    <comment>Options dialog, keyboard shortcut input label</comment>
+  </data>
+  <data name="NotiyIcon_Menu_Open" xml:space="preserve">
+    <value>Open</value>
+    <comment>Notify icon context menu item</comment>
+  </data>
+  <data name="NotifyIcon_Menu_Exit" xml:space="preserve">
+    <value>Exit</value>
+    <comment>Notify icon context menu item</comment>
+  </data>
+  <data name="Keyboard_WindowsLogoKey" xml:space="preserve">
+    <value>Windows</value>
+    <comment>Text for the Windows Logo key</comment>
+  </data>
+  <data name="Keyboard_ControlKey" xml:space="preserve">
+    <value>Ctrl</value>
+    <comment>Text for the control key</comment>
+  </data>
+  <data name="Keyboard_AltKey" xml:space="preserve">
+    <value>Alt</value>
+    <comment>Text for the Alt key</comment>
+  </data>
+  <data name="Keyboard_ShiftKey" xml:space="preserve">
+    <value>Shift</value>
+    <comment>Text for the Shift key</comment>
+  </data>
+  <data name="About_NETLibraryToGenerateTextualDifferences" xml:space="preserve">
+    <value>.NET library to generate textual differences</value>
+    <comment>About dialog acknowledgments</comment>
+  </data>
+  <data name="Replace_OpenFileCompare" xml:space="preserve">
+    <value>Open file compare</value>
+    <comment>Replace window, Diff button text</comment>
+  </data>
+  <data name="Replace_PreviewShowingReplacements" xml:space="preserve">
+    <value>Preview showing replacements</value>
+    <comment>Replace window, Preview diffs checkbox label</comment>
+  </data>
+  <data name="Options_ForwardCommandLineArgumentsToTheExistingWindow" xml:space="preserve">
+    <value>Forward command line arguments to the existing window</value>
+    <comment>Options dialog, forward command line checkbox label</comment>
+  </data>
+  <data name="Main_Menu_About_AppLogs" xml:space="preserve">
+    <value>Application _logs</value>
+    <comment>Main window, main menu subitem label (accel)</comment>
+  </data>
+  <data name="MessageBox_CopySettingsFileError" xml:space="preserve">
+    <value>Some files could not be copied to the new directories. Check the error log for details: </value>
+    <comment>Message box text for: Copy settings file to new directory failed</comment>
+  </data>
+  <data name="MessageBox_DirectoryNotEmptyWarning" xml:space="preserve">
+    <value>The directory '{0}' may contain files that are not part of the application. Use this directory anyway?</value>
+    <comment>Message box text for: The directory may contain non-application files</comment>
+  </data>
+  <data name="MessageBox_CopyApplicationDataFilesQuestion" xml:space="preserve">
+    <value>The application directories have changed. Do you want to copy files to the new directories?</value>
+    <comment>Message box text for: ask if the user wants application files copied to the new directory</comment>
+  </data>
+  <data name="MessageBox_OverwriteExistingFileQuestion" xml:space="preserve">
+    <value>The new directory already has a file named "{0}". Replace the existing file?</value>
+    <comment>Message box text for: ask the user to overwrite the existing file. {0} is the file name</comment>
+  </data>
+  <data name="Preview_Error" xml:space="preserve">
+    <value>Error:</value>
+    <comment>Preview window, search tool window tooltip</comment>
+  </data>
+  <data name="Preview_NoMatchesFound" xml:space="preserve">
+    <value>No matches found!</value>
+    <comment>Preview window, search tool window tooltip</comment>
+  </data>
+  <data name="Options_ResultsFontWeight" xml:space="preserve">
+    <value>Results font weight</value>
+    <comment>Options dialog, font weight input label</comment>
+  </data>
+  <data name="Options_ForFileNameInSearchResults" xml:space="preserve">
+    <value>For file name in search results</value>
+    <comment>Options dialog, tool tip for font weight</comment>
+  </data>
+  <data name="Keyboard_KeyboardShortcuts" xml:space="preserve">
+    <value>Keyboard Shortcuts</value>
+    <comment>Keyboard options window title</comment>
+  </data>
+  <data name="Keyboard_WindowHeader" xml:space="preserve">
+    <value>Window</value>
+    <comment>Keyboard grid column header</comment>
+  </data>
+  <data name="Keyboard_LabelHeader" xml:space="preserve">
+    <value>Label</value>
+    <comment>Keyboard grid column header</comment>
+  </data>
+  <data name="Keyboard_CommandHeader" xml:space="preserve">
+    <value>Command</value>
+    <comment>Keyboard grid column header</comment>
+  </data>
+  <data name="Keyboard_ShortcutKeyHeader" xml:space="preserve">
+    <value>Shortcut key</value>
+    <comment>Keyboard grid column header</comment>
+  </data>
+  <data name="Keyboard_ShortcutForSelectedCommand" xml:space="preserve">
+    <value>Shortcut for selected command</value>
+    <comment>Keyboard dialog label</comment>
+  </data>
+  <data name="Keyboard_PressShortcutKeys" xml:space="preserve">
+    <value>Press shortcut keys:</value>
+    <comment>Keyboard dialog label</comment>
+  </data>
+  <data name="Keyboard_ShortcutCurrentlyUsedBy" xml:space="preserve">
+    <value>Shortcut currently used by:</value>
+    <comment>Keyboard dialog label</comment>
+  </data>
+  <data name="Keyboard_Remove" xml:space="preserve">
+    <value>Remove</value>
+    <comment>Keyboard dialog button label</comment>
+  </data>
+  <data name="Keyboard_Assign" xml:space="preserve">
+    <value>Assign</value>
+    <comment>Keyboard dialog button label</comment>
+  </data>
+  <data name="Keyboard_ResetAllToDefaults" xml:space="preserve">
+    <value>Reset all to defaults</value>
+    <comment>Keyboard dialog button label</comment>
+  </data>
+  <data name="Keyboard_Save" xml:space="preserve">
+    <value>Save</value>
+    <comment>Keyboard dialog button label</comment>
+  </data>
+  <data name="Keyboard_Close" xml:space="preserve">
+    <value>Close</value>
+    <comment>Keyboard dialog button label</comment>
+  </data>
+  <data name="Keyboard_PressF1ForHelpOnKeyboardShortcuts" xml:space="preserve">
+    <value>Press F1 for help on keyboard shortcuts</value>
+    <comment>Keyboard dialog label</comment>
+  </data>
+  <data name="Main_Menu_Keyboard" xml:space="preserve">
+    <value>_Keyboard…</value>
+    <comment>Main window, main menu item label (accel)</comment>
+  </data>
+  <data name="Window_Main" xml:space="preserve">
+    <value>Main</value>
+    <comment>A reference to dnGrep's Main window</comment>
+  </data>
+  <data name="Keyboard_UpArrowKey" xml:space="preserve">
+    <value>Up</value>
+    <comment>Text for the Up arrow key</comment>
+  </data>
+  <data name="Keyboard_DownArrowKey" xml:space="preserve">
+    <value>Down</value>
+    <comment>Text for the Down arrow key</comment>
+  </data>
+  <data name="Keyborard_LeftArrowKey" xml:space="preserve">
+    <value>Left</value>
+    <comment>Text for the Left arrow key</comment>
+  </data>
+  <data name="Keyboard_RightArrowKey" xml:space="preserve">
+    <value>Right</value>
+    <comment>Text for the Right arrow key</comment>
+  </data>
+  <data name="Keyboard_DeleteKey" xml:space="preserve">
+    <value>Delete</value>
+    <comment>Text for the Delete key</comment>
+  </data>
+  <data name="Keyboard_BackspaceKey" xml:space="preserve">
+    <value>Back</value>
+    <comment>Text for the Backspace key</comment>
+  </data>
+  <data name="Keyboard_PageUpKey" xml:space="preserve">
+    <value>PgUp</value>
+    <comment>Text for the Page Up key</comment>
+  </data>
+  <data name="Keyboard_PageDownKey" xml:space="preserve">
+    <value>PgDn</value>
+    <comment>Text for the Page Down key</comment>
+  </data>
+  <data name="Keyboard_HomeKey" xml:space="preserve">
+    <value>Home</value>
+    <comment>Text for the Home key</comment>
+  </data>
+  <data name="Keyboard_EndKey" xml:space="preserve">
+    <value>End</value>
+    <comment>Text for the End key</comment>
+  </data>
+  <data name="Keyboard_PrintScreenKey" xml:space="preserve">
+    <value>PrtScn</value>
+    <comment>Text for the Print Screen key</comment>
+  </data>
+  <data name="Keyboard_SpaceKey" xml:space="preserve">
+    <value>Space</value>
+    <comment>Text for the Space key</comment>
+  </data>
+  <data name="Keyboard_EscapeKey" xml:space="preserve">
+    <value>Esc</value>
+    <comment>Text for the Escape key</comment>
   </data>
 </root>

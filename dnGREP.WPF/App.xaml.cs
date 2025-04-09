@@ -7,6 +7,7 @@ using System.Windows;
 using dnGREP.Common;
 using dnGREP.Engines;
 using dnGREP.Localization;
+using dnGREP.WPF.MVHelpers;
 using NLog;
 using Windows.Win32;
 
@@ -21,9 +22,11 @@ namespace dnGREP.WPF
 
         public static string InstanceId { get; } = Guid.NewGuid().ToString();
 
-        public static string LogDir { get; private set; } = string.Empty;
+        public static string LogDir => DirectoryConfiguration.Instance.LogDirectory;
 
         public CommandLineArgs? AppArgs { get; private set; }
+
+        public static readonly Messenger Messenger = new();
 
         /// <summary>The pipe name.</summary>
         private const string UniquePipeName = "{C5475DAC-0582-42DE-B2B8-C17DFF29988A}";
@@ -37,15 +40,14 @@ namespace dnGREP.WPF
         {
             try
             {
-                LogDir = Path.Combine(Utils.GetDataFolderPath(), "logs");
-                GlobalDiagnosticsContext.Set("logDir", LogDir);
+                GlobalDiagnosticsContext.Set("logDir", DirectoryConfiguration.Instance.LogDirectory);
 
                 // get the raw, unaltered command line
                 string? commandLine = PInvoke.GetCommandLine().ToString();
                 AppArgs = new CommandLineArgs(commandLine ?? string.Empty);
 
                 if (GrepSettings.Instance.Get<bool>(GrepSettings.Key.IsSingletonInstance) &&
-                    !ConfigureSingletonInstance(AppArgs))
+                    !ConfigureSingletonInstance(commandLine))
                 {
                     // Terminate this instance.
                     Shutdown();
@@ -105,6 +107,7 @@ namespace dnGREP.WPF
 
                 if (MainWindow == null)
                 {
+                    KeyBindingManager.LoadBindings();
                     GrepEngineFactory.InitializePlugins();
                     MainWindow = new MainForm();
                     Utils.DeleteTempFolder();
@@ -138,7 +141,7 @@ namespace dnGREP.WPF
             }
         }
 
-        private static bool ConfigureSingletonInstance(CommandLineArgs args)
+        private static bool ConfigureSingletonInstance(string? writeCommandLine)
         {
             singletonMutex = new Mutex(true, UniqueMutexName, out bool isOwned);
 
@@ -158,13 +161,13 @@ namespace dnGREP.WPF
                                 // Wait until the pipe is available.
                                 namedPipeServer.WaitForConnection();
 
-                                string path = string.Empty;
+                                string readCommandLine = string.Empty;
                                 using (StreamReader sr = new(namedPipeServer))
                                 {
                                     string? temp;
                                     while ((temp = sr.ReadLine()) != null)
                                     {
-                                        path += temp;
+                                        readCommandLine += temp;
                                     }
                                 }
 
@@ -173,7 +176,7 @@ namespace dnGREP.WPF
                                     {
                                         if (Current.MainWindow is MainForm wnd)
                                         {
-                                            wnd.BringToForeground(path);
+                                            wnd.BringToForeground(readCommandLine);
                                         }
                                     });
                             }
@@ -201,16 +204,10 @@ namespace dnGREP.WPF
             pipeClientStream.Connect();
             try
             {
-                string path = string.Empty;
-                if (!string.IsNullOrEmpty(args.SearchPath))
-                {
-                    path = args.SearchPath;
-                }
-
                 // Read user input and send that to the server process.
                 using StreamWriter sw = new(pipeClientStream);
                 sw.AutoFlush = true;
-                sw.Write(path);
+                sw.Write(writeCommandLine ?? string.Empty);
             }
             // Catch the IOException that is raised if the pipe is broken
             // or disconnected.
@@ -233,6 +230,7 @@ namespace dnGREP.WPF
             {
                 Utils.DeleteTempFolder();
                 Utils.DeleteUndoFolder();
+                Utils.CleanCacheFiles();
 
                 if (singletonMutex != null)
                 {

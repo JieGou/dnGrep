@@ -1263,7 +1263,7 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <value>Търсене на .gitignore</value>
   </data>
   <data name="Main_StopAfterFirstMatch" xml:space="preserve">
-    <value>Спиране при съвпадение</value>
+    <value>Спиране при първо съвпадение</value>
     <comment>Main window, search options checkbox label (accel)</comment>
   </data>
   <data name="Main_TestExpression" xml:space="preserve">
@@ -1787,7 +1787,7 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Options dialog, theme reload button label (accel)</comment>
   </data>
   <data name="Options_ReloadTheCurrentThemeFile" xml:space="preserve">
-    <value>Презарежда файла на текущата тема [Ctrl+F5]</value>
+    <value>Презарежда файла на текущата тема</value>
     <comment>Options dialog, theme reload button tooltip</comment>
   </data>
   <data name="Options_ReplaceFontSize" xml:space="preserve">
@@ -1955,11 +1955,11 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Replace window, Files group header label</comment>
   </data>
   <data name="Replace_MarkAllMatchesInThisFileForReplacement" xml:space="preserve">
-    <value>Отбелязване на съвпаденията във файла за заменяне [Ctrl+A]</value>
+    <value>Отбелязване на съвпаденията във файла за заменяне</value>
     <comment>Replace window, Replace in File button tooltip</comment>
   </data>
   <data name="Replace_MarkMatchForReplacement" xml:space="preserve">
-    <value>Отбелязва съвпадението за заменяне [Ctrl+R]</value>
+    <value>Отбелязва съвпадението за заменяне</value>
     <comment>Replace window, Replace button tooltip</comment>
   </data>
   <data name="Replace_Matches" xml:space="preserve">
@@ -1967,11 +1967,11 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Replace window, Matches group header label</comment>
   </data>
   <data name="Replace_MoveToTheNextMatchInThisFile" xml:space="preserve">
-    <value>Към следващото съвпадение във файла [Ctrl+Left]</value>
+    <value>Към следващото съвпадение във файла</value>
     <comment>Replace window, Next button tooltip</comment>
   </data>
   <data name="Replace_MoveToThePreviousMatchInThisFile" xml:space="preserve">
-    <value>Към предишното съвпадение във файла [Ctrl+Right]</value>
+    <value>Към предишното съвпадение във файла</value>
     <comment>Replace window, Previous button tooltip</comment>
   </data>
   <data name="Replace_Next" xml:space="preserve">
@@ -1999,7 +1999,7 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Replace window, conditional file name suffix</comment>
   </data>
   <data name="Replace_ReplaceAllMatchesInAllFilesAndApply" xml:space="preserve">
-    <value>Заменяне на съвпаденията във всички файлове и прилагане [F10]</value>
+    <value>Заменяне на съвпаденията във всички файлове и прилагане</value>
     <comment>Replace window, Replace in all files button tooltip</comment>
   </data>
   <data name="Replace_ReplaceButton" xml:space="preserve">
@@ -2039,7 +2039,7 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Replace window, replace text input box label</comment>
   </data>
   <data name="Replace_ResetAndSkipAllMatchesInThisFile" xml:space="preserve">
-    <value>Нулиране и пропускане на съвпаденията във файла [Ctrl+T]</value>
+    <value>Нулиране и пропускане на съвпаденията във файла</value>
     <comment>Replace window, Undo file button tooltip</comment>
   </data>
   <data name="Replace_SearchFor" xml:space="preserve">
@@ -2047,11 +2047,11 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Replace window, search pattern label</comment>
   </data>
   <data name="Replace_ShowTheNextFile" xml:space="preserve">
-    <value>Показва следващия файл [Ctrl+PgDn]</value>
+    <value>Показва следващия файл</value>
     <comment>Replace window, Next file button tooltip</comment>
   </data>
   <data name="Replace_ShowThePreviousFile" xml:space="preserve">
-    <value>Показва предишния файл [Ctrl+PgUp]</value>
+    <value>Показва предишния файл</value>
     <comment>Replace window, Previous file button tooltip</comment>
   </data>
   <data name="Replace_SyntaxNone" xml:space="preserve">
@@ -2075,7 +2075,7 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Replace window, Undo file button label (accel)</comment>
   </data>
   <data name="Replace_UndoMarkReplaceOnThisMatch" xml:space="preserve">
-    <value>Връщане на заменената отметка за съвпадението [Ctrl+U]</value>
+    <value>Връщане на заменената отметка за съвпадението</value>
     <comment>Replace window, Undo button tooltip</comment>
   </data>
   <data name="Replace_WrapText" xml:space="preserve">
@@ -2187,7 +2187,7 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Report search options summary: {0} and {1} are the user input size range</comment>
   </data>
   <data name="ReportSummary_StopAfterFirstMatch" xml:space="preserve">
-    <value>Спиране след първо съвпадение</value>
+    <value>Спиране при първо съвпадение</value>
     <comment>Report search options summary</comment>
   </data>
   <data name="ReportSummary_Type0DateFrom1To2" xml:space="preserve">
@@ -2586,7 +2586,7 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Report options dialog, radio button label</comment>
   </data>
   <data name="ReportOptionsWindow_Global" xml:space="preserve">
-    <value>Общо</value>
+    <value>Глобално</value>
     <comment>Report options dialog, radio button label</comment>
   </data>
   <data name="ReportOptionsWindow_IncludeFileAndLineInformation" xml:space="preserve">
@@ -2707,10 +2707,6 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <value>Наименование</value>
     <comment>Bookmarks dialog, grid header</comment>
   </data>
-  <data name="Bookmarks_ShiftAltDownArrow" xml:space="preserve">
-    <value>Shift+Alt+стрелка надолу</value>
-    <comment>Bookmarks dialog, bookmark list 'Move to bottom' context menu shortcut text</comment>
-  </data>
   <data name="Main_MaximizeResults" xml:space="preserve">
     <value>Увеличаване на резултатите (F7)</value>
     <comment>Main window, Maximize results button tooltip</comment>
@@ -2727,17 +2723,9 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <value>Преместване накрая</value>
     <comment>Bookmarks dialog, bookmark list context menu text</comment>
   </data>
-  <data name="Bookmarks_AltUpArrow" xml:space="preserve">
-    <value>Alt+стрелка нагоре</value>
-    <comment>Bookmarks dialog, bookmark list 'Move up' context menu shortcut text</comment>
-  </data>
   <data name="Bookmarks_MoveDown" xml:space="preserve">
     <value>Преместване надолу</value>
     <comment>Bookmarks dialog, bookmark list context menu text</comment>
-  </data>
-  <data name="Bookmarks_AltDownArrow" xml:space="preserve">
-    <value>Alt+стрелка надолу</value>
-    <comment>Bookmarks dialog, bookmark list 'Move down' context menu shortcut text</comment>
   </data>
   <data name="Bookmarks_MoveToTop" xml:space="preserve">
     <value>Преместване най-горе</value>
@@ -2746,10 +2734,6 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
   <data name="Bookmarks_MoveUp" xml:space="preserve">
     <value>Преместване нагоре</value>
     <comment>Bookmarks dialog, bookmark list context menu text</comment>
-  </data>
-  <data name="Bookmarks_ShiftAltUpArrow" xml:space="preserve">
-    <value>Shift+Alt+стрелка нагоре</value>
-    <comment>Bookmarks dialog, bookmark list 'Move to top' context menu shortcut text</comment>
   </data>
   <data name="Options_PDFNumberStyle" xml:space="preserve">
     <value>Номериране на PDF:</value>
@@ -2860,7 +2844,7 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Script editor command/target tooltip</comment>
   </data>
   <data name="ScriptHint_set_stopafterfirstmatch" xml:space="preserve">
-    <value>Спиране при съвпадение</value>
+    <value>Спиране при първо съвпадение</value>
     <comment>Script editor command/target tooltip</comment>
   </data>
   <data name="ScriptHint_set_usegitignore" xml:space="preserve">
@@ -2920,7 +2904,7 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Script editor menu item (accel)</comment>
   </data>
   <data name="Main_Menu_About_AppData" xml:space="preserve">
-    <value>Данни на _приложението и дневник</value>
+    <value>Файлове с _настройки на приложението</value>
     <comment>Main window, main menu subitem label (accel)</comment>
   </data>
   <data name="MessageBox_Scripts_HasUnsavedChangesSaveNow" xml:space="preserve">
@@ -3633,14 +3617,6 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <value>Преизползване на прозореца (един екземпляр)*</value>
     <comment>Options dialog, singleton instance label (star refers to Options_RestartRequiredWhenChanged footnote</comment>
   </data>
-  <data name="Options_ForwardSearchFolderToExistingWindow" xml:space="preserve">
-    <value>Препращане на папката от търсенето в отворения прозорец</value>
-    <comment>Options dialog, change folder option label</comment>
-  </data>
-  <data name="Options_IfTheSecondInstanceHasASearchFolderArgument" xml:space="preserve">
-    <value>Ако втория екземпляр има аргумент с папка за търсене, да бъде направена промяна в отворения прозорец.</value>
-    <comment>Options dialog, change folder option tooltip</comment>
-  </data>
   <data name="Options_Minutes" xml:space="preserve">
     <value>минути</value>
     <comment>Options dialog, confirmation value units label</comment>
@@ -4024,5 +4000,312 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
   <data name="Options_SortResultsAutomaticallyWhenSearchCompletes" xml:space="preserve">
     <value>Сортиране на резултатите след завършване на търсенето</value>
     <comment>Options dialog, result option checkbox label (accel)</comment>
+  </data>
+  <data name="ShellMenu_SearchWithDnGrep" xml:space="preserve">
+    <value>Търсене с dnGrep</value>
+    <comment>Text shown on Windows shell context menu, and Options dialog, startup options checkbox label</comment>
+  </data>
+  <data name="Options_OriginalRightClickMenu" xml:space="preserve">
+    <value>Обикновено контекстуално меню:</value>
+    <comment>Options dialog, startup options checkbox label</comment>
+  </data>
+  <data name="Options_RequiresWindows11" xml:space="preserve">
+    <value>Изисква Windows 11</value>
+    <comment>Options dialog, startup options checkbox tooltip</comment>
+  </data>
+  <data name="Options_NewRightClickMenu" xml:space="preserve">
+    <value>Контекстуално меню на Windows 11:</value>
+    <comment>Options dialog, startup options checkbox label</comment>
+  </data>
+  <data name="Help_CmdLineEverything" xml:space="preserve">
+    <value>/e [команди за търсене]
+-e [команди за търсене]
+-everything [команди за търсене]
+    Задава текст за търсене с Everything. Трябва да бъде последната команда на командния ред и ще използва дословно всичко след нея.</value>
+    <comment>Help dialog text when running dnGrep from the command-line</comment>
+  </data>
+  <data name="Main_StopAfter0Matches" xml:space="preserve">
+    <value>Спиране при {0} съвпадения</value>
+    <comment>Main window, search option label</comment>
+  </data>
+  <data name="Main_PauseAfter0Matches" xml:space="preserve">
+    <value>Пауза при {0} съвпадения</value>
+    <comment>Main window, search option label</comment>
+  </data>
+  <data name="Options_NumberOfMatchesToAutoStopSearch" xml:space="preserve">
+    <value>Брой на съвпаденията, при които търсенето да спре</value>
+    <comment>Options dialog, search options label</comment>
+  </data>
+  <data name="Options_NumberOfMatchesToAutoPauseSearch" xml:space="preserve">
+    <value>Брой на съвпаденията, при които търсенето да изчака</value>
+    <comment>Options dialog, search options label</comment>
+  </data>
+  <data name="Options_EnableAutocompleteInTextInputBoxes" xml:space="preserve">
+    <value>Автоматично довършване на текстовите полета</value>
+    <comment>Options dialog, search option checkbox label</comment>
+  </data>
+  <data name="Main_PauseAfterFirstMatch" xml:space="preserve">
+    <value>Пауза при първо съвпадение</value>
+    <comment>Main window, search option label</comment>
+  </data>
+  <data name="BookmarkDetails_Global" xml:space="preserve">
+    <value>Глобално</value>
+    <comment>Bookmark details dialog, search option checkbox label (accel)</comment>
+  </data>
+  <data name="Main_Global" xml:space="preserve">
+    <value>Глобално</value>
+    <comment>Main window, search option checkbox label (accel)</comment>
+  </data>
+  <data name="ScriptHint_set_global" xml:space="preserve">
+    <value>Глобално</value>
+    <comment>Script editor command/target tooltip</comment>
+  </data>
+  <data name="Options_FocusResultsTree" xml:space="preserve">
+    <value>Дървото с резултатите</value>
+    <comment>Options dialog, radio button label</comment>
+  </data>
+  <data name="Main_GlobalTooltip_False" xml:space="preserve">
+    <value>Първо съвпадение във всеки файл</value>
+    <comment>Main window, tooltip for the Global checkbox, when not checked</comment>
+  </data>
+  <data name="Options_FocusSearchFor" xml:space="preserve">
+    <value>Полето за търсене</value>
+    <comment>Options dialog, radio button label</comment>
+  </data>
+  <data name="ReportSummary_NotGlobal" xml:space="preserve">
+    <value>Не глобално</value>
+    <comment>Report search options summary</comment>
+  </data>
+  <data name="Bookmarks_Summary_NotGlobal" xml:space="preserve">
+    <value>Не глобално</value>
+    <comment>Bookmarks dialog, Other Properties summary</comment>
+  </data>
+  <data name="Main_GlobalTooltip_True" xml:space="preserve">
+    <value>Всички съвпадения във всеки файл</value>
+    <comment>Main window, tooltip for the Global checkbox, when checked</comment>
+  </data>
+  <data name="Options_SetKeyboardFocusTo" xml:space="preserve">
+    <value>След търсене, фокусът на клавиатурата се прехвърля към</value>
+    <comment>Options dialog, radio button group label</comment>
+  </data>
+  <data name="Options_WithFilesInArchives" xml:space="preserve">
+    <value>Файлове в архиви</value>
+    <comment>Options dialog, radio group label</comment>
+  </data>
+  <data name="Options_CopyTheWholeArchive" xml:space="preserve">
+    <value>Копиране на целия архив</value>
+    <comment>Options dialog, radio button label</comment>
+  </data>
+  <data name="Options_ExtractAndCopyFiles" xml:space="preserve">
+    <value>Извличане и копиране на файловете</value>
+    <comment>Options dialog, radio button label</comment>
+  </data>
+  <data name="Options_MoveTheWholeArchive" xml:space="preserve">
+    <value>Преместване на целия архив</value>
+    <comment>Options dialog, radio button label</comment>
+  </data>
+  <data name="Options_DeleteTheWholeArchive" xml:space="preserve">
+    <value>Премахване на целия архив</value>
+    <comment>Options dialog, radio button label</comment>
+  </data>
+  <data name="Options_DoNothing" xml:space="preserve">
+    <value>Без действие</value>
+    <comment>Options dialog, radio button label</comment>
+  </data>
+  <data name="Options_ExtractAndMoveFiles" xml:space="preserve">
+    <value>Извличане и преместване на файловете</value>
+    <comment>Options dialog, radio button label</comment>
+  </data>
+  <data name="Options_CacheFilesInTempFolder" xml:space="preserve">
+    <value>Запазване на временните файлове във временна памет</value>
+  </data>
+  <data name="Options_CacheFilesIn" xml:space="preserve">
+    <value>Временна памет в</value>
+  </data>
+  <data name="Options_PlugInCache" xml:space="preserve">
+    <value>Временна памет за добавки</value>
+  </data>
+  <data name="Options_CacheExtractedFiles" xml:space="preserve">
+    <value>Запазване на извлечените файлове във временна памет</value>
+  </data>
+  <data name="Options_DeleteFilesFromCacheIfNotUsedIn" xml:space="preserve">
+    <value>Премахване на файловете от временната памет ако не са ползвани повече от</value>
+  </data>
+  <data name="MessageBox_ThePlugInCacheSettingsHaveChanged" xml:space="preserve">
+    <value>Настройките за добавките са променени. Изпразване на старата папка с временна памет?</value>
+  </data>
+  <data name="Options_HashOfFullFile" xml:space="preserve">
+    <value>Отпечатък от съдържанието</value>
+  </data>
+  <data name="Options_HashOfFileSizeAndModifiedTime" xml:space="preserve">
+    <value>Отпечатък от размера и датата на промяна</value>
+  </data>
+  <data name="Preview_ViewWhitespace" xml:space="preserve">
+    <value>Преглед на интервали</value>
+  </data>
+  <data name="Options_CreateCacheFileKeyUsing" xml:space="preserve">
+    <value>Създаване на идентификатор на временна памет с помощта на:</value>
+  </data>
+  <data name="Main_ReplaceMenu_ReplaceInSelectedFiles" xml:space="preserve">
+    <value>Заменяне в избраните файлове</value>
+  </data>
+  <data name="Main_ReplaceMenu_UseReplaceDialog" xml:space="preserve">
+    <value>Използване на диалога за заменяне</value>
+  </data>
+  <data name="MessageBox_ThereAreNoFilesSelectedForReplace" xml:space="preserve">
+    <value>Не са избрани файлове, в които да бъде заменяно.</value>
+  </data>
+  <data name="MessageBox_CouldNotRegisterTheNewKeyboardShortcut" xml:space="preserve">
+    <value>Новата клавишна комбинация не е регистрирана – използва ли се в момента?</value>
+  </data>
+  <data name="Options_MinimizeToNotificationArea" xml:space="preserve">
+    <value>Скриване в областта с известията *</value>
+  </data>
+  <data name="Options_KeyboardShortcutToRestoreWindow" xml:space="preserve">
+    <value>Клавишна комбинация за възстановяване на прозореца dnGrep</value>
+  </data>
+  <data name="NotiyIcon_Menu_Open" xml:space="preserve">
+    <value>Отваряне</value>
+  </data>
+  <data name="NotifyIcon_Menu_Exit" xml:space="preserve">
+    <value>Изход</value>
+  </data>
+  <data name="Keyboard_WindowsLogoKey" xml:space="preserve">
+    <value>Windows</value>
+  </data>
+  <data name="Keyboard_ControlKey" xml:space="preserve">
+    <value>Ctrl</value>
+  </data>
+  <data name="Keyboard_AltKey" xml:space="preserve">
+    <value>Alt</value>
+  </data>
+  <data name="Keyboard_ShiftKey" xml:space="preserve">
+    <value>Shift</value>
+  </data>
+  <data name="Replace_PreviewShowingReplacements" xml:space="preserve">
+    <value>Преглед на заместеното</value>
+  </data>
+  <data name="About_NETLibraryToGenerateTextualDifferences" xml:space="preserve">
+    <value>Библиотека на .NET която отчита разлики в текстове</value>
+  </data>
+  <data name="Replace_OpenFileCompare" xml:space="preserve">
+    <value>Сравняване на файлове</value>
+  </data>
+  <data name="Options_ForwardCommandLineArgumentsToTheExistingWindow" xml:space="preserve">
+    <value>Предаване на аргументите от команден ред към съществуващия прозорец</value>
+  </data>
+  <data name="Main_Menu_About_AppLogs" xml:space="preserve">
+    <value>_Дневник на приложението</value>
+  </data>
+  <data name="MessageBox_CopySettingsFileError" xml:space="preserve">
+    <value>Някои от файловете на са копирани в новата папка. Проверете в дневника за подробности: </value>
+  </data>
+  <data name="MessageBox_CopyApplicationDataFilesQuestion" xml:space="preserve">
+    <value>Папките на приложението са променени. Желаете ли файловете да бъдат копирани в новите папки?</value>
+  </data>
+  <data name="MessageBox_OverwriteExistingFileQuestion" xml:space="preserve">
+    <value>Новата папка вече съдържа файл на име „{0}“. Да бъде ли заменен?</value>
+  </data>
+  <data name="MessageBox_DirectoryNotEmptyWarning" xml:space="preserve">
+    <value>Папката „{0}“ вероятно съдържа файлове, които не са част от приложението. Да бъде ли използвана тази папка въпреки това?</value>
+  </data>
+  <data name="Preview_Error" xml:space="preserve">
+    <value>Грешка:</value>
+  </data>
+  <data name="Preview_NoMatchesFound" xml:space="preserve">
+    <value>Няма съвпадения</value>
+  </data>
+  <data name="Options_ResultsFontWeight" xml:space="preserve">
+    <value>Дебелина на шрифта на резултатите</value>
+  </data>
+  <data name="Options_ForFileNameInSearchResults" xml:space="preserve">
+    <value>За името на файла в резултатите от търсене</value>
+  </data>
+  <data name="Keyboard_LabelHeader" xml:space="preserve">
+    <value>Етикет</value>
+  </data>
+  <data name="Keyboard_CommandHeader" xml:space="preserve">
+    <value>Команда</value>
+  </data>
+  <data name="Keyboard_Remove" xml:space="preserve">
+    <value>Премахване</value>
+  </data>
+  <data name="Keyboard_Save" xml:space="preserve">
+    <value>Запазване</value>
+  </data>
+  <data name="Keyboard_Close" xml:space="preserve">
+    <value>Затваряне</value>
+  </data>
+  <data name="Keyboard_KeyboardShortcuts" xml:space="preserve">
+    <value>Клавишни комбинации</value>
+  </data>
+  <data name="Keyboard_WindowHeader" xml:space="preserve">
+    <value>Прозорец</value>
+  </data>
+  <data name="Keyboard_ShortcutKeyHeader" xml:space="preserve">
+    <value>Комбинация</value>
+  </data>
+  <data name="Keyboard_ShortcutForSelectedCommand" xml:space="preserve">
+    <value>Клавишна комбинация за избраната команда</value>
+  </data>
+  <data name="Keyboard_PressShortcutKeys" xml:space="preserve">
+    <value>Натиснете желаните клавиши:</value>
+  </data>
+  <data name="Keyboard_ShortcutCurrentlyUsedBy" xml:space="preserve">
+    <value>В момента се използват от:</value>
+  </data>
+  <data name="Keyboard_Assign" xml:space="preserve">
+    <value>Задаване</value>
+  </data>
+  <data name="Keyboard_ResetAllToDefaults" xml:space="preserve">
+    <value>Нулиране на всички</value>
+  </data>
+  <data name="Main_Menu_Keyboard" xml:space="preserve">
+    <value>_Клавиатура…</value>
+  </data>
+  <data name="Window_Main" xml:space="preserve">
+    <value>Главен</value>
+  </data>
+  <data name="Keyboard_PressF1ForHelpOnKeyboardShortcuts" xml:space="preserve">
+    <value>Натиснете F1 за помощ относно клавишните комбинации</value>
+  </data>
+  <data name="Keyboard_DeleteKey" xml:space="preserve">
+    <value>Премахване</value>
+  </data>
+  <data name="Keyboard_DownArrowKey" xml:space="preserve">
+    <value>Надолу</value>
+  </data>
+  <data name="Keyborard_LeftArrowKey" xml:space="preserve">
+    <value>Наляво</value>
+  </data>
+  <data name="Keyboard_RightArrowKey" xml:space="preserve">
+    <value>Надясно</value>
+  </data>
+  <data name="Keyboard_PageUpKey" xml:space="preserve">
+    <value>PgUp</value>
+  </data>
+  <data name="Keyboard_PageDownKey" xml:space="preserve">
+    <value>PgDn</value>
+  </data>
+  <data name="Keyboard_HomeKey" xml:space="preserve">
+    <value>Начало</value>
+  </data>
+  <data name="Keyboard_EscapeKey" xml:space="preserve">
+    <value>Esc</value>
+  </data>
+  <data name="Keyboard_PrintScreenKey" xml:space="preserve">
+    <value>PrtScn</value>
+  </data>
+  <data name="Keyboard_BackspaceKey" xml:space="preserve">
+    <value>Изтриване назад</value>
+  </data>
+  <data name="Keyboard_UpArrowKey" xml:space="preserve">
+    <value>Нагоре</value>
+  </data>
+  <data name="Keyboard_SpaceKey" xml:space="preserve">
+    <value>Интервал</value>
+  </data>
+  <data name="Keyboard_EndKey" xml:space="preserve">
+    <value>Край</value>
   </data>
 </root>

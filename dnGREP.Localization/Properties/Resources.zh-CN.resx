@@ -1787,7 +1787,7 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Options dialog, theme reload button label (accel)</comment>
   </data>
   <data name="Options_ReloadTheCurrentThemeFile" xml:space="preserve">
-    <value>重新读取当前主题文件 [Ctrl+F5]</value>
+    <value>重新加载当前主题文件</value>
     <comment>Options dialog, theme reload button tooltip</comment>
   </data>
   <data name="Options_ReplaceFontSize" xml:space="preserve">
@@ -1955,11 +1955,11 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Replace window, Files group header label</comment>
   </data>
   <data name="Replace_MarkAllMatchesInThisFileForReplacement" xml:space="preserve">
-    <value>标记替换当前文件中的所有匹配项 [Ctrl+A]</value>
+    <value>将此文件中所有匹配项标为替换</value>
     <comment>Replace window, Replace in File button tooltip</comment>
   </data>
   <data name="Replace_MarkMatchForReplacement" xml:space="preserve">
-    <value>标记替换匹配项 [Ctrl+R]</value>
+    <value>标记进行替换的匹配项</value>
     <comment>Replace window, Replace button tooltip</comment>
   </data>
   <data name="Replace_Matches" xml:space="preserve">
@@ -1967,11 +1967,11 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Replace window, Matches group header label</comment>
   </data>
   <data name="Replace_MoveToTheNextMatchInThisFile" xml:space="preserve">
-    <value>移动到当前文件的下一个匹配项 [Ctrl+Left]</value>
+    <value>移动到当前文件的下一个匹配项</value>
     <comment>Replace window, Next button tooltip</comment>
   </data>
   <data name="Replace_MoveToThePreviousMatchInThisFile" xml:space="preserve">
-    <value>移动到当前文件的上一个匹配项 [Ctrl+Right]</value>
+    <value>移动到当前文件的上一个匹配项</value>
     <comment>Replace window, Previous button tooltip</comment>
   </data>
   <data name="Replace_Next" xml:space="preserve">
@@ -1999,7 +1999,7 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Replace window, conditional file name suffix</comment>
   </data>
   <data name="Replace_ReplaceAllMatchesInAllFilesAndApply" xml:space="preserve">
-    <value>替换所有文件中的所有匹配项 [F10]</value>
+    <value>替换所有文件中的所有匹配项并应用</value>
     <comment>Replace window, Replace in all files button tooltip</comment>
   </data>
   <data name="Replace_ReplaceButton" xml:space="preserve">
@@ -2039,7 +2039,7 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Replace window, replace text input box label</comment>
   </data>
   <data name="Replace_ResetAndSkipAllMatchesInThisFile" xml:space="preserve">
-    <value>重置并取消该文件中所有匹配项 [Ctrl+T]</value>
+    <value>重置并跳过该文件中所有匹配项</value>
     <comment>Replace window, Undo file button tooltip</comment>
   </data>
   <data name="Replace_SearchFor" xml:space="preserve">
@@ -2047,11 +2047,11 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Replace window, search pattern label</comment>
   </data>
   <data name="Replace_ShowTheNextFile" xml:space="preserve">
-    <value>显示下一文件 [Ctrl+PgDn]</value>
+    <value>显示下一文件</value>
     <comment>Replace window, Next file button tooltip</comment>
   </data>
   <data name="Replace_ShowThePreviousFile" xml:space="preserve">
-    <value>显示上一文件 [Ctrl+PgUp]</value>
+    <value>显示上一文件</value>
     <comment>Replace window, Previous file button tooltip</comment>
   </data>
   <data name="Replace_SyntaxNone" xml:space="preserve">
@@ -2075,7 +2075,7 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Replace window, Undo file button label (accel)</comment>
   </data>
   <data name="Replace_UndoMarkReplaceOnThisMatch" xml:space="preserve">
-    <value>撤销标记替换内容 [Ctrl+U]</value>
+    <value>撤销标记替换内容</value>
     <comment>Replace window, Undo button tooltip</comment>
   </data>
   <data name="Replace_WrapText" xml:space="preserve">
@@ -2699,10 +2699,6 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <value>搜索参数已更改</value>
     <comment>Main window replace button tooltip</comment>
   </data>
-  <data name="Bookmarks_AltUpArrow" xml:space="preserve">
-    <value>Alt+向上</value>
-    <comment>Bookmarks dialog, bookmark list 'Move up' context menu shortcut text</comment>
-  </data>
   <data name="Bookmarks_MoveDown" xml:space="preserve">
     <value>下移</value>
     <comment>Bookmarks dialog, bookmark list context menu text</comment>
@@ -2723,10 +2719,6 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <value>名称</value>
     <comment>Bookmarks dialog, grid header</comment>
   </data>
-  <data name="Bookmarks_ShiftAltUpArrow" xml:space="preserve">
-    <value>Shift+Alt+向上</value>
-    <comment>Bookmarks dialog, bookmark list 'Move to top' context menu shortcut text</comment>
-  </data>
   <data name="Main_MaximizeResults" xml:space="preserve">
     <value>最大化结果（F7）</value>
     <comment>Main window, Maximize results button tooltip</comment>
@@ -2738,14 +2730,6 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
   <data name="BookmarkDetails_BookmarkName" xml:space="preserve">
     <value>书签名：</value>
     <comment>Bookmark name label</comment>
-  </data>
-  <data name="Bookmarks_AltDownArrow" xml:space="preserve">
-    <value>Alt+向下</value>
-    <comment>Bookmarks dialog, bookmark list 'Move down' context menu shortcut text</comment>
-  </data>
-  <data name="Bookmarks_ShiftAltDownArrow" xml:space="preserve">
-    <value>Shift+Alt+向下</value>
-    <comment>Bookmarks dialog, bookmark list 'Move to bottom' context menu shortcut text</comment>
   </data>
   <data name="Options_MaximizeResultsPanelOnSearch" xml:space="preserve">
     <value>搜索时最大化搜索结果面板</value>
@@ -3244,7 +3228,7 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Script Messages dialog title</comment>
   </data>
   <data name="Main_Menu_About_AppData" xml:space="preserve">
-    <value>程序数据和日志(_L)</value>
+    <value>程序数据(_D)</value>
     <comment>Main window, main menu subitem label (accel)</comment>
   </data>
   <data name="Main_Menu_EditScript" xml:space="preserve">
@@ -3625,17 +3609,9 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <value>筛选器：</value>
     <comment>Bookmark details dialog, ignore filter combo box label (accel)</comment>
   </data>
-  <data name="Options_IfTheSecondInstanceHasASearchFolderArgument" xml:space="preserve">
-    <value>如果第二个实例有搜索文件夹参数，则更改现有窗口中的文件夹。</value>
-    <comment>Options dialog, change folder option tooltip</comment>
-  </data>
   <data name="Options_ReuseExistingWindow" xml:space="preserve">
     <value>重用现有窗口（单个实例） *</value>
     <comment>Options dialog, singleton instance label (star refers to Options_RestartRequiredWhenChanged footnote</comment>
-  </data>
-  <data name="Options_ForwardSearchFolderToExistingWindow" xml:space="preserve">
-    <value>转发搜索文件夹到现有窗口</value>
-    <comment>Options dialog, change folder option label</comment>
   </data>
   <data name="Options_RestartRequiredWhenChanged" xml:space="preserve">
     <value>更改后需重启*</value>
@@ -4040,5 +4016,296 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
   <data name="Options_NewRightClickMenu" xml:space="preserve">
     <value>Windows 11 右键菜单：</value>
     <comment>Options dialog, startup options checkbox label</comment>
+  </data>
+  <data name="Help_CmdLineEverything" xml:space="preserve">
+    <value>/e [search commands]
+-e [search commands]
+-everything [search commands]
+    设置 Everything 搜索文本。 必须是命令行最后一个选项，会一字不差地复制命令行剩余部分。</value>
+    <comment>Help dialog text when running dnGrep from the command-line</comment>
+  </data>
+  <data name="Main_PauseAfterFirstMatch" xml:space="preserve">
+    <value>第一个匹配后暂停</value>
+    <comment>Main window, search option label</comment>
+  </data>
+  <data name="Options_EnableAutocompleteInTextInputBoxes" xml:space="preserve">
+    <value>在文本搜索框中启用自动完成</value>
+    <comment>Options dialog, search option checkbox label</comment>
+  </data>
+  <data name="Main_StopAfter0Matches" xml:space="preserve">
+    <value>{0} 个匹配后停止</value>
+    <comment>Main window, search option label</comment>
+  </data>
+  <data name="Options_NumberOfMatchesToAutoPauseSearch" xml:space="preserve">
+    <value>多少个匹配后自动暂停搜索</value>
+    <comment>Options dialog, search options label</comment>
+  </data>
+  <data name="Main_PauseAfter0Matches" xml:space="preserve">
+    <value>{0} 个匹配后暂停</value>
+    <comment>Main window, search option label</comment>
+  </data>
+  <data name="Options_NumberOfMatchesToAutoStopSearch" xml:space="preserve">
+    <value>多少个匹配后自动停止搜索</value>
+    <comment>Options dialog, search options label</comment>
+  </data>
+  <data name="BookmarkDetails_Global" xml:space="preserve">
+    <value>全局</value>
+    <comment>Bookmark details dialog, search option checkbox label (accel)</comment>
+  </data>
+  <data name="Main_Global" xml:space="preserve">
+    <value>全局</value>
+    <comment>Main window, search option checkbox label (accel)</comment>
+  </data>
+  <data name="ScriptHint_set_global" xml:space="preserve">
+    <value>全局</value>
+    <comment>Script editor command/target tooltip</comment>
+  </data>
+  <data name="ReportSummary_NotGlobal" xml:space="preserve">
+    <value>非全局</value>
+    <comment>Report search options summary</comment>
+  </data>
+  <data name="Bookmarks_Summary_NotGlobal" xml:space="preserve">
+    <value>非全局</value>
+    <comment>Bookmarks dialog, Other Properties summary</comment>
+  </data>
+  <data name="Main_GlobalTooltip_True" xml:space="preserve">
+    <value>每个文件中的所有匹配</value>
+    <comment>Main window, tooltip for the Global checkbox, when checked</comment>
+  </data>
+  <data name="Main_GlobalTooltip_False" xml:space="preserve">
+    <value>每个文件中的首个匹配</value>
+    <comment>Main window, tooltip for the Global checkbox, when not checked</comment>
+  </data>
+  <data name="Options_SetKeyboardFocusTo" xml:space="preserve">
+    <value>搜索后，设置键盘焦点到</value>
+    <comment>Options dialog, radio button group label</comment>
+  </data>
+  <data name="Options_FocusResultsTree" xml:space="preserve">
+    <value>结果树</value>
+    <comment>Options dialog, radio button label</comment>
+  </data>
+  <data name="Options_FocusSearchFor" xml:space="preserve">
+    <value>搜索输入</value>
+    <comment>Options dialog, radio button label</comment>
+  </data>
+  <data name="Options_CopyTheWholeArchive" xml:space="preserve">
+    <value>复制整个压缩文件</value>
+    <comment>Options dialog, radio button label</comment>
+  </data>
+  <data name="Options_MoveTheWholeArchive" xml:space="preserve">
+    <value>移动整个压缩文件</value>
+    <comment>Options dialog, radio button label</comment>
+  </data>
+  <data name="Options_DeleteTheWholeArchive" xml:space="preserve">
+    <value>删除整个压缩文件</value>
+    <comment>Options dialog, radio button label</comment>
+  </data>
+  <data name="Options_DoNothing" xml:space="preserve">
+    <value>什么也不做</value>
+    <comment>Options dialog, radio button label</comment>
+  </data>
+  <data name="Options_WithFilesInArchives" xml:space="preserve">
+    <value>如何处理压缩文件中的文件</value>
+    <comment>Options dialog, radio group label</comment>
+  </data>
+  <data name="Options_ExtractAndCopyFiles" xml:space="preserve">
+    <value>提取并复制文件</value>
+    <comment>Options dialog, radio button label</comment>
+  </data>
+  <data name="Options_ExtractAndMoveFiles" xml:space="preserve">
+    <value>提取并移动文件</value>
+    <comment>Options dialog, radio button label</comment>
+  </data>
+  <data name="Options_CacheExtractedFiles" xml:space="preserve">
+    <value>缓存已提取的文件</value>
+  </data>
+  <data name="Options_CacheFilesIn" xml:space="preserve">
+    <value>文件缓存位置</value>
+  </data>
+  <data name="Options_DeleteFilesFromCacheIfNotUsedIn" xml:space="preserve">
+    <value>多久时间未用后从缓存中删除文件</value>
+  </data>
+  <data name="MessageBox_ThePlugInCacheSettingsHaveChanged" xml:space="preserve">
+    <value>插件缓存设置已更改。删除旧的缓存文件夹吗？</value>
+  </data>
+  <data name="Options_PlugInCache" xml:space="preserve">
+    <value>插件缓存</value>
+  </data>
+  <data name="Options_CacheFilesInTempFolder" xml:space="preserve">
+    <value>将文件缓存在 Temp 文件夹中</value>
+  </data>
+  <data name="Options_CreateCacheFileKeyUsing" xml:space="preserve">
+    <value>选择创建缓存文件密钥的方式：</value>
+  </data>
+  <data name="Options_HashOfFullFile" xml:space="preserve">
+    <value>完整文件的哈希值</value>
+  </data>
+  <data name="Options_HashOfFileSizeAndModifiedTime" xml:space="preserve">
+    <value>文件大小哈希值和修改时间</value>
+  </data>
+  <data name="Preview_ViewWhitespace" xml:space="preserve">
+    <value>查看空白处</value>
+  </data>
+  <data name="Main_ReplaceMenu_UseReplaceDialog" xml:space="preserve">
+    <value>使用“替换”对话框</value>
+  </data>
+  <data name="MessageBox_ThereAreNoFilesSelectedForReplace" xml:space="preserve">
+    <value>未选中要进行替换的文件。</value>
+  </data>
+  <data name="Main_ReplaceMenu_ReplaceInSelectedFiles" xml:space="preserve">
+    <value>在选定文件中进行替换</value>
+  </data>
+  <data name="NotiyIcon_Menu_Open" xml:space="preserve">
+    <value>打开</value>
+  </data>
+  <data name="NotifyIcon_Menu_Exit" xml:space="preserve">
+    <value>退出</value>
+  </data>
+  <data name="MessageBox_CouldNotRegisterTheNewKeyboardShortcut" xml:space="preserve">
+    <value>无法注册新的键盘快捷键 - 它是否被占用？</value>
+  </data>
+  <data name="Options_MinimizeToNotificationArea" xml:space="preserve">
+    <value>最小化到通知区域 *</value>
+  </data>
+  <data name="Options_KeyboardShortcutToRestoreWindow" xml:space="preserve">
+    <value>还原 dnGrep 窗口的键盘快捷键</value>
+  </data>
+  <data name="Keyboard_WindowsLogoKey" xml:space="preserve">
+    <value>窗口</value>
+  </data>
+  <data name="Keyboard_ControlKey" xml:space="preserve">
+    <value>Ctrl</value>
+  </data>
+  <data name="Keyboard_AltKey" xml:space="preserve">
+    <value>Alt</value>
+  </data>
+  <data name="Keyboard_ShiftKey" xml:space="preserve">
+    <value>Shift</value>
+  </data>
+  <data name="Replace_OpenFileCompare" xml:space="preserve">
+    <value>打开文件比较</value>
+  </data>
+  <data name="About_NETLibraryToGenerateTextualDifferences" xml:space="preserve">
+    <value>生成文本差异的 .NET 库</value>
+  </data>
+  <data name="Replace_PreviewShowingReplacements" xml:space="preserve">
+    <value>预览替换</value>
+  </data>
+  <data name="Options_ForwardCommandLineArgumentsToTheExistingWindow" xml:space="preserve">
+    <value>转发命令行参数到现有窗口</value>
+  </data>
+  <data name="Main_Menu_About_AppLogs" xml:space="preserve">
+    <value>程序日志(_L)</value>
+  </data>
+  <data name="MessageBox_CopySettingsFileError" xml:space="preserve">
+    <value>无法将一些文件复制到新目录。详情请查看错误日志： </value>
+  </data>
+  <data name="MessageBox_DirectoryNotEmptyWarning" xml:space="preserve">
+    <value>'{0}' 目录可能包含并非程序一部分的文件。仍要使用这个目录吗？</value>
+  </data>
+  <data name="MessageBox_CopyApplicationDataFilesQuestion" xml:space="preserve">
+    <value>程序目录已更改。要将文件复制到新目录吗？</value>
+  </data>
+  <data name="MessageBox_OverwriteExistingFileQuestion" xml:space="preserve">
+    <value>新目录中已经有名为 "{0}" 的文件。替换现有文件吗？</value>
+  </data>
+  <data name="Preview_Error" xml:space="preserve">
+    <value>错误：</value>
+  </data>
+  <data name="Preview_NoMatchesFound" xml:space="preserve">
+    <value>未找到匹配项！</value>
+  </data>
+  <data name="Options_ResultsFontWeight" xml:space="preserve">
+    <value>结果的字重（粗细程度）</value>
+  </data>
+  <data name="Options_ForFileNameInSearchResults" xml:space="preserve">
+    <value>用于搜索结果中的文件名</value>
+  </data>
+  <data name="Keyboard_KeyboardShortcuts" xml:space="preserve">
+    <value>键盘快捷键</value>
+  </data>
+  <data name="Keyboard_WindowHeader" xml:space="preserve">
+    <value>窗口</value>
+  </data>
+  <data name="Keyboard_LabelHeader" xml:space="preserve">
+    <value>标签</value>
+  </data>
+  <data name="Keyboard_CommandHeader" xml:space="preserve">
+    <value>命令</value>
+  </data>
+  <data name="Keyboard_ShortcutKeyHeader" xml:space="preserve">
+    <value>快捷键</value>
+  </data>
+  <data name="Keyboard_ShortcutForSelectedCommand" xml:space="preserve">
+    <value>所选命令的快捷键</value>
+  </data>
+  <data name="Keyboard_Remove" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="Keyboard_Assign" xml:space="preserve">
+    <value>分配</value>
+  </data>
+  <data name="Keyboard_ResetAllToDefaults" xml:space="preserve">
+    <value>重置全部到默认</value>
+  </data>
+  <data name="Keyboard_PressF1ForHelpOnKeyboardShortcuts" xml:space="preserve">
+    <value>按下 F1 获取键盘快捷键的帮助</value>
+  </data>
+  <data name="Main_Menu_Keyboard" xml:space="preserve">
+    <value>键盘(_K)…</value>
+  </data>
+  <data name="Window_Main" xml:space="preserve">
+    <value>主</value>
+  </data>
+  <data name="Keyboard_Save" xml:space="preserve">
+    <value>保存</value>
+  </data>
+  <data name="Keyboard_PressShortcutKeys" xml:space="preserve">
+    <value>按下快捷键：</value>
+  </data>
+  <data name="Keyboard_Close" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="Keyboard_ShortcutCurrentlyUsedBy" xml:space="preserve">
+    <value>当前使用此快捷键的是：</value>
+  </data>
+  <data name="Keyboard_DeleteKey" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="Keyboard_DownArrowKey" xml:space="preserve">
+    <value>↓</value>
+  </data>
+  <data name="Keyborard_LeftArrowKey" xml:space="preserve">
+    <value>←</value>
+  </data>
+  <data name="Keyboard_RightArrowKey" xml:space="preserve">
+    <value>→</value>
+  </data>
+  <data name="Keyboard_BackspaceKey" xml:space="preserve">
+    <value>Back Space</value>
+  </data>
+  <data name="Keyboard_HomeKey" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="Keyboard_EndKey" xml:space="preserve">
+    <value>End</value>
+  </data>
+  <data name="Keyboard_SpaceKey" xml:space="preserve">
+    <value>空格键</value>
+  </data>
+  <data name="Keyboard_EscapeKey" xml:space="preserve">
+    <value>Esc</value>
+  </data>
+  <data name="Keyboard_PrintScreenKey" xml:space="preserve">
+    <value>PrtScn</value>
+  </data>
+  <data name="Keyboard_UpArrowKey" xml:space="preserve">
+    <value>↑</value>
+  </data>
+  <data name="Keyboard_PageDownKey" xml:space="preserve">
+    <value>PgDn</value>
+  </data>
+  <data name="Keyboard_PageUpKey" xml:space="preserve">
+    <value>PgUp</value>
   </data>
 </root>

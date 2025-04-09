@@ -181,29 +181,26 @@
     <ProjectReference Include="..\dnGREP.Localization\dnGREP.Localization.csproj" />
     <ProjectReference Include="..\dnGREP.DockFloat\dnGREP.DockFloat.csproj" />
     <ProjectReference Include="..\ICSharpCode.AvalonEdit\ICSharpCode.AvalonEdit.csproj" />
+    <ProjectReference Include="..\NetDiff\NetDiff.csproj" />
     <ProjectReference Include="..\SevenZip\SevenZip.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Microsoft.VisualBasic" Version="10.3.0" />
-    <PackageReference Include="Microsoft.Windows.CsWin32" Version="0.3.49-beta">
+    <PackageReference Include="Microsoft.Windows.CsWin32" Version="0.3.183">
       <PrivateAssets>all</PrivateAssets>
       <!--<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>-->
     </PackageReference>
-    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.77" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
     <PackageReference Include="NLog">
-      <Version>5.2.8</Version>
+      <Version>5.4.0</Version>
     </PackageReference>
-    <PackageReference Include="StrongNamer">
-      <Version>0.2.5</Version>
-    </PackageReference>
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.0" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="9.0.3" />
     <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.4.421302">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="System.Management" Version="8.0.0" />
-    <PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="9.0.3" />
   </ItemGroup>
   <ItemGroup>
     <Page Remove="Properties\DesignTimeResources.xaml" />
@@ -228,9 +225,6 @@
   </ItemGroup>
   <ItemGroup Condition="'$(Platform)'=='x86'">
     <EverythingFiles Include="$(SolutionDir)\dnGREP.Everything\x86\Everything32.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <RuntimeFiles Include="$(SolutionDir)\dnGREP.WPF\bin\$(Platform)\$(Configuration)\$(TargetFramework)\runtimes\win\lib\net8.0\System.Management.dll" />
   </ItemGroup>
   <ItemGroup>
     <OpenXmlPluginFiles Include="$(SolutionDir)\dnGREP.OpenXmlEngine\bin\$(Platform)\$(Configuration)\$(TargetFramework)\dnGREP.Engines.OpenXml.plugin" />
@@ -267,7 +261,7 @@
   <ItemGroup>
     <SparsePackageFiles Include="$(SolutionDir)\dnGREP.ContextMenu\bin\$(Platform)\$(Configuration)\dnGREP.ContextMenu.dll" />
     <SparsePackageFiles Include="$(SolutionDir)\dnGREP.WPF\nGrep.ico" />
-    <SparsePackageFiles Include="$(SolutionDir)\dnGREP.msix" />
+    <!-- <SparsePackageFiles Include="$(SolutionDir)\dnGREP.msix" /> -->
   </ItemGroup>
   <Target Name="CopyExtraFiles" AfterTargets="AfterBuild">
     <Copy SourceFiles="@(SevenZipFiles)" DestinationFolder="bin\$(Platform)\$(Configuration)\$(TargetFramework)" SkipUnchangedFiles="true" />
@@ -287,7 +281,7 @@
     <Copy SourceFiles="@(XPDFFiles)" DestinationFolder="$(SolutionDir)\publish\win-$(Platform)\Plugins\PdfSearch\xpdf" />
     <Copy SourceFiles="@(XPDFDocFiles)" DestinationFolder="$(SolutionDir)\publish\win-$(Platform)\Plugins\PdfSearch\xpdf\doc" />
     <Copy SourceFiles="@(WordPluginFiles)" DestinationFolder="$(SolutionDir)\publish\win-$(Platform)\Plugins\MsWordSearch" />
-    <Copy SourceFiles="@(RuntimeFiles)" DestinationFolder="$(SolutionDir)\publish\win-$(Platform)\runtimes\win\lib\net8.0\" />
+    <Copy SourceFiles="@(RuntimeFiles)" DestinationFolder="$(SolutionDir)\publish\win-$(Platform)\runtimes\win\lib\net9.0\" />
     <Copy SourceFiles="@(SparsePackageFiles)" DestinationFolder="$(SolutionDir)\publish\win-$(Platform)" />
   </Target>
   <PropertyGroup>

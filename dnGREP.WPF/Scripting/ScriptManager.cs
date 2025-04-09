@@ -62,9 +62,9 @@ namespace dnGREP.WPF
         public void ResetVariables()
         {
             ScriptEnvironmentVariables.Clear();
-            ScriptEnvironmentVariables.Add("dnGrep_logDir", App.LogDir);
-            ScriptEnvironmentVariables.Add("dnGrep_dataDir", Utils.GetDataFolderPath());
-            ScriptEnvironmentVariables.Add("dnGrep_scriptDir", Path.Combine(Utils.GetDataFolderPath(), ScriptFolder));
+            ScriptEnvironmentVariables.Add("dnGrep_logDir", DirectoryConfiguration.Instance.LogDirectory);
+            ScriptEnvironmentVariables.Add("dnGrep_dataDir", DirectoryConfiguration.Instance.DataDirectory);
+            ScriptEnvironmentVariables.Add("dnGrep_scriptDir", Path.Combine(DirectoryConfiguration.Instance.DataDirectory, ScriptFolder));
         }
 
         [GeneratedRegex("%(\\w+?)%")]
@@ -118,7 +118,7 @@ namespace dnGREP.WPF
         internal void LoadScripts()
         {
             _scripts.Clear();
-            string dataFolder = Path.Combine(Utils.GetDataFolderPath(), ScriptFolder);
+            string dataFolder = Path.Combine(DirectoryConfiguration.Instance.DataDirectory, ScriptFolder);
             if (!Directory.Exists(dataFolder))
             {
                 Directory.CreateDirectory(dataFolder);
@@ -134,6 +134,26 @@ namespace dnGREP.WPF
                 }
                 _scripts.TryAdd(name, fileName);
             }
+        }
+
+        internal static List<string> GetScriptNames()
+        {
+            List<string> results = [];
+            string dataFolder = Path.Combine(DirectoryConfiguration.Instance.DataDirectory, ScriptFolder);
+            if (Directory.Exists(dataFolder))
+            {
+                foreach (string fileName in Directory.GetFiles(dataFolder, "*" + ScriptExt, SearchOption.AllDirectories))
+                {
+                    string name = Path.GetFileNameWithoutExtension(fileName);
+                    string? fileFolder = Path.GetDirectoryName(fileName);
+                    if (fileFolder != null && dataFolder != fileFolder)
+                    {
+                        name = Path.GetRelativePath(dataFolder, fileFolder) + '_' + name;
+                    }
+                    results.Add(name.Replace(Path.DirectorySeparatorChar, '_'));
+                }
+            }
+            return results;
         }
 
         [MemberNotNull(nameof(scriptCommands), nameof(commandCompletionData))]

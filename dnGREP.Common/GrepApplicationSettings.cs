@@ -54,9 +54,10 @@ namespace dnGREP.Common
             public const string CaseSensitive = "CaseSensitive";
             [DefaultValue(true)]
             public const string PreviewFileContent = "PreviewFileContent";
+            [DefaultValue(true)]
+            public const string Global = "Global";
             public const string Multiline = "Multiline";
             public const string Singleline = "Singleline";
-            public const string StopAfterFirstMatch = "StopAfterFirstMatch";
             public const string WholeWord = "WholeWord";
             public const string BooleanOperators = "BooleanOperators";
             public const string SizeFrom = "SizeFrom";
@@ -135,6 +136,8 @@ namespace dnGREP.Common
             public const string CurrentTheme = "CurrentTheme";
             [DefaultValue("en")]
             public const string CurrentCulture = "CurrentCulture";
+            [DefaultValue(ReplaceType.ReplaceDialog)]
+            public const string TypeOfReplace = "TypeOfReplace";
             [DefaultValue(SortType.FileNameDepthFirst)]
             public const string TypeOfSort = "TypeOfSort";
             [DefaultValue(ListSortDirection.Ascending)]
@@ -163,6 +166,7 @@ namespace dnGREP.Common
             [DefaultValue("")]
             public const string ResultsFontFamily = "ResultsFontFamily";
             public const string ResultsFontSize = "ResultsFontSize";
+            public const string ResultsFileNameWeight = "ResultsFileNameWeight";
             [DefaultValue("-layout -enc UTF-8 -bom")]
             public const string PdfToTextOptions = "PdfToTextOptions";
             [DefaultValue(false)]
@@ -171,6 +175,7 @@ namespace dnGREP.Common
             public const string FollowSymlinks = "FollowSymlinks";
             public const string MainWindowState = "MainWindowState";
             public const string MainWindowBounds = "MainWindowBounds";
+            public const string OptionsBounds = "OptionsBounds";
             public const string ReplaceBounds = "ReplaceBounds";
             public const string PreviewBounds = "PreviewBounds";
             public const string PreviewWindowState = "PreviewWindowState";
@@ -183,6 +188,8 @@ namespace dnGREP.Common
             public const string PreviewLargeFileLimit = "PreviewLargeFileLimit";
             [DefaultValue(true)]
             public const string PreviewAutoPosition = "PreviewAutoPosition";
+            [DefaultValue(false)]
+            public const string PreviewViewWhitespace = "PreviewViewWhitespace";
             [DefaultValue(false)]
             public const string CaptureGroupSearch = "CaptureGroupSearch";
             [DefaultValue(16)]
@@ -247,8 +254,6 @@ namespace dnGREP.Common
             [DefaultValue(true)]
             public const string PreviewFileVisible = "PreviewFileVisible";
             [DefaultValue(true)]
-            public const string StopAfterFirstMatchVisible = "StopAfterFirstMatchVisible";
-            [DefaultValue(true)]
             public const string HighlightMatchesVisible = "HighlightMatchesVisible";
             [DefaultValue(true)]
             public const string HighlightGroupsVisible = "HighlightGroupsVisible";
@@ -262,6 +267,8 @@ namespace dnGREP.Common
             public const string PreviewZoomWndVisible = "PreviewZoomWndVisible";
             [DefaultValue(true)]
             public const string WrapTextPreviewWndVisible = "WrapTextPreviewWndVisible";
+            [DefaultValue(true)]
+            public const string ViewWhitespacePreviewWndVisible = "ViewWhitespacePreviewWndVisible";
             [DefaultValue(true)]
             public const string SyntaxPreviewWndVisible = "SyntaxPreviewWndVisible";
             [DefaultValue(true)]
@@ -309,7 +316,7 @@ namespace dnGREP.Common
             [DefaultValue(false)]
             public const string IsSingletonInstance = "IsSingletonInstance";
             [DefaultValue(true)]
-            public const string PassSearchFolderToSingleton = "PassSearchFolderToSingleton";
+            public const string PassCommandLineToSingleton = "PassCommandLineToSingleton";
             [DefaultValue(false)]
             public const string ConfirmExitScript = "ConfirmExitScript";
             [DefaultValue(false)]
@@ -343,7 +350,37 @@ namespace dnGREP.Common
             [DefaultValue("")]
             public const string ArchiveCustomExtensions = "ArchiveCustomExtensions";
             [DefaultValue(true)]
-            public const string StickyScroll = "StickyScroll"; 
+            public const string StickyScroll = "StickyScroll";
+            [DefaultValue(1)]
+            public const string SearchAutoStopCount = "SearchAutoStopCount";
+            [DefaultValue(5)]
+            public const string SearchAutoPauseCount = "SearchAutoPauseCount";
+            [DefaultValue(true)]
+            public const string AutoCompleteEnabled = "AutoCompleteEnabled";
+            [DefaultValue(FocusElement.ResultsTree)]
+            public const string SetFocusElement = "SetFocusElement";
+            [DefaultValue(ArchiveCopyMoveDelete.CopyFile)]
+            public const string ArchiveCopy = "ArchiveCopy";
+            [DefaultValue(ArchiveCopyMoveDelete.CopyFile)]
+            public const string ArchiveMove = "ArchiveMove";
+            [DefaultValue(ArchiveCopyMoveDelete.DoNothing)]
+            public const string ArchiveDelete = "ArchiveDelete";
+            [DefaultValue(true)]
+            public const string CacheExtractedFiles = "CacheExtractedFiles";
+            [DefaultValue(true)]
+            public const string CacheFilesInTempFolder = "CacheFilesInTempFolder";
+            [DefaultValue("")]
+            public const string CacheFilePath = "CacheFilePath";
+            [DefaultValue(0)]
+            public const string CacheFilesCleanDays = "CacheFilesCleanDays";
+            [DefaultValue(HashOption.FullFile)]
+            public const string CacheFileHashType = "CacheFileHashType";
+            [DefaultValue(false)]
+            public const string MinimizeToNotificationArea = "MinimizeToNotificationArea";
+            [DefaultValue("")]
+            public const string RestoreWindowKeyboardShortcut = "RestoreWindowKeyboardShortcut";
+            [DefaultValue(true)]
+            public const string PreviewShowingReplacements = "PreviewShowingReplacements";
         }
 
         public static class ObsoleteKey
@@ -356,6 +393,7 @@ namespace dnGREP.Common
             public const string EscapeQuotesInMatchArgument = "EscapeQuotesInMatchArgument";
             public const string HoursFrom = "HoursFrom";
             public const string HoursTo = "HoursTo";
+            public const string PassSearchFolderToSingleton = "PassSearchFolderToSingleton";
         }
 
 
@@ -389,7 +427,7 @@ namespace dnGREP.Common
         /// </summary>
         public void Load()
         {
-            Load(Path.Combine(Utils.GetDataFolderPath(), storageFileName));
+            Load(Path.Combine(DirectoryConfiguration.Instance.DataDirectory, storageFileName));
         }
 
         public void Clear()
@@ -414,6 +452,7 @@ namespace dnGREP.Common
             Version = GetFileVersion(path);
             if (Version == 0)// new file
             {
+                settings.Clear();
                 ConvertToV3();
             }
             else if (Version == 1)
@@ -684,6 +723,11 @@ namespace dnGREP.Common
                 Set(Key.TimeRangeTo, Get<int>(ObsoleteKey.HoursTo));
                 settings.Remove(ObsoleteKey.HoursTo);
             }
+            if (ContainsKey(ObsoleteKey.PassSearchFolderToSingleton))
+            {
+                Set(Key.PassCommandLineToSingleton, Get<bool>(ObsoleteKey.PassSearchFolderToSingleton));
+                settings.Remove(ObsoleteKey.PassSearchFolderToSingleton);
+            }
         }
 
         private static string LookupTemplate(string path)
@@ -734,6 +778,12 @@ namespace dnGREP.Common
             {
                 Set(Key.ResultsFontSize, SystemFonts.MessageFontSize);
             }
+
+            if (!settings.TryGetValue(Key.ResultsFileNameWeight, out string? weight) ||
+                string.IsNullOrWhiteSpace(weight))
+            {
+                Set(Key.ResultsFileNameWeight, FontWeights.Normal);
+            }
         }
 
         /// <summary>
@@ -741,7 +791,7 @@ namespace dnGREP.Common
         /// </summary>
         public void Save()
         {
-            Save(Path.Combine(Utils.GetDataFolderPath(), storageFileName));
+            Save(Path.Combine(DirectoryConfiguration.Instance.DataDirectory, storageFileName));
         }
 
         /// <summary>
@@ -1055,6 +1105,15 @@ namespace dnGREP.Common
                         return (T)Convert.ChangeType(Rect.Parse(value), typeof(Rect));
                     }
 
+                    if (typeof(T) == typeof(FontWeight))
+                    {
+                        FontWeightConverter fwc = new();
+                        if (fwc.ConvertFromInvariantString(value) is FontWeight weight)
+                            return (T)Convert.ChangeType(weight, typeof(FontWeight));
+                        else
+                            return (T)Convert.ChangeType(FontWeights.Normal, typeof(FontWeight));
+                    }
+
                     if (typeof(T) == typeof(List<string>))
                     {
                         List<string?> list;
@@ -1259,6 +1318,13 @@ namespace dnGREP.Common
                 Rect rect = (Rect)Convert.ChangeType(value, typeof(Rect));
                 // need invariant culture for Rect.Parse to work
                 settings[key] = rect.ToString(CultureInfo.InvariantCulture);
+            }
+            else if (typeof(T) == typeof(FontWeight))
+            {
+                FontWeight weight = (FontWeight)Convert.ChangeType(value, typeof(FontWeight));
+                FontWeightConverter fwc = new();
+                if (fwc.ConvertToInvariantString(weight) is string s)
+                    settings[key] = s;
             }
             else if (typeof(T) == typeof(DateTime))
             {

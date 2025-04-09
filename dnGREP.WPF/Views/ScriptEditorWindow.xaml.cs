@@ -19,6 +19,8 @@ namespace dnGREP.WPF
         private readonly ScriptViewModel viewModel;
         public event EventHandler? NewScriptFileSaved;
         public event EventHandler? RequestRun;
+        private WindowState storedWindowState = WindowState.Normal;
+        private CompletionWindow? completionWindow;
 
         public ScriptEditorWindow()
         {
@@ -57,13 +59,31 @@ namespace dnGREP.WPF
             textEditor.SyntaxHighlighting = definition;
             textEditor.TextArea.TextEntering += TextArea_TextEntering;
             textEditor.TextArea.TextEntered += TextArea_TextEntered;
-            textEditor.TextArea.KeyDown += TextArea_KeyDown;
             textEditor.TextArea.KeyUp += TextArea_KeyUp;
 
             Closing += ScriptEditorWindow_Closing;
 
             DiginesisHelpProvider.HelpNamespace = "https://github.com/dnGrep/dnGrep/wiki/";
             DiginesisHelpProvider.ShowHelp = true;
+
+            StateChanged += (s, e) => storedWindowState = WindowState;
+            Application.Current.MainWindow.IsVisibleChanged += MainWindow_IsVisibleChanged;
+        }
+
+        private void MainWindow_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (sender is Window mainWindow)
+            {
+                if (mainWindow.IsVisible)
+                {
+                    Show();
+                    WindowState = storedWindowState;
+                }
+                else
+                {
+                    Hide();
+                }
+            }
         }
 
         public bool ConfirmSave()
@@ -110,16 +130,6 @@ namespace dnGREP.WPF
         public void OpenScriptFile(string filePath)
         {
             viewModel.OpenScriptFile(filePath);
-        }
-
-        private CompletionWindow? completionWindow;
-        void TextArea_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Space && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
-            {
-                Suggest();
-                e.Handled = true;
-            }
         }
 
         private void TextArea_KeyUp(object sender, KeyEventArgs e)

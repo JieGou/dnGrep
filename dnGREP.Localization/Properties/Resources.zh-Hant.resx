@@ -67,7 +67,7 @@
     <comment>About dialog text</comment>
   </data>
   <data name="About_BuiltOn" xml:space="preserve">
-    <value>編譯於</value>
+    <value>建構於</value>
     <comment>About dialog label</comment>
   </data>
   <data name="About_ConvertsPDFFilesToPlainText" xml:space="preserve">
@@ -79,7 +79,7 @@
     <comment>About dialog text</comment>
   </data>
   <data name="About_DnGrepOnGitHub" xml:space="preserve">
-    <value>dnGrep on GitHub</value>
+    <value>dnGrep 於 GitHub</value>
     <comment>About dialog text</comment>
   </data>
   <data name="About_FileSystemIndexingLocateFilesInstantly" xml:space="preserve">
@@ -91,7 +91,7 @@
     <comment>About dialog acknowledgments</comment>
   </data>
   <data name="About_LibraryForReadingArchiveFiles" xml:space="preserve">
-    <value>用於讀取存檔案的程式庫</value>
+    <value>用於讀取壓縮檔案的函式庫</value>
     <comment>About dialog acknowledgments</comment>
   </data>
   <data name="About_LoggingFrameworkForNET" xml:space="preserve">
@@ -99,27 +99,27 @@
     <comment>About dialog acknowledgments</comment>
   </data>
   <data name="About_NETLibraryFor7Zip" xml:space="preserve">
-    <value>7-Zip 的 .NET 程式庫</value>
+    <value>7-Zip 的 .NET 函式庫</value>
     <comment>About dialog acknowledgments</comment>
   </data>
   <data name="About_NETLibraryForCharacterSetDetection" xml:space="preserve">
-    <value>用於檢測字元集的 .NET 框架</value>
+    <value>用於檢測字元集的 .NET 函式庫</value>
     <comment>About dialog acknowledgments</comment>
   </data>
   <data name="About_NETLibraryForExtendedLengthPaths" xml:space="preserve">
-    <value>用於擴展長度路徑的 .NET 程式庫</value>
+    <value>用於擴展長度路徑的 .NET 函式庫</value>
     <comment>About dialog acknowledgments</comment>
   </data>
   <data name="About_NETLibraryForReadingMicrosoftExcelFiles" xml:space="preserve">
-    <value>讀取 Microsoft Excel 檔案的 .NET 程式庫</value>
+    <value>用於讀取 Microsoft Excel 檔案的 .NET 函式庫</value>
     <comment>About dialog acknowledgments</comment>
   </data>
   <data name="About_NETLibraryToParseECMA376Numbers" xml:space="preserve">
-    <value>解析 ECMA-376 數字的 .NET 程式庫</value>
+    <value>用於解析 ECMA-376 數字的 .NET 函式庫</value>
     <comment>About dialog acknowledgments</comment>
   </data>
   <data name="About_NETLibraryToWorkWithWordAndExcelDocuments" xml:space="preserve">
-    <value>處理 Word 和 Excel 文檔的 .NET 程式庫</value>
+    <value>用於處理 Word 和 Excel 文件的 .NET 函式庫</value>
     <comment>About dialog acknowledgments</comment>
   </data>
   <data name="About_NETWPFTextEditorComponent" xml:space="preserve">
@@ -303,7 +303,7 @@
     <comment>Bookmark details dialog, search option checkbox label (accel)</comment>
   </data>
   <data name="Bookmarks_Add" xml:space="preserve">
-    <value>新增</value>
+    <value>增添</value>
     <comment>Bookmarks dialog, button label (accel)</comment>
   </data>
   <data name="Bookmarks_Close" xml:space="preserve">
@@ -447,7 +447,7 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <value>/x
 -x
 -exit
-    退出 dnGrep.</value>
+    命令列操作完成後退出 dnGrep.</value>
     <comment>Help dialog text when running dnGrep from the command-line</comment>
   </data>
   <data name="Help_CmdLineFolder" xml:space="preserve">
@@ -549,11 +549,11 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Main window, bookmark button tooltip</comment>
   </data>
   <data name="Main_AllDates" xml:space="preserve">
-    <value>所有日期</value>
+    <value>全部日期</value>
     <comment>Main window, filter files by date radio button label (accel)</comment>
   </data>
   <data name="Main_AllSizes" xml:space="preserve">
-    <value>所有大小</value>
+    <value>全部大小</value>
     <comment>Main window, size filter radio button label (accel)</comment>
   </data>
   <data name="Main_AssociateBookmarkWithFolder" xml:space="preserve">
@@ -697,7 +697,7 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Main window, Patterns to exclude label tooltip</comment>
   </data>
   <data name="Main_FilterSummary_AllFiles" xml:space="preserve">
-    <value>所有檔案</value>
+    <value>全部檔案</value>
     <comment>Main window, file filters summary</comment>
   </data>
   <data name="Main_FilterSummary_ByCreatedDate" xml:space="preserve">
@@ -1449,7 +1449,7 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Message box text for: plug-in load errors</comment>
   </data>
   <data name="MessageBox_ThereWasAnErrorAddingDnGrepToExplorerRightClickMenu" xml:space="preserve">
-    <value>將 dnGrep 新增到檔案總管右鍵功能表時發生錯誤. 日誌查看詳情: </value>
+    <value>將 dnGrep 增添到檔案總管右鍵功能表時發生錯誤. 日誌查看詳情: </value>
     <comment>Message box text for: set Explorer context menu error</comment>
   </data>
   <data name="MessageBox_ThereWasAnErrorCopyingFiles" xml:space="preserve">
@@ -1601,7 +1601,7 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Options dialog, font size selector label</comment>
   </data>
   <data name="Options_DnGrepWillAddTheSelectedFiles" xml:space="preserve">
-    <value>dnGrep 將把選擇的檔案新增到命令列末尾.</value>
+    <value>dnGrep 將增添選取的檔案到命令列末尾.</value>
     <comment>Options dialog, compare arguments help text</comment>
   </data>
   <data name="Options_EditorArguments" xml:space="preserve">
@@ -1653,15 +1653,15 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Options dialog, layout option radio button label (accel)</comment>
   </data>
   <data name="Options_ItemsShownInFileFilterHistoryLists" xml:space="preserve">
-    <value>個檔案過濾歷史清單</value>
+    <value>個檔案過濾歷程清單</value>
     <comment>Options dialog, history list text input label</comment>
   </data>
   <data name="Options_ItemsShownInPathHistoryList" xml:space="preserve">
-    <value>個路徑歷史清單</value>
+    <value>個路徑歷程清單</value>
     <comment>Options dialog, history list text input label</comment>
   </data>
   <data name="Options_ItemsShownInSearchAndReplaceHistoryLists" xml:space="preserve">
-    <value>個搜尋和取代歷史清單</value>
+    <value>個搜尋和取代歷程清單</value>
     <comment>Options dialog, history list text input label</comment>
   </data>
   <data name="Options_Language" xml:space="preserve">
@@ -1773,7 +1773,7 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Options dialog, theme selector label</comment>
   </data>
   <data name="Options_ShowDnGrepInExplorerRightClickMenu" xml:space="preserve">
-    <value>將 dnGrep 新增於檔案總管右鍵功能表中</value>
+    <value>在檔案總管右鍵功能表中顯示dnGrep</value>
     <comment>Options dialog, startup options, checkbox label (accel)</comment>
   </data>
   <data name="Options_ShowFileInfoToolTips" xml:space="preserve">
@@ -1897,7 +1897,7 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Replace window, Cancel button text</comment>
   </data>
   <data name="Replace_CancelAllReplacements" xml:space="preserve">
-    <value>取消所有取代</value>
+    <value>取消全部取代</value>
     <comment>Replace window, Cancel button tooltip</comment>
   </data>
   <data name="Replace_ChangesTextEditorZoom" xml:space="preserve">
@@ -1917,11 +1917,11 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Replace window, Files group header label</comment>
   </data>
   <data name="Replace_MarkAllMatchesInThisFileForReplacement" xml:space="preserve">
-    <value>當前檔案中的所有符合項標記為取代 [Ctrl+A]</value>
+    <value>當前檔案中的全部符合項標記為取代</value>
     <comment>Replace window, Replace in file button tooltip</comment>
   </data>
   <data name="Replace_MarkMatchForReplacement" xml:space="preserve">
-    <value>標記取代的符合項 [Ctrl+R]</value>
+    <value>標記取代的符合項</value>
     <comment>Replace window, Replace button tooltip</comment>
   </data>
   <data name="Replace_Matches" xml:space="preserve">
@@ -1929,11 +1929,11 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Replace window, Matches group header label</comment>
   </data>
   <data name="Replace_MoveToTheNextMatchInThisFile" xml:space="preserve">
-    <value>移動到當前檔案的上一個符合項 [Ctrl+Left]</value>
+    <value>移動到當前檔案的下一個符合項</value>
     <comment>Replace window, Next button tooltip</comment>
   </data>
   <data name="Replace_MoveToThePreviousMatchInThisFile" xml:space="preserve">
-    <value>移動到當前檔案的下一個符合項 [Ctrl+Right]</value>
+    <value>移動到當前檔案的上一個符合項</value>
     <comment>Replace window, Previous button tooltip</comment>
   </data>
   <data name="Replace_Next" xml:space="preserve">
@@ -1965,7 +1965,7 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Replace window, conditional file name suffix</comment>
   </data>
   <data name="Replace_ReplaceAllMatchesInAllFilesAndApply" xml:space="preserve">
-    <value>取代所有檔案中的所有符合項 [F10]</value>
+    <value>取代並套用全部檔案中的所有符合項</value>
     <comment>Replace window, Replace in all files button tooltip</comment>
   </data>
   <data name="Replace_ReplaceButton" xml:space="preserve">
@@ -1973,7 +1973,7 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Replace window, Replace button label (accel)</comment>
   </data>
   <data name="Replace_ReplaceInAllFiles" xml:space="preserve">
-    <value>取代所有檔案</value>
+    <value>取代全部檔案</value>
     <comment>Replace window, Replace in all files button label (accel)</comment>
   </data>
   <data name="Replace_ReplaceInFile" xml:space="preserve">
@@ -2005,7 +2005,7 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Replace window, replace text input box label</comment>
   </data>
   <data name="Replace_ResetAndSkipAllMatchesInThisFile" xml:space="preserve">
-    <value>重置並跳過該檔案中所有符合項 [Ctrl+T]</value>
+    <value>重置並跳過該檔案中全部符合項</value>
     <comment>Replace window, Undo file button tooltip</comment>
   </data>
   <data name="Replace_SearchFor" xml:space="preserve">
@@ -2013,11 +2013,11 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Replace window, search pattern label</comment>
   </data>
   <data name="Replace_ShowTheNextFile" xml:space="preserve">
-    <value>顯示下一檔案 [Ctrl+PgDn]</value>
+    <value>顯示下一個檔案</value>
     <comment>Replace window, Next file button tooltip</comment>
   </data>
   <data name="Replace_ShowThePreviousFile" xml:space="preserve">
-    <value>顯示上一檔案 [Ctrl+PgUp]</value>
+    <value>顯示上一個檔案</value>
     <comment>Replace window, Previous file button tooltip</comment>
   </data>
   <data name="Replace_SyntaxNone" xml:space="preserve">
@@ -2025,7 +2025,7 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Replace window, syntax coloring option for no syntax coloring</comment>
   </data>
   <data name="Replace_ThisFileContainsTooManyMatchesForIndividualReplace" xml:space="preserve">
-    <value>此檔案包含了太多單個符合項, 點擊 '取代此檔案' 取代所有的符合項.</value>
+    <value>此檔案包含了太多單個符合項, 點擊 '取代此檔案' 取代全部的符合項.</value>
     <comment>Replace window, warning message box text</comment>
   </data>
   <data name="Replace_Title" xml:space="preserve">
@@ -2041,7 +2041,7 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Replace window, Undo file button label (accel)</comment>
   </data>
   <data name="Replace_UndoMarkReplaceOnThisMatch" xml:space="preserve">
-    <value>撤銷標記取代的符合項 [Ctrl+U]</value>
+    <value>撤銷標記取代的符合項</value>
     <comment>Replace window, Undo button tooltip</comment>
   </data>
   <data name="Replace_WrapText" xml:space="preserve">
@@ -2061,7 +2061,7 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Report content text</comment>
   </data>
   <data name="Report_FileNotFoundHasItBeenDeletedOrMoved" xml:space="preserve">
-    <value>[檔案未找到: 已被刪除或移動?]</value>
+    <value>[未找到檔案: 已被刪除或移動?]</value>
     <comment>Report extract lines from file error</comment>
   </data>
   <data name="Report_Found0MatchesOn1LinesIn2Files" xml:space="preserve">
@@ -2265,7 +2265,7 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Test window, search options checkbox label (accel)</comment>
   </data>
   <data name="TTA1_MatchesAllCharacters" xml:space="preserve">
-    <value>. 符合所有字元</value>
+    <value>. 符合全部字元</value>
     <comment>Main window and Test window tooltip</comment>
   </data>
   <data name="TTA2_MatchesAlphaNumerics" xml:space="preserve">
@@ -2405,7 +2405,7 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Main window, main menu subitem label (accel)</comment>
   </data>
   <data name="MessageBox_DnGrepIsUpToDate" xml:space="preserve">
-    <value>dnGrep is up to date.</value>
+    <value>dnGrep 是最新版.</value>
     <comment>Message box text for: Check for updates response</comment>
   </data>
   <data name="Main_Results_PreviousFile" xml:space="preserve">
@@ -2585,7 +2585,7 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Main window replace button tooltip</comment>
   </data>
   <data name="Main_RestoreResults" xml:space="preserve">
-    <value>回復結果 (F7)</value>
+    <value>還原結果 (F7)</value>
     <comment>Main window, Maximize results button tooltip</comment>
   </data>
   <data name="Options_MaximizeResultsPanelOnSearch" xml:space="preserve">
@@ -2615,7 +2615,7 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <value>/sep [separator character or text]
 -sep [separator character or text]
 -listItemSeparator [separator character or text]
-   設定字元或字串以分隔輸出報表中一行上的列表項目旗標.</value>
+   設定字元或字串以分隔報表輸出中一行中的清單項目.</value>
     <comment>Help dialog text when running dnGrep from the command-line</comment>
   </data>
   <data name="Help_CmdLineFileInformation" xml:space="preserve">
@@ -2765,16 +2765,12 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <value>重置</value>
     <comment>Options dialog, plug-ins extensions button label (accel)</comment>
   </data>
-  <data name="Bookmarks_AltDownArrow" xml:space="preserve">
-    <value>Alt+↓</value>
-    <comment>Bookmarks dialog, bookmark list 'Move down' context menu shortcut text</comment>
-  </data>
   <data name="Bookmarks_MoveToBottom" xml:space="preserve">
     <value>移到底部</value>
     <comment>Bookmarks dialog, bookmark list context menu text</comment>
   </data>
   <data name="Main_Menu_About_AppData" xml:space="preserve">
-    <value>程式資料和日誌</value>
+    <value>程式資料</value>
     <comment>Main window, main menu subitem label (accel)</comment>
   </data>
   <data name="Options_LineNumbers" xml:space="preserve">
@@ -2790,19 +2786,19 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Script editor menu item (accel)</comment>
   </data>
   <data name="Main_Menu_CancelScript" xml:space="preserve">
-    <value>取消腳本</value>
+    <value>取消指令碼</value>
     <comment>Main window, main menu item label (accel)</comment>
   </data>
   <data name="Main_Menu_EditScript" xml:space="preserve">
-    <value>編輯腳本…</value>
+    <value>編輯指令碼…</value>
     <comment>Main window, main menu item label (accel)</comment>
   </data>
   <data name="Main_Menu_NewScript" xml:space="preserve">
-    <value>新建腳本…</value>
+    <value>新建指令碼…</value>
     <comment>Main window, main menu item label (accel)</comment>
   </data>
   <data name="Main_Menu_Scripts" xml:space="preserve">
-    <value>腳本</value>
+    <value>指令碼</value>
     <comment>Main window, main menu item label (accel)</comment>
   </data>
   <data name="Script_Editor_File" xml:space="preserve">
@@ -2826,7 +2822,7 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Script editor menu item (accel)</comment>
   </data>
   <data name="Script_Editor_RunScript" xml:space="preserve">
-    <value>執行腳本</value>
+    <value>執行指令碼</value>
     <comment>Script editor menu item (accel)</comment>
   </data>
   <data name="Script_Editor_SaveAs" xml:space="preserve">
@@ -2878,20 +2874,16 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Options dialog, delete option label</comment>
   </data>
   <data name="Script_Editor_ScriptingCommands" xml:space="preserve">
-    <value>腳本命令</value>
+    <value>指令碼命令</value>
     <comment>Script editor menu item (accel)</comment>
   </data>
   <data name="Script_Editor_Title" xml:space="preserve">
-    <value>腳本編輯器</value>
+    <value>指令碼編輯器</value>
     <comment>Script editor menu item (accel)</comment>
   </data>
   <data name="BookmarkDetails_BookmarkName" xml:space="preserve">
     <value>書籤名稱:</value>
     <comment>Bookmark name label</comment>
-  </data>
-  <data name="Bookmarks_AltUpArrow" xml:space="preserve">
-    <value>Alt+↑</value>
-    <comment>Bookmarks dialog, bookmark list 'Move up' context menu shortcut text</comment>
   </data>
   <data name="Bookmarks_MoveDown" xml:space="preserve">
     <value>下移</value>
@@ -2909,14 +2901,6 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <value>名稱</value>
     <comment>Bookmarks dialog, grid header</comment>
   </data>
-  <data name="Bookmarks_ShiftAltDownArrow" xml:space="preserve">
-    <value>Shift+Alt+↓</value>
-    <comment>Bookmarks dialog, bookmark list 'Move to bottom' context menu shortcut text</comment>
-  </data>
-  <data name="Bookmarks_ShiftAltUpArrow" xml:space="preserve">
-    <value>Shift+Alt+↑</value>
-    <comment>Bookmarks dialog, bookmark list 'Move to top' context menu shortcut text</comment>
-  </data>
   <data name="ScriptHint_bookmark_removefolder" xml:space="preserve">
     <value>移除資料夾書籤</value>
     <comment>Script editor command/target tooltip </comment>
@@ -2930,7 +2914,7 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Message box text for: Scripts unsaved changes; {0} is a script file name</comment>
   </data>
   <data name="Scripts_ScriptMessages" xml:space="preserve">
-    <value>腳本訊息</value>
+    <value>指令碼訊息</value>
     <comment>Script Messages dialog title</comment>
   </data>
   <data name="Scripts_RunCommandInvalid" xml:space="preserve">
@@ -2942,7 +2926,7 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Script editor command/target/value tooltip</comment>
   </data>
   <data name="ScriptHint_set_uniquescope" xml:space="preserve">
-    <value>報告唯一值範圍: 依檔案或所有檔案</value>
+    <value>報告唯一值範圍: 依檔案或全部檔案</value>
     <comment>Script editor command/target tooltip</comment>
   </data>
   <data name="ScriptHint_set_uniquevalues" xml:space="preserve">
@@ -3002,7 +2986,7 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Script editor command tooltip</comment>
   </data>
   <data name="ScriptHint_run_powershell_value" xml:space="preserve">
-    <value>.ps1 腳本檔案的完整路徑和檔案名稱</value>
+    <value>.ps1 指令碼檔案的完整路徑和檔案名稱</value>
     <comment>Script editor command/target/value tooltip</comment>
   </data>
   <data name="ScriptHint_run_cmd_value" xml:space="preserve">
@@ -3010,7 +2994,7 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Script editor command/target/value tooltip</comment>
   </data>
   <data name="ScriptHint_run_powershell" xml:space="preserve">
-    <value>執行 PowerShell 腳本</value>
+    <value>執行 PowerShell 指令碼</value>
     <comment>Script editor command/target tooltip</comment>
   </data>
   <data name="ScriptHint_set_folder" xml:space="preserve">
@@ -3022,11 +3006,11 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Script editor command/target tooltip</comment>
   </data>
   <data name="Scripts_ScriptFiles" xml:space="preserve">
-    <value>腳本檔案</value>
+    <value>指令碼檔案</value>
     <comment>Scripts: Open and Save file dialog label for script files</comment>
   </data>
   <data name="Scripts_ScriptComplete" xml:space="preserve">
-    <value>腳本完成</value>
+    <value>指令碼完成</value>
     <comment>Script message for script completed</comment>
   </data>
   <data name="Script_Validation_TheCommandIsInvalid" xml:space="preserve">
@@ -3122,7 +3106,7 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Script editor command/target tooltip</comment>
   </data>
   <data name="ScriptHint_set_folder_value" xml:space="preserve">
-    <value>資料夾, 檔案路徑或以逗號分隔的資料夾/檔案列表</value>
+    <value>資料夾, 檔案路徑或以逗號分隔的資料夾/檔案清單</value>
     <comment>Script editor command/target/value tooltip</comment>
   </data>
   <data name="ScriptHint_set_enddate" xml:space="preserve">
@@ -3150,7 +3134,7 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Script editor command/target tooltip</comment>
   </data>
   <data name="ScriptHint_messages" xml:space="preserve">
-    <value>當腳本完成時, 總是顯示腳本訊息視窗</value>
+    <value>當指令碼完成時, 總是顯示指令碼訊息視窗</value>
     <comment>Script editor command tooltip</comment>
   </data>
   <data name="ScriptHint_movefiles" xml:space="preserve">
@@ -3186,7 +3170,7 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Script editor command tooltip</comment>
   </data>
   <data name="ScriptHint_exit" xml:space="preserve">
-    <value>關閉所有視窗並退出 dnGrep</value>
+    <value>關閉全部視窗並退出 dnGrep</value>
     <comment>Script editor command tooltip</comment>
   </data>
   <data name="ScriptHint_set_hoursto" xml:space="preserve">
@@ -3198,18 +3182,18 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Script editor command/target tooltip</comment>
   </data>
   <data name="ScriptHint_set_pathtomatch_value" xml:space="preserve">
-    <value>檔案過濾器樣式, 如 *.txt, 或過濾器列表</value>
+    <value>檔案過濾器樣式, 如 *.txt, 或過濾器清單</value>
     <comment>Script editor command/target/value tooltip</comment>
   </data>
   <data name="Help_CmdLineScript" xml:space="preserve">
     <value>/sc [scriptKey]
 -sc [scriptKey]
 -script [scriptKey]
-    執行腳本鍵識別的腳本.</value>
+    執行指令碼鍵識別的指令碼.</value>
     <comment>Help dialog text when running dnGrep from the command-line</comment>
   </data>
   <data name="Script_Validation_TheScriptKeyWasNotFound" xml:space="preserve">
-    <value>未找到腳本鍵</value>
+    <value>未找到指令碼鍵</value>
     <comment>Script validation error message</comment>
   </data>
   <data name="Script_Validation_ThisCommandDoesNotNeedAValueParameter" xml:space="preserve">
@@ -3261,7 +3245,7 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Script editor command/target/value tooltip</comment>
   </data>
   <data name="ScriptHint_set_pathtoignore_value" xml:space="preserve">
-    <value>檔案過濾器樣式, 如 test\\*, 或過濾器列表</value>
+    <value>檔案過濾器樣式, 如 test\\*, 或過濾器清單</value>
     <comment>Script editor command/target/value tooltip</comment>
   </data>
   <data name="ScriptHint_set_paterntype" xml:space="preserve">
@@ -3273,7 +3257,7 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Script editor command/target tooltip</comment>
   </data>
   <data name="ScriptHint_maximizeresults" xml:space="preserve">
-    <value>最大化或回復搜尋結果樹狀圖</value>
+    <value>最大化或還原搜尋結果樹狀圖</value>
     <comment>Script editor command tooltip</comment>
   </data>
   <data name="ScriptHint_set" xml:space="preserve">
@@ -3281,7 +3265,7 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Script editor command tooltip</comment>
   </data>
   <data name="ScriptHint_run_cmd" xml:space="preserve">
-    <value>執行命令腳本</value>
+    <value>執行命令指令碼</value>
     <comment>Script editor command/target tooltip</comment>
   </data>
   <data name="ScriptHint_set_searchtype" xml:space="preserve">
@@ -3301,11 +3285,11 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Script editor command/target tooltip</comment>
   </data>
   <data name="Scripts_ScriptCanceled" xml:space="preserve">
-    <value>腳本已取消</value>
+    <value>指令碼已取消</value>
     <comment>Script message for script canceled</comment>
   </data>
   <data name="Scripts_NewScript" xml:space="preserve">
-    <value>新腳本</value>
+    <value>新指令碼</value>
     <comment>Scripts: name for unnamed script file</comment>
   </data>
   <data name="Scripts_InvalidFileExtension" xml:space="preserve">
@@ -3369,11 +3353,11 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Script editor command tooltip</comment>
   </data>
   <data name="ScriptHint_include_script" xml:space="preserve">
-    <value>當前腳本中包含來自另一個腳本的命令</value>
+    <value>當前指令碼中包含來自另一個指令碼的命令</value>
     <comment>Script editor command/target tooltip</comment>
   </data>
   <data name="ScriptHint_include_script_value" xml:space="preserve">
-    <value>腳本的鍵/檔案名稱</value>
+    <value>指令碼鍵/檔案名稱</value>
     <comment>Script editor command/target/value tooltip</comment>
   </data>
   <data name="ScriptHint_copyresults" xml:space="preserve">
@@ -3591,12 +3575,8 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <value>請輸入範圍內的值: {0}-{1}.</value>
     <comment>Validation message for user input of numeric values: {0} is the minimum allowed value, {1) is the maximum allowed value</comment>
   </data>
-  <data name="Options_IfTheSecondInstanceHasASearchFolderArgument" xml:space="preserve">
-    <value>若第二個實例有搜尋資料夾參數, 則變更現有視窗中的資料夾.</value>
-    <comment>Options dialog, change folder option tooltip</comment>
-  </data>
   <data name="MessageBox_DoYouWantToStopTheScriptAndExit" xml:space="preserve">
-    <value>您想停止此腳本並退出嗎?</value>
+    <value>您想停止此指令碼並退出嗎?</value>
     <comment>Message box text for: Script is running on exit, line 2</comment>
   </data>
   <data name="Options_ReuseExistingWindow" xml:space="preserve">
@@ -3620,19 +3600,15 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>format string for pdftotext error messages: {0} is the error message and {1} is the file name</comment>
   </data>
   <data name="MessageBox_AScriptIsRunning" xml:space="preserve">
-    <value>一個腳本正在執行.</value>
+    <value>指令碼正在執行中.</value>
     <comment>Message box text for: Script is running on exit, line 1</comment>
-  </data>
-  <data name="Options_ForwardSearchFolderToExistingWindow" xml:space="preserve">
-    <value>將搜尋資料夾轉送到現有視窗</value>
-    <comment>Options dialog, change folder option label</comment>
   </data>
   <data name="Error_DocumentReadFailed" xml:space="preserve">
     <value>文件讀取失敗</value>
     <comment>Error message returned to results list</comment>
   </data>
   <data name="Options_AskForConfirmationOnExitWhenScriptIsRunning" xml:space="preserve">
-    <value>腳本執行時需確認才可退出</value>
+    <value>指令碼執行時需確認才可退出</value>
     <comment>Options dialog, check box label</comment>
   </data>
   <data name="Options_Exit" xml:space="preserve">
@@ -3720,7 +3696,7 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Main window sort options menu item tooltip</comment>
   </data>
   <data name="Options_MayNotBeSupportedInAllFonts" xml:space="preserve">
-    <value>可能並非支援所有字體</value>
+    <value>可能並非支援全部字體</value>
     <comment>Options dialog, radio button tooltip</comment>
   </data>
   <data name="Error_PdftotextReturned0" xml:space="preserve">
@@ -3900,7 +3876,7 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
     <comment>Main window, results list context menu item label</comment>
   </data>
   <data name="Options_EditorAdd" xml:space="preserve">
-    <value>新增…</value>
+    <value>增添…</value>
     <comment>Options dialog, button label to add custom editor</comment>
   </data>
   <data name="Validation_PathMustBeValid" xml:space="preserve">
@@ -3982,5 +3958,296 @@ dnGrep "C:\Program Files\dnGrep" t\w*t</value>
   <data name="Options_OriginalRightClickMenu" xml:space="preserve">
     <value>原始右鍵功能表:</value>
     <comment>Options dialog, startup options checkbox label</comment>
+  </data>
+  <data name="Main_StopAfter0Matches" xml:space="preserve">
+    <value>符合 {0} 項後停止</value>
+    <comment>Main window, search option label</comment>
+  </data>
+  <data name="Main_PauseAfter0Matches" xml:space="preserve">
+    <value>符合 {0} 項後暫停</value>
+    <comment>Main window, search option label</comment>
+  </data>
+  <data name="Options_NumberOfMatchesToAutoStopSearch" xml:space="preserve">
+    <value>自動停止搜尋的符合項數量</value>
+    <comment>Options dialog, search options label</comment>
+  </data>
+  <data name="Main_PauseAfterFirstMatch" xml:space="preserve">
+    <value>首個符合項後即暫停</value>
+    <comment>Main window, search option label</comment>
+  </data>
+  <data name="Options_EnableAutocompleteInTextInputBoxes" xml:space="preserve">
+    <value>在文字輸入框中啟用自動完成</value>
+    <comment>Options dialog, search option checkbox label</comment>
+  </data>
+  <data name="Options_NumberOfMatchesToAutoPauseSearch" xml:space="preserve">
+    <value>自動暫停搜尋的符合項數量</value>
+    <comment>Options dialog, search options label</comment>
+  </data>
+  <data name="Help_CmdLineEverything" xml:space="preserve">
+    <value>/e [search commands]
+-e [search commands]
+-everything [search commands]
+    設定 Everything 搜尋文字. 必須是命令列上的最後一個選項, 並將逐字複製命令列的其餘部分.</value>
+    <comment>Help dialog text when running dnGrep from the command-line</comment>
+  </data>
+  <data name="BookmarkDetails_Global" xml:space="preserve">
+    <value>全局</value>
+    <comment>Bookmark details dialog, search option checkbox label (accel)</comment>
+  </data>
+  <data name="Main_Global" xml:space="preserve">
+    <value>全局</value>
+    <comment>Main window, search option checkbox label (accel)</comment>
+  </data>
+  <data name="ScriptHint_set_global" xml:space="preserve">
+    <value>全局</value>
+    <comment>Script editor command/target tooltip</comment>
+  </data>
+  <data name="Main_GlobalTooltip_True" xml:space="preserve">
+    <value>每個檔案中的全部符合項</value>
+    <comment>Main window, tooltip for the Global checkbox, when checked</comment>
+  </data>
+  <data name="Main_GlobalTooltip_False" xml:space="preserve">
+    <value>每個檔案中的首個符合項</value>
+    <comment>Main window, tooltip for the Global checkbox, when not checked</comment>
+  </data>
+  <data name="ReportSummary_NotGlobal" xml:space="preserve">
+    <value>非全局</value>
+    <comment>Report search options summary</comment>
+  </data>
+  <data name="Bookmarks_Summary_NotGlobal" xml:space="preserve">
+    <value>非全局</value>
+    <comment>Bookmarks dialog, Other Properties summary</comment>
+  </data>
+  <data name="Options_FocusResultsTree" xml:space="preserve">
+    <value>結果樹狀圖</value>
+    <comment>Options dialog, radio button label</comment>
+  </data>
+  <data name="Options_SetKeyboardFocusTo" xml:space="preserve">
+    <value>搜尋後, 將鍵盤焦點設定為</value>
+    <comment>Options dialog, radio button group label</comment>
+  </data>
+  <data name="Options_FocusSearchFor" xml:space="preserve">
+    <value>搜尋輸入</value>
+    <comment>Options dialog, radio button label</comment>
+  </data>
+  <data name="Options_WithFilesInArchives" xml:space="preserve">
+    <value>如何處理壓縮檔案中的檔案</value>
+    <comment>Options dialog, radio group label</comment>
+  </data>
+  <data name="Options_CopyTheWholeArchive" xml:space="preserve">
+    <value>複製整個壓縮檔案</value>
+    <comment>Options dialog, radio button label</comment>
+  </data>
+  <data name="Options_ExtractAndCopyFiles" xml:space="preserve">
+    <value>提取並複製檔案</value>
+    <comment>Options dialog, radio button label</comment>
+  </data>
+  <data name="Options_MoveTheWholeArchive" xml:space="preserve">
+    <value>移動整個壓縮檔案</value>
+    <comment>Options dialog, radio button label</comment>
+  </data>
+  <data name="Options_ExtractAndMoveFiles" xml:space="preserve">
+    <value>提取並移動檔案</value>
+    <comment>Options dialog, radio button label</comment>
+  </data>
+  <data name="Options_DeleteTheWholeArchive" xml:space="preserve">
+    <value>刪除整個壓縮檔案</value>
+    <comment>Options dialog, radio button label</comment>
+  </data>
+  <data name="Options_DoNothing" xml:space="preserve">
+    <value>什麼也不做</value>
+    <comment>Options dialog, radio button label</comment>
+  </data>
+  <data name="Options_CacheFilesInTempFolder" xml:space="preserve">
+    <value>在 Temp 資料夾中快取檔案</value>
+  </data>
+  <data name="Options_CacheFilesIn" xml:space="preserve">
+    <value>將檔案快取於</value>
+  </data>
+  <data name="MessageBox_ThePlugInCacheSettingsHaveChanged" xml:space="preserve">
+    <value>外掛程式快取設定已變更. 刪除舊的快取資料夾?</value>
+  </data>
+  <data name="Options_PlugInCache" xml:space="preserve">
+    <value>外掛程式快取</value>
+  </data>
+  <data name="Options_CacheExtractedFiles" xml:space="preserve">
+    <value>快取提取的檔案</value>
+  </data>
+  <data name="Options_DeleteFilesFromCacheIfNotUsedIn" xml:space="preserve">
+    <value>從快取中刪除檔案, 若未使用</value>
+  </data>
+  <data name="Preview_ViewWhitespace" xml:space="preserve">
+    <value>檢視 Whitespace</value>
+  </data>
+  <data name="Options_CreateCacheFileKeyUsing" xml:space="preserve">
+    <value>建立快取檔案金鑰時, 使用:</value>
+  </data>
+  <data name="Options_HashOfFullFile" xml:space="preserve">
+    <value>完整檔案的雜湊值</value>
+  </data>
+  <data name="Options_HashOfFileSizeAndModifiedTime" xml:space="preserve">
+    <value>檔案大小和修改時間的雜湊值</value>
+  </data>
+  <data name="Main_ReplaceMenu_UseReplaceDialog" xml:space="preserve">
+    <value>使用取代對話框</value>
+  </data>
+  <data name="MessageBox_ThereAreNoFilesSelectedForReplace" xml:space="preserve">
+    <value>沒有選取要取代的檔案.</value>
+  </data>
+  <data name="Main_ReplaceMenu_ReplaceInSelectedFiles" xml:space="preserve">
+    <value>替換選取的檔案</value>
+  </data>
+  <data name="NotiyIcon_Menu_Open" xml:space="preserve">
+    <value>開啟</value>
+  </data>
+  <data name="NotifyIcon_Menu_Exit" xml:space="preserve">
+    <value>退出</value>
+  </data>
+  <data name="MessageBox_CouldNotRegisterTheNewKeyboardShortcut" xml:space="preserve">
+    <value>無法註冊新的鍵盤快速鍵 - 它正在使用中嗎?</value>
+  </data>
+  <data name="Keyboard_WindowsLogoKey" xml:space="preserve">
+    <value>[⊞ Win]</value>
+  </data>
+  <data name="Keyboard_ShiftKey" xml:space="preserve">
+    <value>[Shift]</value>
+  </data>
+  <data name="Keyboard_ControlKey" xml:space="preserve">
+    <value>[Ctrl]</value>
+  </data>
+  <data name="Keyboard_AltKey" xml:space="preserve">
+    <value>[Alt]</value>
+  </data>
+  <data name="Options_KeyboardShortcutToRestoreWindow" xml:space="preserve">
+    <value>用於還原 dnGrep 視窗的鍵盤快速鍵</value>
+  </data>
+  <data name="Options_MinimizeToNotificationArea" xml:space="preserve">
+    <value>最小化到通知區域 *</value>
+  </data>
+  <data name="Replace_OpenFileCompare" xml:space="preserve">
+    <value>開啟檔案比較</value>
+  </data>
+  <data name="Replace_PreviewShowingReplacements" xml:space="preserve">
+    <value>預覽顯示替換效果</value>
+  </data>
+  <data name="About_NETLibraryToGenerateTextualDifferences" xml:space="preserve">
+    <value>.NET 程式庫產生文字差異</value>
+  </data>
+  <data name="Options_ForwardCommandLineArgumentsToTheExistingWindow" xml:space="preserve">
+    <value>將命令列參數轉送到現有視窗</value>
+  </data>
+  <data name="Main_Menu_About_AppLogs" xml:space="preserve">
+    <value>程式日誌</value>
+  </data>
+  <data name="MessageBox_CopySettingsFileError" xml:space="preserve">
+    <value>一些檔案無法複製到新目錄. 檢查錯誤日誌以獲得詳細資訊: </value>
+  </data>
+  <data name="MessageBox_DirectoryNotEmptyWarning" xml:space="preserve">
+    <value>目錄 '{0}' 可能包含不屬於應用程式的檔案. 仍然使用此目錄嗎?</value>
+  </data>
+  <data name="MessageBox_CopyApplicationDataFilesQuestion" xml:space="preserve">
+    <value>應用程式目錄已變更. 您要將檔案複製到新目錄嗎?</value>
+  </data>
+  <data name="MessageBox_OverwriteExistingFileQuestion" xml:space="preserve">
+    <value>新目錄已有名稱為 "{0}" 的檔案. 替換已存在的檔案？</value>
+  </data>
+  <data name="Preview_Error" xml:space="preserve">
+    <value>錯誤:</value>
+  </data>
+  <data name="Preview_NoMatchesFound" xml:space="preserve">
+    <value>未找到符合項!</value>
+  </data>
+  <data name="Options_ForFileNameInSearchResults" xml:space="preserve">
+    <value>搜尋結果中的檔案名稱</value>
+  </data>
+  <data name="Options_ResultsFontWeight" xml:space="preserve">
+    <value>結果字體粗細</value>
+  </data>
+  <data name="Keyboard_KeyboardShortcuts" xml:space="preserve">
+    <value>鍵盤快速鍵</value>
+  </data>
+  <data name="Keyboard_WindowHeader" xml:space="preserve">
+    <value>視窗</value>
+  </data>
+  <data name="Keyboard_LabelHeader" xml:space="preserve">
+    <value>標籤</value>
+  </data>
+  <data name="Keyboard_CommandHeader" xml:space="preserve">
+    <value>命令</value>
+  </data>
+  <data name="Keyboard_ShortcutKeyHeader" xml:space="preserve">
+    <value>快速鍵</value>
+  </data>
+  <data name="Keyboard_ShortcutForSelectedCommand" xml:space="preserve">
+    <value>所選取命令的快速鍵</value>
+  </data>
+  <data name="Keyboard_ShortcutCurrentlyUsedBy" xml:space="preserve">
+    <value>目前使用的快速鍵:</value>
+  </data>
+  <data name="Keyboard_Remove" xml:space="preserve">
+    <value>移除</value>
+  </data>
+  <data name="Keyboard_Assign" xml:space="preserve">
+    <value>指定</value>
+  </data>
+  <data name="Keyboard_Save" xml:space="preserve">
+    <value>儲存</value>
+  </data>
+  <data name="Keyboard_PressShortcutKeys" xml:space="preserve">
+    <value>按下快速鍵:</value>
+  </data>
+  <data name="Keyboard_ResetAllToDefaults" xml:space="preserve">
+    <value>重置全部為預設</value>
+  </data>
+  <data name="Window_Main" xml:space="preserve">
+    <value>主要</value>
+  </data>
+  <data name="Keyboard_Close" xml:space="preserve">
+    <value>關閉</value>
+  </data>
+  <data name="Keyboard_PressF1ForHelpOnKeyboardShortcuts" xml:space="preserve">
+    <value>按 [F1] 鍵以取得鍵盤快速鍵的說明</value>
+  </data>
+  <data name="Main_Menu_Keyboard" xml:space="preserve">
+    <value>鍵盤…</value>
+  </data>
+  <data name="Keyboard_DeleteKey" xml:space="preserve">
+    <value>[Del]</value>
+  </data>
+  <data name="Keyborard_LeftArrowKey" xml:space="preserve">
+    <value>[◀︎]</value>
+  </data>
+  <data name="Keyboard_RightArrowKey" xml:space="preserve">
+    <value>[►]</value>
+  </data>
+  <data name="Keyboard_DownArrowKey" xml:space="preserve">
+    <value>▼</value>
+  </data>
+  <data name="Keyboard_UpArrowKey" xml:space="preserve">
+    <value>▲</value>
+  </data>
+  <data name="Keyboard_PageUpKey" xml:space="preserve">
+    <value>[PgUp]</value>
+  </data>
+  <data name="Keyboard_PageDownKey" xml:space="preserve">
+    <value>[PgDn]</value>
+  </data>
+  <data name="Keyboard_HomeKey" xml:space="preserve">
+    <value>[Home]</value>
+  </data>
+  <data name="Keyboard_EndKey" xml:space="preserve">
+    <value>[End]</value>
+  </data>
+  <data name="Keyboard_PrintScreenKey" xml:space="preserve">
+    <value>[PrtScn]</value>
+  </data>
+  <data name="Keyboard_SpaceKey" xml:space="preserve">
+    <value>␣</value>
+  </data>
+  <data name="Keyboard_BackspaceKey" xml:space="preserve">
+    <value>[⌫ Backspace]</value>
+  </data>
+  <data name="Keyboard_EscapeKey" xml:space="preserve">
+    <value>[Esc]</value>
   </data>
 </root>

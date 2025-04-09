@@ -14,7 +14,7 @@ namespace dnGREP.Common
 
         private static BookmarkEntity? bookmarks;
 
-        public static readonly int LatestVersion = 6;
+        public static readonly int LatestVersion = 7;
 
         public static bool IsDeserializing { get; private set; } = false;
 
@@ -32,7 +32,7 @@ namespace dnGREP.Common
 
         private static string BookmarksFile
         {
-            get { return Path.Combine(Utils.GetDataFolderPath(), "bookmarks.xml"); }
+            get { return Path.Combine(DirectoryConfiguration.Instance.DataDirectory, "bookmarks.xml"); }
         }
 
         [MemberNotNull(nameof(bookmarks))]
@@ -102,6 +102,12 @@ namespace dnGREP.Common
                     {
                         bk.Id = Guid.NewGuid().ToString();
                     }
+
+                    for (int idx = 0; idx < bk.FolderReferences.Count; idx++)
+                    {
+                        var folder = bk.FolderReferences[idx];
+                        bk.FolderReferences[idx] = Path.TrimEndingDirectorySeparator(folder);
+                    }
                 }
                 UpdateOrdinals();
             }
@@ -155,6 +161,7 @@ namespace dnGREP.Common
 
         public void AddFolderReference(Bookmark bookmark, string folder)
         {
+            folder = Path.TrimEndingDirectorySeparator(folder);
             var oldRefs = Bookmarks.Where(b => b.FolderReferences.Contains(folder)).ToArray();
             foreach (Bookmark bk in oldRefs)
             {
@@ -222,6 +229,7 @@ namespace dnGREP.Common
         public SearchType TypeOfSearch { get; set; } = SearchType.PlainText;
         public string SearchPattern { get; set; } = string.Empty;
         public string ReplacePattern { get; set; } = string.Empty;
+        public bool Global { get; set; }
         public bool CaseSensitive { get; set; }
         public bool WholeWord { get; set; }
         public bool Multiline { get; set; }
@@ -271,6 +279,7 @@ namespace dnGREP.Common
         public bool ShouldSerializeApplySearchFilters() { return Version > 2; }
         public bool ShouldSerializeSkipRemoteCloudStorageFiles() { return Version > 3; }
         public bool ShouldSerializeIgnoreFilterName() { return Version > 5; }
+        public bool ShouldSerializeGlobal() { return Version > 6; }
 
         public override bool Equals(object? obj)
         {
@@ -307,6 +316,7 @@ namespace dnGREP.Common
             return TypeOfSearch == otherBookmark.TypeOfSearch &&
                     SearchPattern == otherBookmark.SearchPattern &&
                     ReplacePattern == otherBookmark.ReplacePattern &&
+                    Global == otherBookmark.Global &&
                     CaseSensitive == otherBookmark.CaseSensitive &&
                     WholeWord == otherBookmark.WholeWord &&
                     Multiline == otherBookmark.Multiline &&
@@ -340,6 +350,7 @@ namespace dnGREP.Common
                 TypeOfSearch == otherBookmark.TypeOfSearch &&
                 SearchPattern == otherBookmark.SearchPattern &&
                 ReplacePattern == otherBookmark.ReplacePattern &&
+                Global == otherBookmark.Global &&
                 CaseSensitive == otherBookmark.CaseSensitive &&
                 WholeWord == otherBookmark.WholeWord &&
                 Multiline == otherBookmark.Multiline &&
@@ -374,6 +385,7 @@ namespace dnGREP.Common
                 hashCode = (hashCode * 17) ^ TypeOfSearch.GetHashCode();
                 hashCode = (hashCode * 17) ^ SearchPattern?.GetHashCode(StringComparison.Ordinal) ?? 5;
                 hashCode = (hashCode * 17) ^ ReplacePattern?.GetHashCode(StringComparison.Ordinal) ?? 5;
+                hashCode = (hashCode * 17) ^ Global.GetHashCode();
                 hashCode = (hashCode * 17) ^ CaseSensitive.GetHashCode();
                 hashCode = (hashCode * 17) ^ WholeWord.GetHashCode();
                 hashCode = (hashCode * 17) ^ Multiline.GetHashCode();

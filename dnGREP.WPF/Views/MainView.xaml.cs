@@ -28,7 +28,8 @@ namespace dnGREP.WPF
         private readonly bool isVisible = true;
         private const double UpperThreshold = 1.4;
         private const double LowerThreshold = 1.0;
-
+        private System.Windows.Forms.NotifyIcon? notifyIcon;
+        private HotKey? restoreKey;
 
         public MainForm()
             : this(true)
@@ -58,6 +59,26 @@ namespace dnGREP.WPF
 
             if (isVisible)
             {
+                if (GrepSettings.Instance.Get<bool>(GrepSettings.Key.MinimizeToNotificationArea))
+                {
+                    notifyIcon = new()
+                    {
+                        Text = Localization.Properties.Resources.Main_DnGREP_Title,
+                        Icon = new System.Drawing.Icon("nGREP.ico")
+                    };
+                    notifyIcon.MouseClick += NotifyIcon_MouseClick;
+                    notifyIcon.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
+                    notifyIcon.ContextMenuStrip.Items.Add(new System.Windows.Forms.ToolStripMenuItem(
+                        Localization.Properties.Resources.NotiyIcon_Menu_Open, null, OnOpen_Click));
+                    notifyIcon.ContextMenuStrip.Items.Add(new System.Windows.Forms.ToolStripMenuItem(
+                        Localization.Properties.Resources.NotifyIcon_Menu_Exit, null, OnExit_Click));
+                    notifyIcon.Visible = true;
+
+                    StateChanged += OnStateChanged;
+                }
+
+                InitializeKeyboardShortcut();
+
                 Loaded += (s, e) =>
                 {
                     if (windowBounds.IsOnScreen())
@@ -105,13 +126,14 @@ namespace dnGREP.WPF
             viewModel.PropertyChanged += ViewModel_PropertyChanged;
             DataContext = viewModel;
 
+            if (notifyIcon != null)
+                notifyIcon.Text = viewModel.WindowTitle;
+
             viewModel.PreviewModel = previewControl.ViewModel;
             DockViewModel.Instance.PropertyChanged += ViewModel_PropertyChanged;
 
             Loaded += Window_Loaded;
             Closing += MainForm_Closing;
-
-            PreviewKeyDown += MainForm_PreviewKeyDown;
         }
 
         public MainViewModel ViewModel => viewModel;
@@ -162,16 +184,6 @@ namespace dnGREP.WPF
 
             SetActivePreviewDockSite();
             DockSite.InitFloatingWindows();
-
-            previewControl.PreviewKeyDown += (s, a) =>
-            {
-                // called when the preview control is un-docked in a Floating Window
-                MainForm_PreviewKeyDown(s, a);
-                if (a.Handled)
-                {
-                    previewControl.SetFocus();
-                }
-            };
         }
 
         private static void SetWatermark(DatePicker dp)
@@ -221,7 +233,7 @@ namespace dnGREP.WPF
             }
         }
 
-        private void AutoPosistionPreviewWindow(double ratio)
+        private void AutoPositionPreviewWindow(double ratio)
         {
             var dvm = DockViewModel.Instance;
             if (viewModel.PreviewFileContent && dvm.IsPreviewDocked && dvm.PreviewAutoPosition)
@@ -337,6 +349,11 @@ namespace dnGREP.WPF
             // get the changes to the Bookmarks window closing
             previewControl.SaveSettings();
             viewModel.SaveSettings();
+
+            notifyIcon?.Dispose();
+            notifyIcon = null;
+            restoreKey?.Dispose();
+            restoreKey = null;
         }
 
         private void ViewModel_PreviewShow(object? sender, EventArgs e)
@@ -363,11 +380,11 @@ namespace dnGREP.WPF
         {
             if (e.PropertyName == "IsPreviewDocked")
             {
-                AutoPosistionPreviewWindow(ActualWidth / ActualHeight);
+                AutoPositionPreviewWindow(ActualWidth / ActualHeight);
             }
             else if (e.PropertyName == "PreviewAutoPosition")
             {
-                AutoPosistionPreviewWindow(ActualWidth / ActualHeight);
+                AutoPositionPreviewWindow(ActualWidth / ActualHeight);
             }
             else if (e.PropertyName == "PreviewDockSide")
             {
@@ -386,6 +403,10 @@ namespace dnGREP.WPF
                     dvm.PreviewAutoPosition = false;
                     dvm.SaveSettings();
                 }
+            }
+            else if (e.PropertyName == "WindowTitle" && notifyIcon != null)
+            {
+                notifyIcon.Text = viewModel.WindowTitle;
             }
         }
 
@@ -444,7 +465,7 @@ namespace dnGREP.WPF
 
         private void MainForm_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            AutoPosistionPreviewWindow(e.NewSize.Width / e.NewSize.Height);
+            AutoPositionPreviewWindow(e.NewSize.Width / e.NewSize.Height);
         }
 
         private void CbEncoding_Initialized(object sender, EventArgs e)
@@ -470,30 +491,6 @@ namespace dnGREP.WPF
                 tbFilePatternIgnore.ActualWidth - tbFilePatternIgnore.Margin.Left - tbFilePatternIgnore.Margin.Right;
 
             viewModel.MaxFileFiltersSummaryWidth = Math.Max(0, maxWidth);
-        }
-
-        private void MainForm_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.F3 && Keyboard.Modifiers == ModifierKeys.None)
-            {
-                NextMatch();
-                e.Handled = true;
-            }
-            else if (e.Key == Key.F3 && Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
-            {
-                NextFile();
-                e.Handled = true;
-            }
-            else if (e.Key == Key.F4 && Keyboard.Modifiers == ModifierKeys.None)
-            {
-                PreviousMatch();
-                e.Handled = true;
-            }
-            else if (e.Key == Key.F4 && Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
-            {
-                PreviousFile();
-                e.Handled = true;
-            }
         }
 
         internal async void NextMatch()
@@ -584,35 +581,25 @@ namespace dnGREP.WPF
         private DateTime timeOfLastMessage = DateTime.Now;
 
         /// <summary>Brings main window to foreground.</summary>
-        public void BringToForeground(string searchPath)
+        public void BringToForeground(string commandLine)
         {
-            TimeSpan fromLastMessage = DateTime.Now - timeOfLastMessage;
-            timeOfLastMessage = DateTime.Now;
-
-            bool replace = fromLastMessage > TimeSpan.FromMilliseconds(500);
-
-            if (GrepSettings.Instance.Get<bool>(GrepSettings.Key.PassSearchFolderToSingleton) &&
-                !string.IsNullOrEmpty(searchPath))
+            HelpWindow? help = null;
+            if (GrepSettings.Instance.Get<bool>(GrepSettings.Key.PassCommandLineToSingleton))
             {
-                if (replace || string.IsNullOrEmpty(viewModel.FileOrFolderPath))
+                TimeSpan fromLastMessage = DateTime.Now - timeOfLastMessage;
+                timeOfLastMessage = DateTime.Now;
+
+                bool replace = fromLastMessage > TimeSpan.FromMilliseconds(500);
+
+                CommandLineArgs args = new(commandLine);
+                if (args.InvalidArgument || args.ShowHelp)
                 {
-                    viewModel.FileOrFolderPath = searchPath;
+                    help = new(CommandLineArgs.GetHelpString(),
+                        args.InvalidArgument, args.CommandLine);
                 }
                 else
                 {
-                    bool found = false;
-                    foreach (var subPath in UiUtils.SplitPath(viewModel.FileOrFolderPath, true))
-                    {
-                        if (subPath.Equals(searchPath, StringComparison.OrdinalIgnoreCase))
-                        {
-                            found = true;
-                            break;
-                        }
-                    }
-                    if (!found)
-                    {
-                        viewModel.FileOrFolderPath += ";" + searchPath;
-                    }
+                    ApplyArgsToMainWindow(args, replace);
                 }
             }
 
@@ -627,7 +614,226 @@ namespace dnGREP.WPF
             Topmost = true;
             Topmost = false;
             Focus();
+
+            if (help != null)
+            {
+                help.ShowDialog();
+                help.Topmost = true;
+                help.Topmost = false;
+                help.Focus();
+            }
         }
+
+        private void ApplyArgsToMainWindow(CommandLineArgs args, bool replace)
+        {
+            if (!string.IsNullOrEmpty(args.SearchPath))
+            {
+                if (replace || string.IsNullOrEmpty(viewModel.FileOrFolderPath))
+                {
+                    viewModel.FileOrFolderPath = args.SearchPath;
+                }
+                else
+                {
+                    bool found = false;
+                    foreach (var subPath in UiUtils.SplitPath(viewModel.FileOrFolderPath, true))
+                    {
+                        if (subPath.Equals(args.SearchPath, StringComparison.OrdinalIgnoreCase))
+                        {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found)
+                    {
+                        viewModel.FileOrFolderPath += ";" + searchPath;
+                    }
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(args.SearchFor))
+            {
+                viewModel.SearchFor = args.SearchFor;
+            }
+
+            if (!string.IsNullOrWhiteSpace(args.NamePatternToInclude))
+            {
+                viewModel.FilePattern = args.NamePatternToInclude;
+            }
+
+            if (!string.IsNullOrWhiteSpace(args.NamePatternToExclude))
+            {
+                viewModel.FilePatternIgnore = args.NamePatternToExclude;
+            }
+
+            if (args.TypeOfSearch.HasValue)
+            {
+                viewModel.TypeOfSearch = args.TypeOfSearch.Value;
+            }
+
+            if (args.TypeOfFileSearch.HasValue)
+            {
+                viewModel.TypeOfFileSearch = args.TypeOfFileSearch.Value;
+            }
+
+            if (!string.IsNullOrWhiteSpace(args.Everything))
+            {
+                viewModel.TypeOfFileSearch = FileSearchType.Everything;
+                viewModel.FileOrFolderPath = args.Everything;
+            }
+
+            if (args.CaseSensitive.HasValue)
+            {
+                viewModel.CaseSensitive = args.CaseSensitive.Value;
+            }
+
+            if (args.WholeWord.HasValue)
+            {
+                viewModel.WholeWord = args.WholeWord.Value;
+            }
+
+            if (args.Multiline.HasValue)
+            {
+                viewModel.Multiline = args.Multiline.Value;
+            }
+
+            if (args.DotAsNewline.HasValue)
+            {
+                viewModel.Singleline = args.DotAsNewline.Value;
+            }
+
+            if (args.BooleanOperators.HasValue)
+            {
+                viewModel.BooleanOperators = args.BooleanOperators.Value;
+            }
+
+            if (args.ReportMode.HasValue)
+            {
+                GrepSettings.Instance.Set(GrepSettings.Key.ReportMode, args.ReportMode.Value);
+            }
+
+            if (args.IncludeFileInformation.HasValue)
+            {
+                GrepSettings.Instance.Set(GrepSettings.Key.IncludeFileInformation, args.IncludeFileInformation.Value);
+            }
+
+            if (args.TrimWhitespace.HasValue)
+            {
+                GrepSettings.Instance.Set(GrepSettings.Key.TrimWhitespace, args.TrimWhitespace.Value);
+            }
+
+            if (args.FilterUniqueValues.HasValue)
+            {
+                GrepSettings.Instance.Set(GrepSettings.Key.FilterUniqueValues, args.FilterUniqueValues.Value);
+            }
+
+            if (args.UniqueScope.HasValue)
+            {
+                GrepSettings.Instance.Set(GrepSettings.Key.UniqueScope, args.UniqueScope.Value);
+            }
+
+            if (args.OutputOnSeparateLines.HasValue)
+            {
+                GrepSettings.Instance.Set(GrepSettings.Key.OutputOnSeparateLines, args.OutputOnSeparateLines.Value);
+            }
+
+            if (!string.IsNullOrEmpty(args.ListItemSeparator))
+            {
+                GrepSettings.Instance.Set(GrepSettings.Key.ListItemSeparator, args.ListItemSeparator);
+            }
+
+            if (!string.IsNullOrEmpty(args.Script))
+            {
+                viewModel.QueueScript(args.Script);
+                viewModel.ExecuteScriptQueue();
+            }
+            else if (viewModel.CanSearch)
+            {
+                viewModel.SearchCommand.Execute(null);
+            }
+        }
+
+        #region Notify Icon and Hot Keys
+
+        public bool InitializeKeyboardShortcut()
+        {
+            if (restoreKey != null)
+            {
+                restoreKey.Dispose();
+                restoreKey = null;
+            }
+
+            string keys = GrepSettings.Instance.Get<string>(GrepSettings.Key.RestoreWindowKeyboardShortcut);
+            if (string.IsNullOrEmpty(keys))
+                return true;
+
+            if (HotKey.TryParse(keys, out KeyAndModifiers? keyAndModifiers))
+            {
+                restoreKey = new HotKey(keyAndModifiers, OnHotKeyHandler);
+                if (restoreKey.Register())
+                {
+                    return true;
+                }
+                else
+                {
+                    restoreKey.Dispose();
+                    restoreKey = null;
+                }
+            }
+            return false;
+        }
+
+        private WindowState storedWindowState = WindowState.Normal;
+
+        void OnStateChanged(object? sender, EventArgs args)
+        {
+            if (WindowState == WindowState.Minimized)
+            {
+                Hide();
+            }
+            else
+            {
+                storedWindowState = WindowState;
+            }
+        }
+
+        void OnExit_Click(object? sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void NotifyIcon_MouseClick(object? sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            if (e.Button == System.Windows.Forms.MouseButtons.Left)
+            {
+                RestoreWindow();
+            }
+        }
+
+        void OnOpen_Click(object? sender, EventArgs e)
+        {
+            RestoreWindow();
+        }
+
+        private void OnHotKeyHandler(HotKey hotKey)
+        {
+            RestoreWindow();
+        }
+
+        internal void RestoreWindow()
+        {
+            Show();
+            WindowState = storedWindowState;
+
+            Dispatcher.BeginInvoke(() =>
+            {
+                // According to some sources these steps guarantee that an app will be brought to foreground.
+                Activate();
+                Topmost = true;
+                Topmost = false;
+                Focus();
+            });
+        }
+        #endregion
 
         [GeneratedRegex("\\d+")]
         private static partial Regex AllowedTextRegex();

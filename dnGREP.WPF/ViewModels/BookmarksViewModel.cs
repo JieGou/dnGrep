@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -24,6 +25,29 @@ namespace dnGREP.WPF
         private readonly Window ownerWnd;
         private readonly List<BookmarkViewModel> _bookmarks;
         private bool _isDirty;
+        private static bool beenInitialized;
+
+        static BookmarkListViewModel()
+        {
+            Initialize();
+        }
+
+        public static void Initialize()
+        {
+            if (beenInitialized) return;
+
+            beenInitialized = true;
+            KeyBindingManager.RegisterCommand(KeyCategory.Bookmark, nameof(AddCommand), "Bookmarks_Add", string.Empty);
+            KeyBindingManager.RegisterCommand(KeyCategory.Bookmark, nameof(EditCommand), "Bookmarks_Edit", string.Empty);
+            KeyBindingManager.RegisterCommand(KeyCategory.Bookmark, nameof(DuplicateCommand), "Bookmarks_Duplicate", string.Empty);
+            KeyBindingManager.RegisterCommand(KeyCategory.Bookmark, nameof(DeleteCommand), "Bookmarks_Delete", string.Empty);
+            KeyBindingManager.RegisterCommand(KeyCategory.Bookmark, nameof(UseBookmarkCommand), "Bookmarks_Use", "Control+B");
+
+            KeyBindingManager.RegisterCommand(KeyCategory.Bookmark, nameof(MoveToTopCommand), "Bookmarks_MoveToTop", "Shift+Alt+Up");
+            KeyBindingManager.RegisterCommand(KeyCategory.Bookmark, nameof(MoveUpCommand), "Bookmarks_MoveUp", "Alt+Up");
+            KeyBindingManager.RegisterCommand(KeyCategory.Bookmark, nameof(MoveDownCommand), "Bookmarks_MoveDown", "Alt+Down");
+            KeyBindingManager.RegisterCommand(KeyCategory.Bookmark, nameof(MoveToBottomCommand), "Bookmarks_MoveToBottom", "Shift+Alt+Down");
+        }
 
         public BookmarkListViewModel(Window owner, Action<Bookmark> clearStar)
         {
@@ -36,6 +60,36 @@ namespace dnGREP.WPF
             ApplicationFontFamily = GrepSettings.Instance.Get<string>(GrepSettings.Key.ApplicationFontFamily);
             DialogFontSize = GrepSettings.Instance.Get<double>(GrepSettings.Key.DialogFontSize);
             IsPinned = GrepSettings.Instance.Get<bool>(GrepSettings.Key.PinBookmarkWindow);
+
+            InitializeInputBindings();
+            App.Messenger.Register<KeyCategory>("KeyGestureChanged", OnKeyGestureChanged);
+        }
+
+        private void InitializeInputBindings()
+        {
+            foreach (KeyBindingInfo kbi in KeyBindingManager.GetCommandGestures(KeyCategory.Bookmark))
+            {
+                PropertyInfo? pi = GetType().GetProperty(kbi.CommandName, BindingFlags.Instance | BindingFlags.Public);
+                if (pi != null && pi.GetValue(this) is RelayCommand cmd)
+                {
+                    InputBindings.Add(KeyBindingManager.CreateKeyBinding(cmd, kbi.KeyGesture));
+                }
+            }
+        }
+
+        private void OnKeyGestureChanged(KeyCategory category)
+        {
+            if (category == KeyCategory.Bookmark)
+            {
+                InputBindings.Clear();
+                InitializeInputBindings();
+                InputBindings.RaiseAfterCollectionChanged();
+
+                OnPropertyChanged(nameof(MoveToTopCommand));
+                OnPropertyChanged(nameof(MoveUpCommand));
+                OnPropertyChanged(nameof(MoveDownCommand));
+                OnPropertyChanged(nameof(MoveToBottomCommand));
+            }
         }
 
         [MemberNotNull(nameof(Bookmarks))]
@@ -89,6 +143,17 @@ namespace dnGREP.WPF
             return false;
         }
 
+        private void UseBookmark()
+        {
+            if (ownerWnd is BookmarksWindow window)
+            {
+                window.UseBookmarkCommand();
+            }
+        }
+
+
+        public ObservableCollectionEx<InputBinding> InputBindings { get; } = [];
+
         public ICollectionView Bookmarks { get; private set; }
 
         [ObservableProperty]
@@ -117,35 +182,48 @@ namespace dnGREP.WPF
         [ObservableProperty]
         private bool hasSelection = false;
 
-
-        public ICommand AddCommand => new RelayCommand(
+        private RelayCommand? addCommand;
+        public RelayCommand AddCommand => addCommand ??= new RelayCommand(
             param => AddBookmark());
 
-        public ICommand EditCommand => new RelayCommand(
+        private RelayCommand? editCommand;
+        public RelayCommand EditCommand => editCommand ??= new RelayCommand(
             param => Edit(),
             param => SelectedBookmark != null);
 
-        public ICommand DuplicateCommand => new RelayCommand(
+        private RelayCommand? duplicateCommand;
+        public RelayCommand DuplicateCommand => duplicateCommand ??= new RelayCommand(
             param => Duplicate(),
             param => SelectedBookmark != null);
 
-        public ICommand DeleteCommand => new RelayCommand(
+        private RelayCommand? deleteCommand;
+        public RelayCommand DeleteCommand => deleteCommand ??= new RelayCommand(
             param => Delete(),
             param => SelectedBookmark != null);
 
-        public ICommand MoveToTopCommand => new RelayCommand(
+
+        private RelayCommand? useBookmarkCommand;
+        public RelayCommand UseBookmarkCommand => useBookmarkCommand ??= new RelayCommand(
+            p => UseBookmark(),
+            q => HasSelection);
+
+        private RelayCommand? moveToTopCommand;
+        public RelayCommand MoveToTopCommand => moveToTopCommand ??= new RelayCommand(
             p => MoveToTop(),
             q => SelectedBookmark != null && SelectedBookmark.Ordinal > 0);
 
-        public ICommand MoveUpCommand => new RelayCommand(
+        private RelayCommand? moveUpCommand;
+        public RelayCommand MoveUpCommand => moveUpCommand ??= new RelayCommand(
             p => MoveUp(),
             q => SelectedBookmark != null && SelectedBookmark.Ordinal > 0);
 
-        public ICommand MoveDownCommand => new RelayCommand(
+        private RelayCommand? moveDownCommand;
+        public RelayCommand MoveDownCommand => moveDownCommand ??= new RelayCommand(
             p => MoveDown(),
             q => SelectedBookmark != null && SelectedBookmark.Ordinal < _bookmarks.Count - 1);
 
-        public ICommand MoveToBottomCommand => new RelayCommand(
+        private RelayCommand? moveToBottomCommand;
+        public RelayCommand MoveToBottomCommand => moveToBottomCommand ??= new RelayCommand(
             p => MoveToBottom(),
             q => SelectedBookmark != null && SelectedBookmark.Ordinal < _bookmarks.Count - 1);
 
@@ -314,6 +392,7 @@ namespace dnGREP.WPF
                         TypeOfSearch = editBmk.TypeOfSearch,
                         SearchPattern = editBmk.SearchFor,
                         ReplacePattern = editBmk.ReplaceWith,
+                        Global = editBmk.Global,
                         CaseSensitive = editBmk.CaseSensitive,
                         WholeWord = editBmk.WholeWord,
                         Multiline = editBmk.Multiline,
@@ -333,7 +412,8 @@ namespace dnGREP.WPF
                         ApplyFilePropertyFilters = editBmk.ApplyFilePropertyFilters,
                         ApplyContentSearchFilters = editBmk.ApplyContentSearchFilters,
                     };
-                    string[] paths = editBmk.PathReferences.Split(newlines, StringSplitOptions.RemoveEmptyEntries);
+                    string[] paths = editBmk.PathReferences.Split(newlines, StringSplitOptions.RemoveEmptyEntries)
+                        .Select(Path.TrimEndingDirectorySeparator).ToArray();
                     newBmk.FolderReferences.AddRange(paths);
 
                     BookmarkLibrary.Instance.Bookmarks.Add(newBmk);
@@ -379,6 +459,7 @@ namespace dnGREP.WPF
                         TypeOfSearch = duplicateBmk.TypeOfSearch,
                         SearchPattern = duplicateBmk.SearchFor,
                         ReplacePattern = duplicateBmk.ReplaceWith,
+                        Global = duplicateBmk.Global,
                         CaseSensitive = duplicateBmk.CaseSensitive,
                         WholeWord = duplicateBmk.WholeWord,
                         Multiline = duplicateBmk.Multiline,
@@ -440,6 +521,7 @@ namespace dnGREP.WPF
                     TypeOfSearch = editBmk.TypeOfSearch,
                     SearchPattern = editBmk.SearchFor,
                     ReplacePattern = editBmk.ReplaceWith,
+                    Global = editBmk.Global,
                     CaseSensitive = editBmk.CaseSensitive,
                     WholeWord = editBmk.WholeWord,
                     Multiline = editBmk.Multiline,
@@ -459,7 +541,8 @@ namespace dnGREP.WPF
                     ApplyFilePropertyFilters = editBmk.ApplyFilePropertyFilters,
                     ApplyContentSearchFilters = editBmk.ApplyContentSearchFilters,
                 };
-                string[] paths = editBmk.PathReferences.Split(newlines, StringSplitOptions.RemoveEmptyEntries);
+                string[] paths = editBmk.PathReferences.Split(newlines, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(Path.TrimEndingDirectorySeparator).ToArray();
                 newBmk.FolderReferences.AddRange(paths);
 
                 editBmk.Id = newBmk.Id;
@@ -497,6 +580,7 @@ namespace dnGREP.WPF
             ReplaceWith = bk.ReplacePattern;
 
             TypeOfSearch = bk.TypeOfSearch;
+            Global = bk.Global;
             CaseSensitive = bk.CaseSensitive;
             WholeWord = bk.WholeWord;
             Multiline = bk.Multiline;
@@ -563,6 +647,9 @@ namespace dnGREP.WPF
             CodePage = toCopy.CodePage;
             PathReferences = string.Join(Environment.NewLine, toCopy.PathReferences);
 
+            Global = toCopy.Global;
+            IsGlobalEnabled = toCopy.IsGlobalEnabled;
+
             CaseSensitive = toCopy.CaseSensitive;
             IsCaseSensitiveEnabled = toCopy.IsCaseSensitiveEnabled;
 
@@ -626,6 +713,8 @@ namespace dnGREP.WPF
 
             if (ApplyContentSearchFilters)
             {
+                if (!Global)
+                    tempList.Add(Resources.Bookmarks_Summary_NotGlobal);
                 if (CaseSensitive)
                     tempList.Add(Resources.Bookmarks_Summary_CaseSensitive);
                 if (WholeWord)
@@ -659,6 +748,7 @@ namespace dnGREP.WPF
                 TypeOfSearch = TypeOfSearch,
                 SearchPattern = SearchFor,
                 ReplacePattern = ReplaceWith,
+                Global = Global,
                 CaseSensitive = CaseSensitive,
                 WholeWord = WholeWord,
                 Multiline = Multiline,
@@ -677,12 +767,14 @@ namespace dnGREP.WPF
                 ApplyFileSourceFilters = ApplyFileSourceFilters,
                 ApplyFilePropertyFilters = ApplyFilePropertyFilters,
                 ApplyContentSearchFilters = ApplyContentSearchFilters,
-                FolderReferences = [.. PathReferences.Split(newlines, StringSplitOptions.RemoveEmptyEntries)]
+                FolderReferences = [.. PathReferences.Split(newlines, StringSplitOptions.RemoveEmptyEntries)
+                .Select(Path.TrimEndingDirectorySeparator)]
             };
         }
 
         private void UpdateTypeOfSearchState()
         {
+            IsGlobalEnabled = true;
             IsCaseSensitiveEnabled = true;
             IsMultilineEnabled = true;
             IsSinglelineEnabled = true;
@@ -691,11 +783,13 @@ namespace dnGREP.WPF
 
             if (TypeOfSearch == SearchType.XPath)
             {
+                IsGlobalEnabled = false;
                 IsCaseSensitiveEnabled = false;
                 IsMultilineEnabled = false;
                 IsSinglelineEnabled = false;
                 IsWholeWordEnabled = false;
                 IsBooleanOperatorsEnabled = false;
+                Global = true;
                 CaseSensitive = false;
                 Multiline = false;
                 Singleline = false;
@@ -709,9 +803,22 @@ namespace dnGREP.WPF
             }
             else if (TypeOfSearch == SearchType.Soundex)
             {
+                IsGlobalEnabled = false;
                 IsCaseSensitiveEnabled = false;
                 IsSinglelineEnabled = false;
                 IsBooleanOperatorsEnabled = false;
+                Global = true;
+                CaseSensitive = false;
+                Singleline = false;
+                BooleanOperators = false;
+            }
+            else if (TypeOfSearch == SearchType.Hex)
+            {
+                IsGlobalEnabled = false;
+                IsCaseSensitiveEnabled = false;
+                IsSinglelineEnabled = false;
+                IsBooleanOperatorsEnabled = false;
+                Global = true;
                 CaseSensitive = false;
                 Singleline = false;
                 BooleanOperators = false;
@@ -736,7 +843,7 @@ namespace dnGREP.WPF
                 }
             }
 
-            string dataFolder = Path.Combine(Utils.GetDataFolderPath(), MainViewModel.IgnoreFilterFolder);
+            string dataFolder = Path.Combine(DirectoryConfiguration.Instance.DataDirectory, MainViewModel.IgnoreFilterFolder);
             if (!Directory.Exists(dataFolder))
             {
                 Directory.CreateDirectory(dataFolder);
@@ -802,10 +909,16 @@ namespace dnGREP.WPF
 
         [ObservableProperty]
         private SearchType typeOfSearch = SearchType.PlainText;
-        partial void OnTypeOfFileSearchChanged(FileSearchType value)
+        partial void OnTypeOfSearchChanged(SearchType value)
         {
             UpdateTypeOfSearchState();
         }
+
+        [ObservableProperty]
+        private bool global = false;
+
+        [ObservableProperty]
+        private bool isGlobalEnabled = false;
 
         [ObservableProperty]
         private bool caseSensitive = false;
@@ -945,15 +1058,19 @@ namespace dnGREP.WPF
             SectionIndex = value;
         }
 
-        public ICommand FilterComboBoxDropDownCommand => new RelayCommand(
+        private RelayCommand? filterComboBoxDropDownCommand;
+        public RelayCommand FilterComboBoxDropDownCommand => filterComboBoxDropDownCommand ??= new RelayCommand(
             p => PopulateIgnoreFilters());
 
         /// <summary>
         /// Returns a command that checks for can save
         /// </summary>
-        public ICommand SaveCommand => new RelayCommand(
-            param => { /*nothing to do here*/ },
-            param => CanSave());
+        private RelayCommand? saveCommand;
+        public RelayCommand SaveCommand => saveCommand ??= new RelayCommand(
+            param =>
+            { /*nothing to do here*/
+            },
+                param => CanSave());
 
         private bool CanSave()
         {

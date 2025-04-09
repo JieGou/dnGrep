@@ -11,6 +11,7 @@ namespace dnGREP.Engines
 {
     public class GrepEngineFactory
     {
+        private const string? separator = ", ";
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         private static readonly Dictionary<string, GrepPlugin> fileTypeEngines = [];
@@ -81,7 +82,7 @@ namespace dnGREP.Engines
                                             }
 
                                             logger.Debug(string.Format("Loading plugin: {0} for extensions {1}",
-                                                plugin.DllFilePath, string.Join(", ", [.. plugin.Extensions])));
+                                                plugin.DllFilePath, string.Join(separator, plugin.Extensions)));
 
                                         }
                                         else
@@ -164,7 +165,7 @@ namespace dnGREP.Engines
                             }
 
                             logger.Debug(string.Format("Loading plugin: {0} for extensions {1}",
-                                plugin.DllFilePath, string.Join(", ", [.. plugin.Extensions])));
+                                plugin.DllFilePath, string.Join(separator, plugin.Extensions)));
 
                         }
                         else
@@ -202,7 +203,14 @@ namespace dnGREP.Engines
             {
                 if (searchType == SearchType.Hex)
                 {
-                    return GetHexEngine(param, filter);
+                    if (ArchiveDirectory.Extensions.Contains(fileExtension))
+                    {
+                        return GetArchiveEngine(fileExtension, param, filter);
+                    }
+                    else
+                    {
+                        return GetHexEngine(param, filter);
+                    }
                 }
 
                 IGrepEngine? poolEngine = FetchFromPool(fileExtension);

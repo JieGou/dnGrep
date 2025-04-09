@@ -9,7 +9,6 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using dnGREP.Common;
-using dnGREP.Common.UI;
 using dnGREP.Localization.Properties;
 using Microsoft.Win32;
 
@@ -28,7 +27,8 @@ namespace dnGREP.WPF
         private DateTime scriptStartTime = DateTime.MinValue;
         private string queuedScript = string.Empty;
         private bool queuedSearchRequest = false;
-
+        private bool scriptStopAfterFirstMatch = false;
+        private bool scriptCanceled = false;
         private void AddScriptMessage(string message)
         {
             if (ScriptMessages.Count == 0 && !string.IsNullOrEmpty(currentScriptFile))
@@ -49,7 +49,7 @@ namespace dnGREP.WPF
         {
             if (SetCommandMap.Count == 0)
             {
-                SetCommandMap.Add("folder", new ScriptCommand<string>(p => FileOrFolderPath = UiUtils.QuoteIfNeeded(p)));
+                SetCommandMap.Add("folder", new ScriptCommand<string>(p => FileOrFolderPath = p));
                 SetCommandMap.Add("pathtomatch", new ScriptCommand<string>(p => FilePattern = p));
                 SetCommandMap.Add("pathtoignore", new ScriptCommand<string>(p => FilePatternIgnore = p));
                 SetCommandMap.Add("searchinarchives", new ScriptCommand<bool>(p => IncludeArchive = p));
@@ -83,6 +83,7 @@ namespace dnGREP.WPF
                 SetCommandMap.Add("searchfor", new ScriptCommand<string>(p => SearchFor = p));
                 SetCommandMap.Add("replacewith", new ScriptCommand<string>(p => ReplaceWith = p));
 
+                SetCommandMap.Add("global", new ScriptCommand<bool>(p => Global = p));
                 SetCommandMap.Add("casesensitive", new ScriptCommand<bool>(p => CaseSensitive = p));
                 SetCommandMap.Add("wholeword", new ScriptCommand<bool>(p => WholeWord = p));
                 SetCommandMap.Add("multiline", new ScriptCommand<bool>(p => Multiline = p));
@@ -92,7 +93,7 @@ namespace dnGREP.WPF
 
                 SetCommandMap.Add("searchinresults", new ScriptCommand<bool>(p => SearchInResultsContent = p));
                 SetCommandMap.Add("previewfile", new ScriptCommand<bool>(p => PreviewFileContent = p));
-                SetCommandMap.Add("stopafterfirstmatch", new ScriptCommand<bool>(p => StopAfterFirstMatch = p));
+                SetCommandMap.Add("stopafterfirstmatch", new ScriptCommand<bool>(p => scriptStopAfterFirstMatch = p));
 
                 SetCommandMap.Add("highlightmatches", new ScriptCommand<bool>(p => HighlightsOn = p));
                 SetCommandMap.Add("highlightgroups", new ScriptCommand<bool>(p => HighlightCaptureGroups = p));
@@ -174,12 +175,28 @@ namespace dnGREP.WPF
             ScriptManager.Instance.LoadScripts();
             InitializeScriptTargets();
 
-            ScriptMenuItems.Add(new MenuItemViewModel(Resources.Main_Menu_NewScript, new RelayCommand(p => NewScript(), q => !IsScriptRunning)));
-            ScriptMenuItems.Add(new MenuItemViewModel(Resources.Main_Menu_EditScript, new RelayCommand(p => EditScript(), q => !IsScriptRunning)));
-            ScriptMenuItems.Add(new MenuItemViewModel(Resources.Main_Menu_CancelScript, new RelayCommand(p => CancelScript(), q => IsScriptRunning)));
+            ScriptMenuItems.Clear();
+            ScriptMenuItems.Add(new MenuItemViewModel(Resources.Main_Menu_NewScript, NewScriptCommand));
+            ScriptMenuItems.Add(new MenuItemViewModel(Resources.Main_Menu_EditScript, EditScriptCommand));
+            ScriptMenuItems.Add(new MenuItemViewModel(Resources.Main_Menu_CancelScript, CancelScriptCommand));
             ScriptMenuItems.Add(new MenuItemViewModel(null, null));
             AddScriptFilesToMenu();
         }
+
+        private RelayCommand? newScriptCommand;
+        public RelayCommand NewScriptCommand => newScriptCommand ??= new RelayCommand(
+            p => NewScript(),
+            q => !IsScriptRunning);
+
+        private RelayCommand? editScriptCommand;
+        public RelayCommand EditScriptCommand => editScriptCommand ??= new RelayCommand(
+            p => EditScript(),
+            q => !IsScriptRunning);
+
+        private RelayCommand? cancelScriptCommand;
+        public RelayCommand CancelScriptCommand => cancelScriptCommand ??= new RelayCommand(
+            p => CancelScript(),
+            q => IsScriptRunning);
 
         private void AddScriptFilesToMenu()
         {
@@ -210,8 +227,16 @@ namespace dnGREP.WPF
                         menuItems = parent.Children;
                     }
 
-                    menuItems.Add(new MenuItemViewModel(header,
-                        new RelayCommand(p => RunScript(key), q => !IsScriptRunning)));
+                    var command = new RelayCommand(p => RunScript(key), q => !IsScriptRunning);
+                    menuItems.Add(new MenuItemViewModel(header, command));
+
+                    string scriptKey = key.Replace(Path.DirectorySeparatorChar, '_');
+                    var kbi = KeyBindingManager.GetRunScriptGesture(KeyCategory.Main, scriptKey);
+                    if (kbi != null)
+                    {
+                        var kb = KeyBindingManager.CreateKeyBinding(command, kbi.KeyGesture);
+                        InputBindings.Add(kb);
+                    }
                 }
             }
 
@@ -271,7 +296,7 @@ namespace dnGREP.WPF
             if (firstFileOpen)
             {
                 firstFileOpen = false;
-                string dataFolder = Path.Combine(Utils.GetDataFolderPath(), ScriptManager.ScriptFolder);
+                string dataFolder = Path.Combine(DirectoryConfiguration.Instance.DataDirectory, ScriptManager.ScriptFolder);
                 if (!Directory.Exists(dataFolder))
                 {
                     Directory.CreateDirectory(dataFolder);
@@ -300,6 +325,7 @@ namespace dnGREP.WPF
 
         private void CancelScript()
         {
+            scriptCanceled = true;
             Cancel();
 
             if (!ScriptMessages.Contains(Resources.Scripts_ScriptCanceled))
@@ -354,6 +380,7 @@ namespace dnGREP.WPF
                 currentScriptFile = name;
                 showEmptyMessageWindow = false;
                 IsScriptRunning = true;
+                scriptCanceled = false;
                 CommandManager.InvalidateRequerySuggested();
                 scriptStartTime = DateTime.Now;
                 pauseCancelTokenSource = new();
@@ -463,8 +490,17 @@ namespace dnGREP.WPF
                         break;
 
                     case "search":
-                        SearchCommand.Execute(null);
-                        if (pauseCancelToken.IsCancellationRequested)
+                        if (scriptStopAfterFirstMatch)
+                        {
+                            SearchAutoStopCount = 1;
+                            SearchAndStopCommand.Execute(null);
+                        }
+                        else
+                        {
+                            SearchCommand.Execute(null);
+                        }
+
+                        if (pauseCancelToken.IsCancellationRequested || scriptCanceled)
                         {
                             break;
                         }
@@ -475,7 +511,7 @@ namespace dnGREP.WPF
 
                     case "replace":
                         ReplaceCommand.Execute(null);
-                        if (pauseCancelToken.IsCancellationRequested)
+                        if (pauseCancelToken.IsCancellationRequested || scriptCanceled)
                         {
                             break;
                         }

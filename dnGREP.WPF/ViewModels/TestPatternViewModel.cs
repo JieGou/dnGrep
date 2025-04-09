@@ -59,6 +59,7 @@ namespace dnGREP.WPF
                 hashCode = (hashCode * 397) ^ SampleText?.GetHashCode(StringComparison.Ordinal) ?? 5;
                 hashCode = (hashCode * 397) ^ SearchFor?.GetHashCode(StringComparison.Ordinal) ?? 5;
                 hashCode = (hashCode * 397) ^ TypeOfSearch.GetHashCode();
+                hashCode = (hashCode * 397) ^ Global.GetHashCode();
                 hashCode = (hashCode * 397) ^ CaseSensitive.GetHashCode();
                 hashCode = (hashCode * 397) ^ WholeWord.GetHashCode();
                 hashCode = (hashCode * 397) ^ Multiline.GetHashCode();
@@ -93,6 +94,7 @@ namespace dnGREP.WPF
                 case nameof(SampleText):
                 case nameof(SearchFor):
                 case nameof(TypeOfSearch):
+                case nameof(Global):
                 case nameof(CaseSensitive):
                 case nameof(WholeWord):
                 case nameof(Multiline):
@@ -136,7 +138,6 @@ namespace dnGREP.WPF
             get
             {
                 return new GrepEngineInitParams(
-                    GrepSettings.Instance.Get<bool>(GrepSettings.Key.ShowLinesInContext),
                     GrepSettings.Instance.Get<int>(GrepSettings.Key.ContextLinesBefore),
                     GrepSettings.Instance.Get<int>(GrepSettings.Key.ContextLinesAfter),
                     GrepSettings.Instance.Get<double>(GrepSettings.Key.FuzzyMatchThreshold),
@@ -150,10 +151,12 @@ namespace dnGREP.WPF
             get
             {
                 GrepSearchOption searchOptions = GrepSearchOption.None;
-                if (Multiline)
-                    searchOptions |= GrepSearchOption.Multiline;
+                if (Global)
+                    searchOptions |= GrepSearchOption.Global;
                 if (CaseSensitive)
                     searchOptions |= GrepSearchOption.CaseSensitive;
+                if (Multiline)
+                    searchOptions |= GrepSearchOption.Multiline;
                 if (Singleline)
                     searchOptions |= GrepSearchOption.SingleLine;
                 if (WholeWord)
@@ -194,7 +197,7 @@ namespace dnGREP.WPF
             {
                 try
                 {
-                    grepResults = engine.Search(inputStream, "test.txt", SearchFor, TypeOfSearch,
+                    grepResults = engine.Search(inputStream, new("test.txt"), SearchFor, TypeOfSearch,
                         SearchOptions, encoding, default);
 
                     if (TypeOfSearch == SearchType.Hex)

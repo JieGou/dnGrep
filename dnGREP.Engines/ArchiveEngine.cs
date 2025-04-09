@@ -58,7 +58,7 @@ namespace dnGREP.Engines
             return [];
         }
 
-        List<GrepSearchResult> IGrepEngine.Search(Stream input, string fileName, string searchPattern,
+        List<GrepSearchResult> IGrepEngine.Search(Stream input, FileData fileData, string searchPattern,
             SearchType searchType, GrepSearchOption searchOptions, Encoding encoding, PauseCancelToken pauseCancelToken)
         {
             // not used, just here to implement interface
@@ -148,10 +148,18 @@ namespace dnGREP.Engines
                 string innerFileName = fileInfo.FileName;
 
                 int index = fileInfo.Index;
+                bool isAnonymousArchive = false;
                 if (innerFileName == "[no name]" && extractor.ArchiveFileData.Count == 1)
                 {
+                    // this may be a file or an archive
+
                     index = 0;
                     innerFileName = Path.GetFileNameWithoutExtension(fileName);
+
+                    string innerExtension = Path.GetExtension(innerFileName);
+                    if (string.IsNullOrEmpty(innerExtension)) // no file extension, assume it is an archive
+                        isAnonymousArchive = true;
+
                     ArchiveFileInfo temp = ArchiveDirectory.Copy(fileInfo);
                     temp.FileName = innerFileName;
                     fileData = new FileData(fileName, temp);
@@ -191,7 +199,7 @@ namespace dnGREP.Engines
                     }
                 }
 
-                if (Utils.IsArchive(innerFileName))
+                if (isAnonymousArchive || Utils.IsArchive(innerFileName))
                 {
                     using Stream stream = new MemoryStream(4096);
                     extractor.ExtractFile(index, stream);
@@ -280,7 +288,7 @@ namespace dnGREP.Engines
                 StartingFileSearch?.Invoke(this, new DataEventArgs<string>(innerFileName));
 
                 IGrepEngine engine = GrepEngineFactory.GetSearchEngine(innerFileName, searchParams, fileFilter, searchType);
-                innerFileResults = engine.Search(stream, innerFileName, searchPattern, searchType, searchOptions, encoding, pauseCancelToken);
+                innerFileResults = engine.Search(stream, fileData, searchPattern, searchType, searchOptions, encoding, pauseCancelToken);
 
                 if (innerFileResults.Count != 0)
                 {

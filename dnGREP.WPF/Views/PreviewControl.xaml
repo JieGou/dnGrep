@@ -11,7 +11,8 @@
              FlowDirection="{Binding CultureFlowDirection}"
              FontFamily="{Binding ApplicationFontFamily}"
              FontSize="{Binding MainFormFontSize}"
-             mc:Ignorable="d">
+             mc:Ignorable="d"
+             my:InputBindingsBehavior.InputBindings="{Binding InputBindings}">
 
     <UserControl.Resources>
         <my:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" TrueValue="Visible" FalseValue="Collapsed" />
@@ -67,6 +68,11 @@
                           Margin="3,0,3,0" VerticalAlignment="Center"
                           VerticalContentAlignment="Center"
                           Visibility="{Binding WrapTextPreviewWndVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                <CheckBox Content="{l:Loc Key='Preview_ViewWhitespace'}"
+                          Margin="3,0,3,0" VerticalAlignment="Center"
+                          VerticalContentAlignment="Center"
+                          IsChecked="{Binding ViewWhitespace}"
+                          Visibility="{Binding ViewWhitespacePreviewWndVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
                 <Button Margin="3" Padding="8,3" MinWidth="80"
                         Click="SyntaxButton_Click"
                         ToolTip="{l:Loc Key='Preview_Syntax'}"
@@ -102,7 +108,9 @@
                            WordWrap="{Binding ElementName=cbWrapText, Path=IsChecked}">
                 <ae:TextEditor.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="{l:Loc Key='TextBox_Command_Copy'}" Command="Copy"/>
+                        <MenuItem Header="{l:Loc Key='TextBox_Command_Copy'}" 
+                                  InputGestureText="{x:Static my:TextBoxCommands.CopyGesture}" 
+                                  Command="Copy"/>
                         <Separator/>
                         <MenuItem Header="{l:Loc Key='Main_AutoPosition'}" IsCheckable="True" 
                                   IsChecked="{Binding DockVM.PreviewAutoPosition}"/>
